@@ -1677,6 +1677,66 @@ function updateRace() {
 let raceElapsedTime = 0;
 
 // ============================================================
+// RACE COUNTDOWN
+// ============================================================
+
+let raceStarted = false;
+let countdownTime = 3.0;
+let countdownFinished = false;
+const countdownDisplay = document.createElement("div");
+
+countdownDisplay.style.position = "absolute";
+countdownDisplay.style.top = "50%";
+countdownDisplay.style.left = "50%";
+countdownDisplay.style.transform = "translate(-50%, -50%)";
+countdownDisplay.style.color = "white";
+countdownDisplay.style.fontFamily = "Arial, sans-serif";
+countdownDisplay.style.fontSize = "120px";
+countdownDisplay.style.fontWeight = "bold";
+countdownDisplay.style.textShadow = "0 5px 15px rgba(0,0,0,0.8)";
+countdownDisplay.style.zIndex = "30";
+countdownDisplay.style.pointerEvents = "none";
+countdownDisplay.style.textAlign = "center";
+
+container.appendChild(countdownDisplay);
+
+function updateCountdown(deltaTime) {
+
+    if (countdownFinished) {
+        return;
+    }
+
+    countdownTime -= deltaTime;
+
+    if (countdownTime > 2) {
+
+        countdownDisplay.textContent = "3";
+
+    } else if (countdownTime > 1) {
+
+        countdownDisplay.textContent = "2";
+
+    } else if (countdownTime > 0) {
+
+        countdownDisplay.textContent = "1";
+
+    } else {
+
+        countdownDisplay.textContent = "GO!";
+
+        raceStarted = true;
+
+        setTimeout(() => {
+
+            countdownDisplay.textContent = "";
+
+            countdownFinished = true;
+
+        }, 700);
+    }
+}
+
+// ============================================================
 // HUD
 // ============================================================
 
@@ -1969,19 +2029,25 @@ function animate(currentTime) {
     // RACE TIMER
     // --------------------------------------------------------
 
-    if (!player.finished) {
+    if (
+    raceStarted &&
+    !player.finished
+) {
 
-        raceElapsedTime +=
-            deltaTime;
-    }
+    raceElapsedTime +=
+        deltaTime;
+}
 
     // --------------------------------------------------------
     // PHYSICS
     // --------------------------------------------------------
 
+    if (raceStarted) {
+
     updatePlayer(
         deltaTime
     );
+}
 
     // --------------------------------------------------------
     // CAMERA
