@@ -53,13 +53,13 @@ const player = {
     // Actual forward speed
     speed: 0,
 
-    maxSpeed: 6,
+    maxSpeed: 4,
 
     acceleration: 0.12,
     braking: 0.18,
 
     // Normal steering
-    turnSpeed: 0.045,
+    turnSpeed: 0.03,
 
     width: 32,
     height: 18,
