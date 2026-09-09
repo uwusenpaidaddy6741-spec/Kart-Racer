@@ -1278,13 +1278,9 @@ function updatePlayer(deltaTime) {
             deltaTime;
     }
 
-    // --------------------------------------------------------
-    // DRIFT CHARGE
-    // --------------------------------------------------------
-
-    // ============================================================
+// --------------------------------------------------------
 // DRIFT CHARGE
-// ============================================================
+// --------------------------------------------------------
 
 if (player.drifting) {
 
@@ -1305,41 +1301,39 @@ if (player.drifting) {
     ) {
 
         // MINI BOOST
-        if (
-            player.driftCharge < 0.8
-        ) {
+        if (player.driftCharge < 0.8) {
 
-            player.boostTimer = 0.45;
+            player.boostTimer = 0.35;
 
             player.speed =
                 Math.min(
-                    player.speed + 8,
+                    player.speed + 4,
                     player.boostMaxSpeed
                 );
+
         }
 
         // MEDIUM BOOST
-        else if (
-            player.driftCharge < 1.5
-        ) {
+        else if (player.driftCharge < 1.5) {
 
-            player.boostTimer = 0.8;
+            player.boostTimer = 0.65;
 
             player.speed =
                 Math.min(
-                    player.speed + 14,
+                    player.speed + 10,
                     player.boostMaxSpeed
                 );
+
         }
 
         // MAX BOOST
         else {
 
-            player.boostTimer = 1.25;
+            player.boostTimer = 1.0;
 
             player.speed =
                 Math.min(
-                    player.speed + 22,
+                    player.speed + 18,
                     player.boostMaxSpeed
                 );
         }
@@ -1350,20 +1344,19 @@ if (player.drifting) {
 
 player.lastDrifting =
     player.drifting;
-    
-    // --------------------------------------------------------
-    // BOOST
-    // --------------------------------------------------------
 
-    if (
-    player.boostTimer > 0
-) {
+
+  // --------------------------------------------------------
+// BOOST
+// --------------------------------------------------------
+
+if (player.boostTimer > 0) {
 
     // Count down the boost.
     player.boostTimer -=
         deltaTime;
 
-    // Strong acceleration during the burst.
+    // Small additional acceleration during the burst.
     player.speed +=
         player.boostAcceleration *
         deltaTime;
@@ -1394,8 +1387,9 @@ player.lastDrifting =
                 30 *
                 deltaTime
             );
-    } 
+    }
 }
+    
     // --------------------------------------------------------
     // DRIFT MOVEMENT
     // --------------------------------------------------------
