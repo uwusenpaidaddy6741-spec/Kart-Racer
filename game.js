@@ -1291,30 +1291,33 @@ function updatePlayer(deltaTime) {
     } else {
 
         if (
-            player.lastDrifting &&
-            player.driftCharge >= 0.35
-        ) {
+    player.lastDrifting &&
+    player.driftCharge >= 0.35
+) {
 
-            if (
-                player.driftCharge < 0.8
-            ) {
+    if (
+        player.driftCharge < 0.8
+    ) {
 
-                // MINI BOOST
-                player.boostTimer = 0.45;
+        // MINI BOOST
+        player.boostTimer = 0.45;
+        player.speed += 4;
 
-            } else if (
-                player.driftCharge < 1.5
-            ) {
+    } else if (
+        player.driftCharge < 1.5
+    ) {
 
-                // MEDIUM BOOST
-                player.boostTimer = 0.8;
+        // MEDIUM BOOST
+        player.boostTimer = 0.8;
+        player.speed += 9;
 
-            } else {
+    } else {
 
-                // MAX BOOST
-                player.boostTimer = 1.25;
-            }
-        }
+        // MAX BOOST
+        player.boostTimer = 1.25;
+        player.speed += 16;
+    }
+}
 
         player.driftCharge = 0;
     }
