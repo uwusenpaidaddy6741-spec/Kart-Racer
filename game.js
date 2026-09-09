@@ -1300,22 +1300,16 @@ function updatePlayer(deltaTime) {
     ) {
 
         // MINI BOOST
-        player.boostTimer = 0.45;
-        player.speed += 4;
+player.boostTimer = 0.45;
+player.speed = Math.max(player.speed, 50);
 
-    } else if (
-        player.driftCharge < 1.5
-    ) {
+// MEDIUM BOOST
+player.boostTimer = 0.8;
+player.speed = Math.max(player.speed, 75);
 
-        // MEDIUM BOOST
-        player.boostTimer = 0.8;
-        player.speed += 9;
-
-    } else {
-
-        // MAX BOOST
-        player.boostTimer = 1.25;
-        player.speed += 16;
+// MAX BOOST
+player.boostTimer = 1.25;
+player.speed = Math.max(player.speed, 110);
     }
 }
 
