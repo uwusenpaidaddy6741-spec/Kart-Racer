@@ -745,10 +745,12 @@ const player = {
     driftCharge: 0,
 
     boostTimer: 0,
-
-    boostAcceleration: 0.01,
-
+    
+    boostAcceleration: 25,
+    
     boostMaxSpeed: 55,
+    
+    currentBoostCap: 45,
 
     lap: 1,
 
@@ -1155,38 +1157,57 @@ function updatePlayer(deltaTime) {
         return;
     }
 
-// --------------------------------------------------------
+  // --------------------------------------------------------
 // ACCELERATION
 // --------------------------------------------------------
 
 if (forward()) {
 
-    // Only accelerate if we are below the normal
-    // speed limit, or if a boost is active.
-    if (
-        player.boostTimer > 0 ||
-        player.speed < player.maxSpeed
-    ) {
+    if (player.boostTimer > 0) {
 
-        player.speed +=
-            player.acceleration *
-            deltaTime;
+        // Accelerate during boost until the boost's cap
+        if (player.speed < player.currentBoostCap) {
+
+            player.speed +=
+                player.acceleration *
+                deltaTime;
+
+            player.speed =
+                Math.min(
+                    player.speed,
+                    player.currentBoostCap
+                );
+        }
+
+    } else {
+
+        // Normal driving
+        if (player.speed < player.maxSpeed) {
+
+            player.speed +=
+                player.acceleration *
+                deltaTime;
+
+            player.speed =
+                Math.min(
+                    player.speed,
+                    player.maxSpeed
+                );
+        }
+
+        // If we are above normal speed after a boost,
+        // smoothly return toward 36.
+        if (player.speed > player.maxSpeed) {
+
+            player.speed =
+                moveToward(
+                    player.speed,
+                    player.maxSpeed,
+                    3 * deltaTime
+                );
+        }
     }
-
-    // Normal driving can never exceed max speed.
-    if (
-        player.boostTimer <= 0 &&
-        player.speed > player.maxSpeed
-    ) {
-
-        player.speed =
-            moveToward(
-                player.speed,
-                player.maxSpeed,
-                3 * deltaTime
-            );
-    }
-}  
+} 
     
     // --------------------------------------------------------
     // BRAKING / REVERSE
@@ -1289,103 +1310,111 @@ if (forward()) {
             deltaTime;
     }
 
-// --------------------------------------------------------
-// DRIFT CHARGE
-// --------------------------------------------------------
+    // --------------------------------------------------------
+    // DRIFT CHARGE
+    // --------------------------------------------------------
 
-if (player.drifting) {
+    if (player.drifting) {
 
-    player.driftCharge +=
-        deltaTime;
+        player.driftCharge +=
+            deltaTime;
 
-    player.driftCharge =
-        Math.min(
-            player.driftCharge,
-            2.5
-        );
+        player.driftCharge =
+            Math.min(
+                player.driftCharge,
+                2.5
+            );
 
-} else {
+    } else {
 
-    if (
-        player.lastDrifting &&
-        player.driftCharge >= 0.35
-    ) {
+        if (
+            player.lastDrifting &&
+            player.driftCharge >= 0.35
+        ) {
 
-        // MINI BOOST
-        if (player.driftCharge < 0.8) {
+            // ------------------------------------------------
+            // RELEASE DRIFT BOOST
+            // ------------------------------------------------
 
-            player.boostTimer = 0.35;
+            if (player.driftCharge < 0.8) {
 
-            player.speed =
-    Math.min(
-        player.speed + 4,
-        45
-    );
+                // MINI BOOST
+                player.boostTimer = 0.35;
+                player.currentBoostCap = 45;
 
+                player.speed =
+                    Math.min(
+                        player.speed + 4,
+                        player.currentBoostCap
+                    );
+
+            }
+            else if (player.driftCharge < 1.5) {
+
+                // MEDIUM BOOST
+                player.boostTimer = 0.65;
+                player.currentBoostCap = 50;
+
+                player.speed =
+                    Math.min(
+                        player.speed + 10,
+                        player.currentBoostCap
+                    );
+
+            }
+            else {
+
+                // MAX BOOST
+                player.boostTimer = 1.0;
+                player.currentBoostCap = 55;
+
+                player.speed =
+                    Math.min(
+                        player.speed + 18,
+                        player.currentBoostCap
+                    );
+            }
         }
 
-        // MEDIUM BOOST
-        else if (player.driftCharge < 1.5) {
+        player.driftCharge = 0;
+    }
 
-            player.boostTimer = 0.65;
+    // --------------------------------------------------------
+    // BOOST
+    // --------------------------------------------------------
+
+    if (player.boostTimer > 0) {
+
+        player.boostTimer -=
+            deltaTime;
+
+        // Never allow the current boost
+        // to exceed its individual cap.
+        player.speed =
+            Math.min(
+                player.speed,
+                player.currentBoostCap
+            );
+
+        boostFlame.visible = true;
+
+    } else {
+
+        boostFlame.visible = false;
+
+        // After the boost ends, gradually
+        // return toward normal speed.
+        if (player.speed > player.maxSpeed) {
 
             player.speed =
-    Math.min(
-        player.speed + 10,
-        50
-    );
-
-        }
-
-        // MAX BOOST
-        else {
-
-            player.boostTimer = 1.0;
-
-           player.speed =
-    Math.min(
-        player.speed + 18,
-        55
-    );
+                moveToward(
+                    player.speed,
+                    player.maxSpeed,
+                    3 * deltaTime
+                );
         }
     }
 
-    player.driftCharge = 0;
-}
-
-player.lastDrifting =
-    player.drifting;
-
-
-  // --------------------------------------------------------
-// BOOST
-// --------------------------------------------------------
-
-if (player.boostTimer > 0) {
-
-    // Count down the boost.
-    player.boostTimer -=
-        deltaTime;
-
-    // Small additional acceleration during the burst.
-    player.speed +=
-        player.boostAcceleration *
-        deltaTime;
-
-    // Don't go past the boost speed limit.
-    player.speed =
-        Math.min(
-            player.speed,
-            player.boostMaxSpeed
-        );
-
-    boostFlame.visible = true;
-
-} else {
-
-    boostFlame.visible = false;
-}  
-    
     // --------------------------------------------------------
     // DRIFT MOVEMENT
     // --------------------------------------------------------
@@ -1393,9 +1422,7 @@ if (player.boostTimer > 0) {
     let moveAngle =
         player.angle;
 
-    if (
-        player.drifting
-    ) {
+    if (player.drifting) {
 
         const driftDirection =
             right()
@@ -1524,6 +1551,11 @@ if (player.boostTimer > 0) {
     // --------------------------------------------------------
 
     updateRace();
+
+    // Remember whether we were drifting
+    // for the next frame.
+    player.lastDrifting =
+        player.drifting;
 }
 
 // ============================================================
