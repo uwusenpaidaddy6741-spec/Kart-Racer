@@ -1375,19 +1375,15 @@ if (player.boostTimer > 0) {
     boostFlame.visible = false;
 
     // Smoothly return to normal driving speed.
-    if (
-        player.speed >
-        player.maxSpeed
-    ) {
+   if (player.speed > player.maxSpeed) {
 
-        player.speed =
-            moveToward(
-                player.speed,
-                player.maxSpeed,
-                8 * 
-                deltaTime
-            );
+    player.speed -= 3 * deltaTime;
+
+    if (player.speed < player.maxSpeed) {
+        player.speed = player.maxSpeed;
     }
+}
+    
 }
     
     // --------------------------------------------------------
