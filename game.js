@@ -1295,23 +1295,46 @@ function updatePlayer(deltaTime) {
     player.driftCharge >= 0.35
 ) {
 
+    // MINI BOOST
     if (
         player.driftCharge < 0.8
     ) {
 
-        // MINI BOOST
-player.boostTimer = 0.45;
-player.speed = Math.max(player.speed, 50);
+        player.boostTimer = 0.45;
 
-// MEDIUM BOOST
-player.boostTimer = 0.8;
-player.speed = Math.max(player.speed, 75);
-
-// MAX BOOST
-player.boostTimer = 1.25;
-player.speed = Math.max(player.speed, 110);
+        player.speed =
+            Math.max(
+                player.speed,
+                50
+            );
     }
-}
+
+    // MEDIUM BOOST
+    else if (
+        player.driftCharge < 1.5
+    ) {
+
+        player.boostTimer = 0.8;
+
+        player.speed =
+            Math.max(
+                player.speed,
+                75
+            );
+    }
+
+    // MAX BOOST
+    else {
+
+        player.boostTimer = 1.25;
+
+        player.speed =
+            Math.max(
+                player.speed,
+                110
+            );
+    }
+} 
 
         player.driftCharge = 0;
     }
