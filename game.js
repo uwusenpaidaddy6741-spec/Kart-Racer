@@ -36,8 +36,9 @@ window.addEventListener("keyup", (event) => {
 // =========================
 
 const player = {
+    // START ON THE TRACK
     x: 500,
-    y: 350,
+    y: 200,
 
     angle: 0,
 
@@ -91,56 +92,75 @@ function updatePlayer() {
 
     const drifting = keys[" "];
 
-    // Acceleration
+    // =========================
+    // ACCELERATION
+    // =========================
+
     if (accelerating) {
         player.speed += player.acceleration;
     } else {
         player.speed *= 0.985;
     }
 
-    // Brake / reverse
+    // =========================
+    // BRAKE / REVERSE
+    // =========================
+
     if (braking) {
         player.speed -= player.braking;
     }
 
-    // Limit speed
+    // =========================
+    // LIMIT SPEED
+    // =========================
+
     player.speed = Math.max(
         -2,
         Math.min(player.speed, player.maxSpeed)
     );
 
-    // Steering
+    // =========================
+    // STEERING
+    // =========================
+
     if (Math.abs(player.speed) > 0.1) {
 
-        let direction =
+        const direction =
             player.speed >= 0 ? 1 : -1;
 
+        const steeringAmount =
+            player.turnSpeed *
+            direction *
+            (Math.abs(player.speed) / player.maxSpeed + 0.3);
+
         if (left) {
-            player.angle -=
-                player.turnSpeed *
-                direction *
-                (Math.abs(player.speed) / player.maxSpeed + 0.3);
+            player.angle -= steeringAmount;
         }
 
         if (right) {
-            player.angle +=
-                player.turnSpeed *
-                direction *
-                (Math.abs(player.speed) / player.maxSpeed + 0.3);
+            player.angle += steeringAmount;
         }
     }
 
-    // Drifting
-    player.drifting = drifting && Math.abs(player.speed) > 1;
+    // =========================
+    // DRIFTING
+    // =========================
+
+    player.drifting =
+        drifting && Math.abs(player.speed) > 1;
 
     if (player.drifting) {
 
         player.driftCharge += 0.5;
 
-        // Slightly reduce grip while drifting
-        player.angle +=
-            (right ? 0.012 : 0) -
-            (left ? 0.012 : 0);
+        // Reduce grip while drifting
+        if (right) {
+            player.angle += 0.012;
+        }
+
+        if (left) {
+            player.angle -= 0.012;
+        }
 
         if (player.driftCharge > 100) {
             player.driftCharge = 100;
@@ -149,10 +169,13 @@ function updatePlayer() {
     } else if (player.driftCharge > 0) {
 
         // Release drift = boost
+
         if (player.driftCharge > 70) {
             player.boostTimer = 90;
+
         } else if (player.driftCharge > 35) {
             player.boostTimer = 50;
+
         } else if (player.driftCharge > 10) {
             player.boostTimer = 25;
         }
@@ -160,8 +183,12 @@ function updatePlayer() {
         player.driftCharge = 0;
     }
 
-    // Boost
+    // =========================
+    // BOOST
+    // =========================
+
     if (player.boostTimer > 0) {
+
         player.speed += 0.15;
         player.boostTimer--;
 
@@ -170,7 +197,10 @@ function updatePlayer() {
         }
     }
 
-    // Move
+    // =========================
+    // MOVE
+    // =========================
+
     player.x +=
         Math.cos(player.angle) * player.speed;
 
@@ -204,11 +234,15 @@ function keepPlayerOnTrack() {
     const innerY =
         track.innerHeight / 2;
 
-    // Outside track
+    // =========================
+    // OUTSIDE TRACK
+    // =========================
+
     if (
         Math.abs(dx) > outerX ||
         Math.abs(dy) > outerY
     ) {
+
         player.x -=
             Math.cos(player.angle) * player.speed;
 
@@ -218,11 +252,15 @@ function keepPlayerOnTrack() {
         player.speed *= 0.5;
     }
 
-    // Inside the grass / center island
+    // =========================
+    // CENTER GRASS / ISLAND
+    // =========================
+
     if (
         Math.abs(dx) < innerX &&
         Math.abs(dy) < innerY
     ) {
+
         player.x -=
             Math.cos(player.angle) * player.speed;
 
@@ -239,7 +277,9 @@ function keepPlayerOnTrack() {
 
 function drawTrack() {
 
+    // Grass background
     ctx.fillStyle = "#397a32";
+
     ctx.fillRect(
         0,
         0,
@@ -247,7 +287,10 @@ function drawTrack() {
         canvas.height
     );
 
-    // Track
+    // =========================
+    // TRACK
+    // =========================
+
     ctx.fillStyle = "#444";
 
     ctx.fillRect(
@@ -257,7 +300,10 @@ function drawTrack() {
         track.outerHeight
     );
 
-    // Grass island
+    // =========================
+    // CENTER GRASS
+    // =========================
+
     ctx.fillStyle = "#397a32";
 
     ctx.fillRect(
@@ -267,7 +313,10 @@ function drawTrack() {
         track.innerHeight
     );
 
-    // Track lines
+    // =========================
+    // TRACK OUTLINE
+    // =========================
+
     ctx.strokeStyle = "#fff";
     ctx.lineWidth = 5;
 
@@ -278,6 +327,10 @@ function drawTrack() {
         track.outerHeight
     );
 
+    // =========================
+    // CENTER OUTLINE
+    // =========================
+
     ctx.strokeRect(
         track.centerX - track.innerWidth / 2,
         track.centerY - track.innerHeight / 2,
@@ -285,7 +338,10 @@ function drawTrack() {
         track.innerHeight
     );
 
-    // Start line
+    // =========================
+    // START LINE
+    // =========================
+
     ctx.fillStyle = "#fff";
 
     ctx.fillRect(
@@ -311,7 +367,10 @@ function drawPlayer() {
 
     ctx.rotate(player.angle);
 
-    // Boost flames
+    // =========================
+    // BOOST FLAMES
+    // =========================
+
     if (player.boostTimer > 0) {
 
         ctx.fillStyle = "#ff8c00";
@@ -328,7 +387,10 @@ function drawPlayer() {
         ctx.fill();
     }
 
-    // Kart body
+    // =========================
+    // KART BODY
+    // =========================
+
     ctx.fillStyle = "#e53935";
 
     ctx.fillRect(
@@ -338,7 +400,10 @@ function drawPlayer() {
         18
     );
 
-    // Driver
+    // =========================
+    // DRIVER
+    // =========================
+
     ctx.fillStyle = "#222";
 
     ctx.beginPath();
@@ -353,14 +418,39 @@ function drawPlayer() {
 
     ctx.fill();
 
-    // Wheels
+    // =========================
+    // WHEELS
+    // =========================
+
     ctx.fillStyle = "#111";
 
-    ctx.fillRect(-12, -12, 8, 5);
-    ctx.fillRect(4, -12, 8, 5);
+    ctx.fillRect(
+        -12,
+        -12,
+        8,
+        5
+    );
 
-    ctx.fillRect(-12, 7, 8, 5);
-    ctx.fillRect(4, 7, 8, 5);
+    ctx.fillRect(
+        4,
+        -12,
+        8,
+        5
+    );
+
+    ctx.fillRect(
+        -12,
+        7,
+        8,
+        5
+    );
+
+    ctx.fillRect(
+        4,
+        7,
+        8,
+        5
+    );
 
     ctx.restore();
 }
@@ -384,6 +474,7 @@ function drawUI() {
 
     ctx.font = "18px Arial";
 
+    // Speed
     ctx.fillText(
         "SPEED: " +
         Math.round(Math.abs(player.speed) * 20),
@@ -391,13 +482,16 @@ function drawUI() {
         50
     );
 
+    // Drift
     ctx.fillText(
         "DRIFT: " +
-        Math.round(player.driftCharge) + "%",
+        Math.round(player.driftCharge) +
+        "%",
         35,
         80
     );
 
+    // Boost
     if (player.boostTimer > 0) {
 
         ctx.fillStyle = "#ffd000";
@@ -421,7 +515,9 @@ function gameLoop() {
     updatePlayer();
 
     drawTrack();
+
     drawPlayer();
+
     drawUI();
 
     requestAnimationFrame(gameLoop);
