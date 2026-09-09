@@ -2034,9 +2034,38 @@ const cameraTarget =
 
 function updateCamera(deltaTime) {
 
-    const cameraDistance = 12;
+    // --------------------------------------------------------
+    // CAMERA SETTINGS
+    // --------------------------------------------------------
 
-    const cameraHeight = 7;
+    const normalDistance = 12;
+    const boostDistance = 15;
+
+    const normalHeight = 7;
+    const boostHeight = 8;
+
+    const boostAmount =
+        player.boostTimer > 0
+            ? 1
+            : 0;
+
+    const cameraDistance =
+        THREE.MathUtils.lerp(
+            normalDistance,
+            boostDistance,
+            boostAmount
+        );
+
+    const cameraHeight =
+        THREE.MathUtils.lerp(
+            normalHeight,
+            boostHeight,
+            boostAmount
+        );
+
+    // --------------------------------------------------------
+    // CAMERA POSITION
+    // --------------------------------------------------------
 
     const behindX =
         player.x -
@@ -2066,22 +2095,31 @@ function updateCamera(deltaTime) {
         smoothing
     );
 
+    // --------------------------------------------------------
+    // LOOK AHEAD
+    // --------------------------------------------------------
+
+    const lookAhead =
+        player.boostTimer > 0
+            ? 8
+            : 6;
+
     const lookX =
         player.x +
         Math.cos(player.angle) *
-        6;
+        lookAhead;
 
     const lookZ =
         player.z -
         Math.sin(player.angle) *
-        6;
+        lookAhead;
 
     camera.lookAt(
         lookX,
         1.2,
         lookZ
     );
-}
+} 
 
 // ============================================================
 // RESIZE
@@ -2147,9 +2185,6 @@ function animate(currentTime) {
 
     previousTime =
         currentTime;
-
-    // Prevent huge physics jumps
-    // if the browser is temporarily paused.
 
     deltaTime =
         Math.min(
