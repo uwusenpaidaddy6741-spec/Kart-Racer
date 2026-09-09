@@ -414,56 +414,73 @@ function updatePlayer() {
     }
 
 
-    // =========================
-    // DRIFT CHARGE
-    // =========================
+   // =========================
+// DRIFT CHARGE
+// =========================
 
-    if (player.drifting) {
+if (player.drifting) {
 
-        player.driftCharge += 1;
+    // Build up drift charge
+    player.driftCharge += 1;
 
-
-        if (player.driftCharge > 120) {
-            player.driftCharge = 120;
-        }
-
-    } else {
-
-        // Release drift and use charge for boost
-        if (player.driftCharge > 20) {
-
-            player.boostTimer =
-                Math.min(
-                    30,
-                    player.driftCharge * 0.35
-                );
-        }
-
-
-        player.driftCharge = 0;
+    // Maximum drift charge
+    if (player.driftCharge > 120) {
+        player.driftCharge = 120;
     }
 
+} else {
 
     // =========================
-    // BOOST
+    // RELEASE DRIFT = BOOST
     // =========================
 
-    if (player.boostTimer > 0) {
+    if (player.driftCharge >= 20) {
 
-        player.boostTimer--;
+        // Small boost
+        if (player.driftCharge < 50) {
 
-        player.speed += 0.08;
+            player.boostTimer = 20;
 
+        }
 
-        if (
-            player.speed >
-            player.maxSpeed + 3
-        ) {
-            player.speed =
-                player.maxSpeed + 3;
+        // Medium boost
+        else if (player.driftCharge < 90) {
+
+            player.boostTimer = 35;
+
+        }
+
+        // Large boost
+        else {
+
+            player.boostTimer = 55;
         }
     }
 
+    // Reset drift charge
+    player.driftCharge = 0;
+}
+
+
+// =========================
+// BOOST
+// =========================
+
+if (player.boostTimer > 0) {
+
+    // Count down boost
+    player.boostTimer--;
+
+    // Give the kart extra acceleration
+    player.speed += 0.18;
+
+    // Allow boosted speed to go above normal max speed
+    if (player.speed > player.maxSpeed + 4) {
+
+        player.speed =
+            player.maxSpeed + 4;
+    }
+}
 
     // =========================
     // CALCULATE MOVEMENT
