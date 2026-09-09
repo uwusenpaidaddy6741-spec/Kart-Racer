@@ -8,7 +8,7 @@ const canvas = document.getElementById("gameCanvas");
 const container = document.getElementById("gameCanvasContainer");
 
 // ============================================================
-// THREE.JS SETUP
+// SCENE
 // ============================================================
 
 const scene = new THREE.Scene();
@@ -17,9 +17,13 @@ scene.background = new THREE.Color(0x87ceeb);
 
 scene.fog = new THREE.Fog(
     0x87ceeb,
-    100,
-    240
+    110,
+    250
 );
+
+// ============================================================
+// CAMERA
+// ============================================================
 
 const camera = new THREE.PerspectiveCamera(
     65,
@@ -47,21 +51,23 @@ renderer.shadowMap.type =
     THREE.PCFSoftShadowMap;
 
 // ============================================================
-// LIGHTING
+// LIGHTS
 // ============================================================
 
-const skyLight = new THREE.HemisphereLight(
-    0xffffff,
-    0x426b42,
-    2.2
-);
+const hemisphereLight =
+    new THREE.HemisphereLight(
+        0xffffff,
+        0x4a704a,
+        2.2
+    );
 
-scene.add(skyLight);
+scene.add(hemisphereLight);
 
-const sun = new THREE.DirectionalLight(
-    0xffffff,
-    2.5
-);
+const sun =
+    new THREE.DirectionalLight(
+        0xffffff,
+        2.5
+    );
 
 sun.position.set(
     40,
@@ -85,71 +91,59 @@ scene.add(sun);
 // GRASS
 // ============================================================
 
-const grass = new THREE.Mesh(
-    new THREE.PlaneGeometry(
-        220,
-        180
-    ),
-    new THREE.MeshStandardMaterial({
-        color: 0x4c9f45,
-        roughness: 1
-    })
-);
+const grass =
+    new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            220,
+            180
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x4c9f45,
+            roughness: 1
+        })
+    );
 
-grass.rotation.x = -Math.PI / 2;
+grass.rotation.x =
+    -Math.PI / 2;
 
 grass.receiveShadow = true;
 
 scene.add(grass);
 
 // ============================================================
-// TRACK SETTINGS
+// TRACK
 // ============================================================
 
-const TRACK_WIDTH = 18;
+const TRACK_WIDTH = 20;
 
 const TRACK_HALF_X = 45;
 const TRACK_HALF_Z = 30;
 
-const CORNER_RADIUS = 13;
+const CORNER_RADIUS = 14;
 
-// ============================================================
-// TRACK CENTERLINE
-// ============================================================
-
-function createTrackPoints() {
+function makeTrackPoints() {
 
     const points = [];
 
-    const cornerSteps = 35;
-
     const sections = [
-
-        // Top-right corner
         {
             cx: TRACK_HALF_X - CORNER_RADIUS,
             cz: -TRACK_HALF_Z + CORNER_RADIUS,
             start: -Math.PI / 2,
             end: 0
         },
-
-        // Bottom-right corner
         {
             cx: TRACK_HALF_X - CORNER_RADIUS,
             cz: TRACK_HALF_Z - CORNER_RADIUS,
             start: 0,
             end: Math.PI / 2
         },
-
-        // Bottom-left corner
         {
             cx: -TRACK_HALF_X + CORNER_RADIUS,
             cz: TRACK_HALF_Z - CORNER_RADIUS,
             start: Math.PI / 2,
             end: Math.PI
         },
-
-        // Top-left corner
         {
             cx: -TRACK_HALF_X + CORNER_RADIUS,
             cz: -TRACK_HALF_Z + CORNER_RADIUS,
@@ -162,12 +156,11 @@ function createTrackPoints() {
 
         for (
             let i = 0;
-            i < cornerSteps;
+            i < 40;
             i++
         ) {
 
-            const t =
-                i / cornerSteps;
+            const t = i / 40;
 
             const angle =
                 section.start +
@@ -194,10 +187,10 @@ function createTrackPoints() {
 }
 
 const trackPoints =
-    createTrackPoints();
+    makeTrackPoints();
 
 // ============================================================
-// TRACK ROAD
+// ROAD
 // ============================================================
 
 function createRoad() {
@@ -205,8 +198,8 @@ function createRoad() {
     const positions = [];
     const indices = [];
 
-    const leftSide = [];
-    const rightSide = [];
+    const left = [];
+    const right = [];
 
     for (
         let i = 0;
@@ -241,24 +234,28 @@ function createRoad() {
         const nz =
             dx / length;
 
-        leftSide.push({
+        left.push({
             x:
                 current.x +
-                nx * TRACK_WIDTH / 2,
+                nx *
+                TRACK_WIDTH / 2,
 
             z:
                 current.z +
-                nz * TRACK_WIDTH / 2
+                nz *
+                TRACK_WIDTH / 2
         });
 
-        rightSide.push({
+        right.push({
             x:
                 current.x -
-                nx * TRACK_WIDTH / 2,
+                nx *
+                TRACK_WIDTH / 2,
 
             z:
                 current.z -
-                nz * TRACK_WIDTH / 2
+                nz *
+                TRACK_WIDTH / 2
         });
     }
 
@@ -269,13 +266,13 @@ function createRoad() {
     ) {
 
         positions.push(
-            leftSide[i].x,
+            left[i].x,
             0.05,
-            leftSide[i].z,
+            left[i].z,
 
-            rightSide[i].x,
+            right[i].x,
             0.05,
-            rightSide[i].z
+            right[i].z
         );
     }
 
@@ -291,7 +288,6 @@ function createRoad() {
 
         const a = i * 2;
         const b = i * 2 + 1;
-
         const c = next * 2;
         const d = next * 2 + 1;
 
@@ -334,17 +330,17 @@ function createRoad() {
 createRoad();
 
 // ============================================================
-// TRACK EDGE CURBS
+// CURBS
 // ============================================================
 
 function createCurbs() {
 
-    const redMaterial =
+    const red =
         new THREE.MeshStandardMaterial({
             color: 0xe53935
         });
 
-    const whiteMaterial =
+    const white =
         new THREE.MeshStandardMaterial({
             color: 0xffffff
         });
@@ -392,33 +388,30 @@ function createCurbs() {
             const side of [-1, 1]
         ) {
 
-            const material =
-                i % 4 === 0
-                    ? whiteMaterial
-                    : redMaterial;
-
             const curb =
                 new THREE.Mesh(
                     new THREE.BoxGeometry(
-                        length + 0.2,
-                        0.18,
+                        length + 0.15,
+                        0.2,
                         0.8
                     ),
-                    material
+                    i % 4 === 0
+                        ? white
+                        : red
                 );
 
             curb.position.set(
                 current.x +
                     nx *
                     side *
-                    (TRACK_WIDTH / 2),
+                    TRACK_WIDTH / 2,
 
                 0.18,
 
                 current.z +
                     nz *
                     side *
-                    (TRACK_WIDTH / 2)
+                    TRACK_WIDTH / 2
             );
 
             curb.rotation.y =
@@ -445,86 +438,82 @@ function createFinishLine() {
     const next =
         trackPoints[1];
 
-    const finish =
+    const line =
         new THREE.Group();
 
-    const squareSize = 1.5;
-
-    const rows = 2;
-    const columns = 6;
+    const size = 1.6;
 
     for (
         let row = 0;
-        row < rows;
+        row < 2;
         row++
     ) {
 
         for (
-            let column = 0;
-            column < columns;
-            column++
+            let col = 0;
+            col < 10;
+            col++
         ) {
 
-            const black =
-                (
-                    row +
-                    column
-                ) % 2 === 0;
+            const isBlack =
+                (row + col) % 2 === 0;
 
             const square =
                 new THREE.Mesh(
                     new THREE.BoxGeometry(
-                        squareSize,
-                        0.12,
-                        squareSize
+                        size,
+                        0.1,
+                        size
                     ),
                     new THREE.MeshStandardMaterial({
                         color:
-                            black
+                            isBlack
                                 ? 0x111111
                                 : 0xffffff
                     })
                 );
 
             square.position.set(
-                0,
-                0.16,
+                row === 0
+                    ? -0.8
+                    : 0.8,
+
+                0.15,
+
                 (
-                    column -
-                    (columns - 1) / 2
-                ) *
-                squareSize
+                    col - 4.5
+                ) * size
             );
 
-            finish.add(square);
+            line.add(square);
         }
     }
 
-    finish.position.set(
+    line.position.set(
         start.x,
         0,
         start.z
     );
 
-    finish.rotation.y =
-        -Math.atan2(
-            next.z - start.z,
-            next.x - start.x
+    line.rotation.y =
+        Math.atan2(
+            next.x - start.x,
+            next.z - start.z
         );
 
-    scene.add(finish);
+    scene.add(line);
 }
 
 createFinishLine();
 
 // ============================================================
-// CHECKPOINT GATES
+// CHECKPOINTS
 // ============================================================
 
 const checkpointIndices = [
-    35,
-    70,
-    105
+    40,
+    80,
+    120
 ];
 
 function createCheckpoint(
@@ -544,7 +533,7 @@ function createCheckpoint(
     const gate =
         new THREE.Group();
 
-    const gateMaterial =
+    const material =
         new THREE.MeshStandardMaterial({
             color:
                 number === 1
@@ -552,7 +541,7 @@ function createCheckpoint(
                     : 0x00aaff,
 
             transparent: true,
-            opacity: 0.5
+            opacity: 0.45
         });
 
     const bar =
@@ -562,7 +551,7 @@ function createCheckpoint(
                 5,
                 TRACK_WIDTH
             ),
-            gateMaterial
+            material
         );
 
     bar.position.y = 2.5;
@@ -576,9 +565,9 @@ function createCheckpoint(
     );
 
     gate.rotation.y =
-        -Math.atan2(
-            next.z - point.z,
-            next.x - point.x
+        Math.atan2(
+            next.x - point.x,
+            next.z - point.z
         );
 
     scene.add(gate);
@@ -586,6 +575,7 @@ function createCheckpoint(
 
 checkpointIndices.forEach(
     (index, i) => {
+
         createCheckpoint(
             index,
             i + 1
@@ -609,8 +599,8 @@ function createTree(
     const trunk =
         new THREE.Mesh(
             new THREE.CylinderGeometry(
-                0.65,
-                0.85,
+                0.7,
+                0.9,
                 3,
                 8
             ),
@@ -628,7 +618,7 @@ function createTree(
     const leaves =
         new THREE.Mesh(
             new THREE.SphereGeometry(
-                2.7,
+                2.8,
                 12,
                 12
             ),
@@ -649,35 +639,35 @@ function createTree(
         z
     );
 
-    tree.scale.setScalar(scale);
+    tree.scale.setScalar(
+        scale
+    );
 
     scene.add(tree);
 }
 
-const treeLocations = [
-
-    [-72, -45],
+[
+    [-75, -45],
     [-55, -48],
-    [-20, -48],
-    [20, -48],
-    [55, -48],
-    [72, -40],
+    [-25, -48],
+    [10, -48],
+    [45, -48],
+    [70, -42],
 
-    [72, 40],
-    [50, 48],
-    [20, 48],
-    [-20, 48],
+    [70, 42],
+    [45, 48],
+    [10, 48],
+    [-25, 48],
     [-55, 48],
-    [-72, 40]
-];
-
-treeLocations.forEach(
+    [-75, 42]
+].forEach(
     ([x, z], i) => {
 
         createTree(
             x,
             z,
-            0.9 + (i % 3) * 0.15
+            0.9 +
+            (i % 3) * 0.12
         );
     }
 );
@@ -689,13 +679,13 @@ treeLocations.forEach(
 const kart =
     new THREE.Group();
 
-// Main body
+// Body
 
 const body =
     new THREE.Mesh(
         new THREE.BoxGeometry(
             2.8,
-            0.65,
+            0.7,
             4
         ),
         new THREE.MeshStandardMaterial({
@@ -710,13 +700,13 @@ body.castShadow = true;
 
 kart.add(body);
 
-// Front hood
+// Front
 
-const hood =
+const front =
     new THREE.Mesh(
         new THREE.BoxGeometry(
             2.5,
-            0.4,
+            0.45,
             1.5
         ),
         new THREE.MeshStandardMaterial({
@@ -724,15 +714,15 @@ const hood =
         })
     );
 
-hood.position.set(
+front.position.set(
     0,
     1.15,
     -1.05
 );
 
-hood.castShadow = true;
+front.castShadow = true;
 
-kart.add(hood);
+kart.add(front);
 
 // Seat
 
@@ -741,7 +731,7 @@ const seat =
         new THREE.BoxGeometry(
             1.3,
             1.1,
-            1.25
+            1.3
         ),
         new THREE.MeshStandardMaterial({
             color: 0x202020
@@ -758,9 +748,9 @@ seat.castShadow = true;
 
 kart.add(seat);
 
-// Driver head
+// Driver
 
-const head =
+const driver =
     new THREE.Mesh(
         new THREE.SphereGeometry(
             0.55,
@@ -772,21 +762,23 @@ const head =
         })
     );
 
-head.position.set(
+driver.position.set(
     0,
     2.25,
     0.35
 );
 
-head.castShadow = true;
+driver.castShadow = true;
 
-kart.add(head);
+kart.add(driver);
 
-// Wheels
+// ============================================================
+// WHEELS
+// ============================================================
 
 const wheels = [];
 
-function createWheel(
+function makeWheel(
     x,
     z
 ) {
@@ -821,13 +813,13 @@ function createWheel(
     wheels.push(wheel);
 }
 
-createWheel(-1.5, -1.25);
-createWheel(1.5, -1.25);
-createWheel(-1.5, 1.25);
-createWheel(1.5, 1.25);
+makeWheel(-1.5, -1.25);
+makeWheel(1.5, -1.25);
+makeWheel(-1.5, 1.25);
+makeWheel(1.5, 1.25);
 
 // ============================================================
-// BOOST FLAMES
+// BOOST FLAME
 // ============================================================
 
 const boostFlame =
@@ -867,19 +859,21 @@ const player = {
 
     z: trackPoints[0].z,
 
+    // IMPORTANT:
+    // 0 means the kart faces toward -Z.
     angle: 0,
 
     speed: 0,
 
-    maxSpeed: 0.62,
+    maxSpeed: 0.55,
 
-    acceleration: 0.012,
+    acceleration: 0.010,
 
-    braking: 0.025,
+    braking: 0.022,
 
-    reverseSpeed: 0.28,
+    reverseSpeed: 0.25,
 
-    turnSpeed: 0.025,
+    turnSpeed: 0.035,
 
     drifting: false,
 
@@ -899,33 +893,36 @@ const player = {
 };
 
 // ============================================================
-// CORRECT KART START DIRECTION
+// STARTING DIRECTION
 // ============================================================
 
-const startPoint =
+// Work out the direction of the first
+// section of track.
+
+const start =
     trackPoints[0];
 
-const secondPoint =
+const startNext =
     trackPoints[1];
+
+// Our kart faces -Z.
+// Calculate the rotation needed so
+// -Z points along the track.
 
 player.angle =
     Math.atan2(
-        secondPoint.z - startPoint.z,
-        secondPoint.x - startPoint.x
+        startNext.x - start.x,
+        -(startNext.z - start.z)
     );
-
-// The kart model points toward -Z,
-// so rotate the model 90 degrees
-// relative to its movement direction.
-
-kart.rotation.y =
-    player.angle + Math.PI / 2;
 
 kart.position.set(
     player.x,
     0,
     player.z
 );
+
+kart.rotation.y =
+    player.angle;
 
 // ============================================================
 // INPUT
@@ -1008,9 +1005,9 @@ function closestTrackPoint(
     z
 ) {
 
-    let closestIndex = 0;
+    let bestIndex = 0;
 
-    let closestDistance =
+    let bestDistance =
         Infinity;
 
     for (
@@ -1034,22 +1031,23 @@ function closestTrackPoint(
 
         if (
             distance <
-            closestDistance
+            bestDistance
         ) {
 
-            closestDistance =
+            bestDistance =
                 distance;
 
-            closestIndex = i;
+            bestIndex =
+                i;
         }
     }
 
     return {
-        index: closestIndex,
+        index: bestIndex,
 
         distance:
             Math.sqrt(
-                closestDistance
+                bestDistance
             )
     };
 }
@@ -1065,22 +1063,21 @@ function isOnTrack(
             z
         );
 
-    // Extra forgiveness around
-    // the edges of the road.
-
     return (
         nearest.distance <=
-        TRACK_WIDTH / 2 + 3
+        TRACK_WIDTH / 2 + 4
     );
 }
 
 // ============================================================
-// PLAYER MOVEMENT
+// MOVEMENT
 // ============================================================
 
 function updatePlayer() {
 
-    if (player.finished) {
+    if (
+        player.finished
+    ) {
         return;
     }
 
@@ -1133,7 +1130,7 @@ function updatePlayer() {
     }
 
     // --------------------------------------------------------
-    // NATURAL SLOWDOWN
+    // FRICTION
     // --------------------------------------------------------
 
     if (
@@ -1141,7 +1138,8 @@ function updatePlayer() {
         !backward()
     ) {
 
-        player.speed *= 0.975;
+        player.speed *=
+            0.97;
 
         if (
             Math.abs(
@@ -1159,11 +1157,13 @@ function updatePlayer() {
 
     player.drifting =
         space() &&
-        Math.abs(player.speed) > 0.12 &&
+        Math.abs(
+            player.speed
+        ) > 0.10 &&
         (left() || right());
 
     // --------------------------------------------------------
-    // STEERING
+    // TURNING
     // --------------------------------------------------------
 
     if (
@@ -1171,16 +1171,22 @@ function updatePlayer() {
         right()
     ) {
 
-        let direction =
-            right()
-                ? -1
-                : 1;
+        const direction =
+            left()
+                ? 1
+                : -1;
 
-        let steeringPower =
+        let turnAmount =
+            player.turnSpeed;
+
+        // Turning becomes slightly stronger
+        // as the kart gains speed.
+
+        turnAmount *=
             Math.min(
                 Math.abs(
                     player.speed
-                ) / 0.45,
+                ) / 0.30,
                 1
             );
 
@@ -1188,13 +1194,23 @@ function updatePlayer() {
             player.drifting
         ) {
 
-            steeringPower *= 1.7;
+            turnAmount *=
+                1.65;
+        }
+
+        // Reverse steering
+
+        if (
+            player.speed < 0
+        ) {
+
+            turnAmount *=
+                -1;
         }
 
         player.angle +=
             direction *
-            player.turnSpeed *
-            steeringPower;
+            turnAmount;
     }
 
     // --------------------------------------------------------
@@ -1226,8 +1242,6 @@ function updatePlayer() {
                 player.driftCharge < 50
             ) {
 
-                // Small boost
-
                 player.boostTimer =
                     22;
 
@@ -1235,14 +1249,10 @@ function updatePlayer() {
                 player.driftCharge < 90
             ) {
 
-                // Medium boost
-
                 player.boostTimer =
                     38;
 
             } else {
-
-                // Large boost
 
                 player.boostTimer =
                     60;
@@ -1267,51 +1277,95 @@ function updatePlayer() {
 
         if (
             player.speed >
-            player.maxSpeed + 0.25
+            player.maxSpeed +
+            0.25
         ) {
 
             player.speed =
-                player.maxSpeed + 0.25;
+                player.maxSpeed +
+                0.25;
         }
 
-        boostFlame.visible = true;
+        boostFlame.visible =
+            true;
 
     } else {
 
-        boostFlame.visible = false;
+        boostFlame.visible =
+            false;
     }
 
     // --------------------------------------------------------
-    // MOVEMENT
+    // FORWARD VECTOR
     // --------------------------------------------------------
 
-    let movementAngle =
-        player.angle;
+    // The kart's front is -Z.
+    //
+    // Therefore:
+    //
+    // X = sin(angle)
+    // Z = -cos(angle)
+
+    let forwardX =
+        Math.sin(
+            player.angle
+        );
+
+    let forwardZ =
+        -Math.cos(
+            player.angle
+        );
+
+    // --------------------------------------------------------
+    // DRIFT MOVEMENT
+    // --------------------------------------------------------
+
+    let movementX =
+        forwardX;
+
+    let movementZ =
+        forwardZ;
 
     if (
         player.drifting
     ) {
 
         const driftDirection =
-            right()
+            left()
                 ? -1
                 : 1;
 
-        movementAngle +=
-            driftDirection *
-            0.20;
+        const sidewaysX =
+            Math.cos(
+                player.angle
+            ) *
+            driftDirection;
+
+        const sidewaysZ =
+            Math.sin(
+                player.angle
+            ) *
+            driftDirection;
+
+        movementX =
+            forwardX * 0.88 +
+            sidewaysX * 0.20;
+
+        movementZ =
+            forwardZ * 0.88 +
+            sidewaysZ * 0.20;
     }
 
+    // --------------------------------------------------------
+    // MOVE
+    // --------------------------------------------------------
+
     const moveX =
-        Math.cos(
-            movementAngle
-        ) *
+        movementX *
         player.speed;
 
     const moveZ =
-        Math.sin(
-            movementAngle
-        ) *
+        movementZ *
         player.speed;
 
     const newX =
@@ -1337,7 +1391,7 @@ function updatePlayer() {
     } else {
 
         player.speed *=
-            0.30;
+            0.25;
     }
 
     if (
@@ -1353,11 +1407,11 @@ function updatePlayer() {
     } else {
 
         player.speed *=
-            0.30;
+            0.25;
     }
 
     // --------------------------------------------------------
-    // UPDATE KART
+    // KART POSITION
     // --------------------------------------------------------
 
     kart.position.x =
@@ -1366,36 +1420,30 @@ function updatePlayer() {
     kart.position.z =
         player.z;
 
+    // IMPORTANT:
+    // Same angle used by movement.
+
     kart.rotation.y =
-        player.angle +
-        Math.PI / 2;
+        player.angle;
 
     // --------------------------------------------------------
-    // WHEEL ROTATION
+    // BODY LEAN
     // --------------------------------------------------------
-
-    for (
-        const wheel of wheels
-    ) {
-
-        wheel.rotation.x +=
-            player.speed *
-            0.7;
-    }
-
-    // Small body movement
 
     if (
         player.drifting
     ) {
 
+        const lean =
+            left()
+                ? 0.10
+                : -0.10;
+
         kart.rotation.z =
             THREE.MathUtils.lerp(
                 kart.rotation.z,
-                right()
-                    ? -0.08
-                    : 0.08,
-                0.12
+                lean,
+                0.15
             );
 
     } else {
@@ -1408,11 +1456,24 @@ function updatePlayer() {
             );
     }
 
+    // --------------------------------------------------------
+    // WHEEL ROTATION
+    // --------------------------------------------------------
+
+    for (
+        const wheel of wheels
+    ) {
+
+        wheel.rotation.x +=
+            player.speed *
+            0.8;
+    }
+
     updateRace();
 }
 
 // ============================================================
-// RACE SYSTEM
+// RACE
 // ============================================================
 
 const TOTAL_LAPS = 3;
@@ -1431,58 +1492,50 @@ function updateRace() {
     player.lastTrackIndex =
         index;
 
-    // --------------------------------------------------------
-    // CHECKPOINT 1
-    // --------------------------------------------------------
+    // Checkpoint 1
 
     if (
         player.nextCheckpoint === 0 &&
         Math.abs(
             index -
             checkpointIndices[0]
-        ) < 6
+        ) < 7
     ) {
 
         player.nextCheckpoint = 1;
     }
 
-    // --------------------------------------------------------
-    // CHECKPOINT 2
-    // --------------------------------------------------------
+    // Checkpoint 2
 
     if (
         player.nextCheckpoint === 1 &&
         Math.abs(
             index -
             checkpointIndices[1]
-        ) < 6
+        ) < 7
     ) {
 
         player.nextCheckpoint = 2;
     }
 
-    // --------------------------------------------------------
-    // CHECKPOINT 3
-    // --------------------------------------------------------
+    // Checkpoint 3
 
     if (
         player.nextCheckpoint === 2 &&
         Math.abs(
             index -
             checkpointIndices[2]
-        ) < 6
+        ) < 7
     ) {
 
         player.nextCheckpoint = 3;
     }
 
-    // --------------------------------------------------------
-    // FINISH LINE
-    // --------------------------------------------------------
+    // Finish
 
     if (
         player.nextCheckpoint === 3 &&
-        index < 6
+        index < 7
     ) {
 
         if (
@@ -1560,29 +1613,28 @@ container.appendChild(
 
 function updateHUD() {
 
-    let boostText = "";
+    let boost =
+        "";
 
     if (
         player.boostTimer > 0
     ) {
 
-        boostText =
+        boost =
             "<br>🔥 BOOST!";
     }
 
-    let driftText = "";
+    let drift =
+        "";
 
     if (
         player.drifting
     ) {
 
-        let charge =
-            Math.floor(
+        drift =
+            `<br>Drift: ${Math.floor(
                 player.driftCharge
-            );
-
-        driftText =
-            `<br>Drift: ${charge}`;
+            )}`;
     }
 
     hud.innerHTML = `
@@ -1595,8 +1647,8 @@ function updateHUD() {
                 player.speed
             ) * 100
         )}
-        ${boostText}
-        ${driftText}
+        ${boost}
+        ${drift}
     `;
 }
 
@@ -1677,9 +1729,7 @@ function showFinish() {
         )
         .addEventListener(
             "click",
-            () => {
-                location.reload();
-            }
+            () => location.reload()
         );
 }
 
@@ -1689,50 +1739,68 @@ function showFinish() {
 
 function updateCamera() {
 
-    // Camera stays behind the kart.
+    // ========================================================
+    // THIS IS THE IMPORTANT PART
+    //
+    // The camera is positioned BEHIND the kart using the
+    // EXACT SAME angle that controls the kart.
+    // ========================================================
 
-    const cameraDistance = 13;
-    const cameraHeight = 7.5;
+    const distance = 12;
+    const height = 7;
 
-    const behindX =
+    const cameraX =
         player.x -
-        Math.cos(
-            player.angle
-        ) *
-        cameraDistance;
-
-    const behindZ =
-        player.z -
         Math.sin(
             player.angle
         ) *
-        cameraDistance;
+        distance;
 
-    const target =
-        new THREE.Vector3(
-            behindX,
-            cameraHeight,
-            behindZ
+    const cameraZ =
+        player.z +
+        Math.cos(
+            player.angle
+        ) *
+        distance;
+
+    // Smoothly follow the kart.
+
+    camera.position.x =
+        THREE.MathUtils.lerp(
+            camera.position.x,
+            cameraX,
+            0.15
         );
 
-    camera.position.lerp(
-        target,
-        0.08
-    );
+    camera.position.y =
+        THREE.MathUtils.lerp(
+            camera.position.y,
+            height,
+            0.15
+        );
+
+    camera.position.z =
+        THREE.MathUtils.lerp(
+            camera.position.z,
+            cameraZ,
+            0.15
+        );
+
+    // Look slightly ahead of the kart.
 
     const lookX =
         player.x +
-        Math.cos(
-            player.angle
-        ) *
-        6;
-
-    const lookZ =
-        player.z +
         Math.sin(
             player.angle
         ) *
-        6;
+        7;
+
+    const lookZ =
+        player.z -
+        Math.cos(
+            player.angle
+        ) *
+        7;
 
     camera.lookAt(
         lookX,
@@ -1772,7 +1840,7 @@ window.addEventListener(
 resize();
 
 // ============================================================
-// START TIMER
+// RACE TIMER
 // ============================================================
 
 const raceStartTime =
