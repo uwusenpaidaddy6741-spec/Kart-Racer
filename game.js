@@ -1010,15 +1010,15 @@ const player = {
     speed: 0,
 
     // Deliberately slower than before.
-    maxSpeed: 0.48,
+    maxSpeed: 0.35,
 
-    acceleration: 0.008,
+    acceleration: 0.007,
 
     braking: 0.018,
 
     reverseSpeed: 0.20,
 
-    turnSpeed: 0.035,
+    turnSpeed: 0.0175,
 
     drifting: false,
 
