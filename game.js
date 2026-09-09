@@ -1537,20 +1537,8 @@ function updatePlayer(deltaTime) {
 
 const TOTAL_LAPS = 3;
 
-function circularDistance(
-    a,
-    b,
-    length
-) {
-
-    const difference =
-        Math.abs(a - b);
-
-    return Math.min(
-        difference,
-        length - difference
-    );
-}
+let previousRaceX = player.x;
+let previousRaceZ = player.z;
 
 function updateRace() {
 
@@ -1616,31 +1604,54 @@ function updateRace() {
     // --------------------------------------------------------
     // FINISH LINE
     // --------------------------------------------------------
+    //
+    // The visual finish line is located at trackPoints[0].
+    //
+    // Instead of ending the race anywhere in index 0-3,
+    // require the kart to actually be close to the finish line.
+    // --------------------------------------------------------
 
     if (
-        player.nextCheckpoint === 4 &&
-        index <= 3
+        player.nextCheckpoint === 4
     ) {
 
+        const finishPoint =
+            trackPoints[0];
+
+        const finishDistance =
+            Math.hypot(
+                player.x - finishPoint.x,
+                player.z - finishPoint.z
+            );
+
+        const finishWindow =
+            TRACK_WIDTH / 2 + 1.5;
+
         if (
-            player.lap <
-            TOTAL_LAPS
+            finishDistance <=
+            finishWindow
         ) {
 
-            player.lap++;
+            if (
+                player.lap <
+                TOTAL_LAPS
+            ) {
 
-            player.nextCheckpoint = 1;
+                player.lap++;
 
-        } else {
+                player.nextCheckpoint = 1;
 
-            player.finished = true;
+            } else {
 
-            player.finishTime =
-                raceElapsedTime;
+                player.finished = true;
 
-            boostFlame.visible = false;
+                player.finishTime =
+                    raceElapsedTime;
 
-            showFinish();
+                boostFlame.visible = false;
+
+                showFinish();
+            }
         }
     }
 }
