@@ -1165,12 +1165,24 @@ if (forward()) {
         player.acceleration *
         deltaTime;
 
-    // Only clamp to normal max speed
-    // if we are not above the normal speed
-    // because of a boost.
+    // Only accelerate normally up to max speed.
+    // If we are already above max speed from a boost,
+    // don't add normal acceleration.
     if (
         player.boostTimer <= 0 &&
-        player.speed <= player.maxSpeed
+        player.speed > player.maxSpeed
+    ) {
+
+        player.speed =
+            moveToward(
+                player.speed,
+                player.maxSpeed,
+                3 * deltaTime
+            );
+    }
+
+    else if (
+        player.boostTimer <= 0
     ) {
 
         player.speed =
@@ -1179,7 +1191,7 @@ if (forward()) {
                 player.maxSpeed
             );
     }
-}
+} 
     
     // --------------------------------------------------------
     // BRAKING / REVERSE
@@ -1377,18 +1389,7 @@ if (player.boostTimer > 0) {
 } else {
 
     boostFlame.visible = false;
-
-    // Gradually return to normal driving speed.
-    if (player.speed > player.maxSpeed) {
-
-        player.speed =
-            moveToward(
-                player.speed,
-                player.maxSpeed,
-                3 * deltaTime
-            );
-    }
-} 
+}  
     
     // --------------------------------------------------------
     // DRIFT MOVEMENT
