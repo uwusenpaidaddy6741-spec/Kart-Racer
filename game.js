@@ -118,7 +118,7 @@ scene.add(grass);
 // TRACK SETTINGS
 // ============================================================
 
-const TRACK_WIDTH = 12;
+const TRACK_WIDTH = 14;
 
 const TRACK_HALF_X = 42;
 const TRACK_HALF_Z = 27;
@@ -722,19 +722,6 @@ kart.add(boostFlame);
 // ============================================================
 // PLAYER PHYSICS
 // ============================================================
-//
-// IMPORTANT:
-//
-// ALL VALUES BELOW USE REAL SECONDS.
-//
-// speed = world units per second
-// acceleration = world units per second²
-// turnSpeed = radians per second
-// driftCharge = seconds
-// boostTimer = seconds
-//
-// Nothing here depends on FPS.
-//
 
 const player = {
 
@@ -778,6 +765,10 @@ const player = {
     lastDrifting: false
 };
 
+// ============================================================
+// INITIAL KART DIRECTION
+// ============================================================
+
 const initialDx =
     trackPoints[1].x -
     trackPoints[0].x;
@@ -798,18 +789,17 @@ kart.position.set(
     player.z
 );
 
+// IMPORTANT:
+// The kart model faces local -Z.
+// The movement system's angle points along +X at angle 0.
+// Therefore the model needs a -90 degree offset.
+
 kart.rotation.y =
-    player.angle;
+    player.angle - Math.PI / 2;
 
 // ============================================================
 // CHECKPOINTS
 // ============================================================
-//
-// There are 120 track points:
-// 0 through 119.
-//
-// These are intentionally valid points.
-//
 
 const checkpointIndices = [
     30,
@@ -977,6 +967,16 @@ function space() {
 // ============================================================
 // TRACK DETECTION
 // ============================================================
+//
+// The old version checked the distance to individual
+// centerline POINTS.
+//
+// That caused the kart to get stuck because a position could
+// be close to a road SEGMENT while being too far from the
+// nearest sampled point.
+//
+// This version checks the actual line SEGMENTS between points.
+// ============================================================
 
 function closestTrackPoint(x, z) {
 
@@ -1020,18 +1020,118 @@ function closestTrackPoint(x, z) {
     };
 }
 
-function isOnTrack(x, z) {
+// ============================================================
+// DISTANCE FROM POINT TO TRACK SEGMENT
+// ============================================================
 
-    const nearest =
-        closestTrackPoint(
-            x,
-            z
+function distanceToSegment(
+    px,
+    pz,
+    ax,
+    az,
+    bx,
+    bz
+) {
+
+    const abx = bx - ax;
+    const abz = bz - az;
+
+    const apx = px - ax;
+    const apz = pz - az;
+
+    const abLengthSquared =
+        abx * abx +
+        abz * abz;
+
+    // Prevent division by zero.
+    if (
+        abLengthSquared === 0
+    ) {
+
+        return Math.hypot(
+            px - ax,
+            pz - az
+        );
+    }
+
+    // Project point onto the segment.
+    let t =
+        (
+            apx * abx +
+            apz * abz
+        ) /
+        abLengthSquared;
+
+    // Keep projection on the actual segment.
+    t =
+        Math.max(
+            0,
+            Math.min(1, t)
         );
 
-    return (
-        nearest.distance <=
-        TRACK_WIDTH / 2 + 1.8
+    const closestX =
+        ax +
+        abx * t;
+
+    const closestZ =
+        az +
+        abz * t;
+
+    return Math.hypot(
+        px - closestX,
+        pz - closestZ
     );
+}
+
+// ============================================================
+// ACCURATE TRACK COLLISION
+// ============================================================
+
+function isOnTrack(x, z) {
+
+    // Half of the road width is 7.
+    //
+    // The extra 1.8 gives the kart some room at the edges
+    // so it doesn't become stuck against the border.
+
+    const allowedDistance =
+        TRACK_WIDTH / 2 + 1.8;
+
+    for (
+        let i = 0;
+        i < trackPoints.length;
+        i++
+    ) {
+
+        const a =
+            trackPoints[i];
+
+        const b =
+            trackPoints[
+                (i + 1) %
+                trackPoints.length
+            ];
+
+        const distance =
+            distanceToSegment(
+                x,
+                z,
+                a.x,
+                a.z,
+                b.x,
+                b.z
+            );
+
+        if (
+            distance <=
+            allowedDistance
+        ) {
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 // ============================================================
@@ -1292,14 +1392,6 @@ function updatePlayer(deltaTime) {
     // --------------------------------------------------------
     // REAL-TIME MOVEMENT
     // --------------------------------------------------------
-    //
-    // speed is units/second.
-    //
-    // distance = speed × seconds.
-    //
-    // This is the important part that makes the game
-    // independent of FPS.
-    //
 
     const distance =
         player.speed *
@@ -1321,46 +1413,69 @@ function updatePlayer(deltaTime) {
         player.z +
         moveZ;
 
-    // --------------------------------------------------------
-    // COLLISION - X
-    // --------------------------------------------------------
+    // ========================================================
+    // IMPROVED TRACK COLLISION
+    // ========================================================
+    //
+    // First test the COMPLETE new position.
+    //
+    // This is much better than testing X and Z separately.
+    //
+    // If the complete position isn't valid, we test each axis
+    // independently so the kart can still slide along walls.
+    // ========================================================
 
     if (
         isOnTrack(
             newX,
-            player.z
-        )
-    ) {
-
-        player.x =
-            newX;
-
-    } else {
-
-        player.speed =
-            moveToward(
-                player.speed,
-                0,
-                20 *
-                deltaTime
-            );
-    }
-
-    // --------------------------------------------------------
-    // COLLISION - Z
-    // --------------------------------------------------------
-
-    if (
-        isOnTrack(
-            player.x,
             newZ
         )
     ) {
+
+        // Entire movement is valid.
+        player.x =
+            newX;
 
         player.z =
             newZ;
 
     } else {
+
+        // ----------------------------------------------------
+        // TRY X MOVEMENT ONLY
+        // ----------------------------------------------------
+
+        if (
+            isOnTrack(
+                newX,
+                player.z
+            )
+        ) {
+
+            player.x =
+                newX;
+
+        }
+
+        // ----------------------------------------------------
+        // TRY Z MOVEMENT ONLY
+        // ----------------------------------------------------
+
+        if (
+            isOnTrack(
+                player.x,
+                newZ
+            )
+        ) {
+
+            player.z =
+                newZ;
+
+        }
+
+        // ----------------------------------------------------
+        // SLOW DOWN WHEN HITTING THE EDGE
+        // ----------------------------------------------------
 
         player.speed =
             moveToward(
@@ -1381,19 +1496,19 @@ function updatePlayer(deltaTime) {
     kart.position.z =
         player.z;
 
+    // IMPORTANT:
+    // The kart model faces -Z, while player.angle uses
+    // the movement direction system.
+    //
+    // - Math.PI / 2 keeps the model facing forward.
+
     kart.rotation.y =
-        player.angle;
+        player.angle -
+        Math.PI / 2;
 
     // --------------------------------------------------------
     // WHEEL ROTATION
     // --------------------------------------------------------
-    //
-    // Wheel radius = 0.65.
-    //
-    // rotation = distance / radius.
-    //
-    // Again, this uses real elapsed time.
-    //
 
     const wheelRadius = 0.65;
 
@@ -1529,6 +1644,7 @@ function updateRace() {
         }
     }
 }
+
 // ============================================================
 // RACE TIMER
 // ============================================================
@@ -1726,11 +1842,6 @@ function updateCamera(deltaTime) {
         behindZ
     );
 
-    // FPS-independent smoothing.
-    //
-    // At higher FPS this still approaches the same target
-    // at approximately the same rate.
-
     const smoothing =
         1 -
         Math.exp(
@@ -1822,9 +1933,6 @@ function animate(currentTime) {
 
     previousTime =
         currentTime;
-
-    // Prevent a giant jump if the browser tab
-    // was hidden or paused.
 
     deltaTime =
         Math.min(
