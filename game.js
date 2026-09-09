@@ -639,9 +639,9 @@ kart.rotation.y = player.angle;
 // ------------------------------------------------------------
 
 const checkpointIndices = [
-    90,
-    180,
-    270
+    30,
+    60,
+    90
 ];
 
 function createCheckpoint(index, number) {
