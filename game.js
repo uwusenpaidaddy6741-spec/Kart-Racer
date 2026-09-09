@@ -1155,19 +1155,23 @@ function updatePlayer(deltaTime) {
         return;
     }
 
-    // --------------------------------------------------------
-    // ACCELERATION
-    // --------------------------------------------------------
+// --------------------------------------------------------
+// ACCELERATION
+// --------------------------------------------------------
 
-    if (forward()) {
+if (forward()) {
 
     player.speed +=
         player.acceleration *
         deltaTime;
 
-    // Only use the normal speed limit
-    // when we are NOT boosting.
-    if (player.boostTimer <= 0) {
+    // Only clamp to normal max speed
+    // if we are not above the normal speed
+    // because of a boost.
+    if (
+        player.boostTimer <= 0 &&
+        player.speed <= player.maxSpeed
+    ) {
 
         player.speed =
             Math.min(
@@ -1175,8 +1179,8 @@ function updatePlayer(deltaTime) {
                 player.maxSpeed
             );
     }
-} 
-
+}
+    
     // --------------------------------------------------------
     // BRAKING / REVERSE
     // --------------------------------------------------------
@@ -1374,17 +1378,17 @@ if (player.boostTimer > 0) {
 
     boostFlame.visible = false;
 
-    // Smoothly return to normal driving speed.
-   if (player.speed > player.maxSpeed) {
+    // Gradually return to normal driving speed.
+    if (player.speed > player.maxSpeed) {
 
-    player.speed -= 3 * deltaTime;
-
-    if (player.speed < player.maxSpeed) {
-        player.speed = player.maxSpeed;
+        player.speed =
+            moveToward(
+                player.speed,
+                player.maxSpeed,
+                3 * deltaTime
+            );
     }
-}
-    
-}
+} 
     
     // --------------------------------------------------------
     // DRIFT MOVEMENT
