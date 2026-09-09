@@ -1161,9 +1161,13 @@ function updatePlayer(deltaTime) {
 
     if (forward()) {
 
-        player.speed +=
-            player.acceleration *
-            deltaTime;
+    player.speed +=
+        player.acceleration *
+        deltaTime;
+
+    // Only use the normal speed limit
+    // when we are NOT boosting.
+    if (player.boostTimer <= 0) {
 
         player.speed =
             Math.min(
@@ -1171,6 +1175,7 @@ function updatePlayer(deltaTime) {
                 player.maxSpeed
             );
     }
+} 
 
     // --------------------------------------------------------
     // BRAKING / REVERSE
@@ -1347,29 +1352,46 @@ function updatePlayer(deltaTime) {
     // --------------------------------------------------------
 
     if (
-        player.boostTimer > 0
+    player.boostTimer > 0
+) {
+
+    player.boostTimer -=
+        deltaTime;
+
+    // BOOST ACCELERATION
+    player.speed +=
+        player.boostAcceleration *
+        deltaTime;
+
+    // Allow the kart to go beyond normal max speed.
+    player.speed =
+        Math.min(
+            player.speed,
+            player.boostMaxSpeed
+        );
+
+    boostFlame.visible = true;
+
+} else {
+
+    boostFlame.visible = false;
+
+    // When boost ends, bring speed back
+    // toward the normal maximum.
+    if (
+        player.speed >
+        player.maxSpeed
     ) {
 
-        player.boostTimer -=
-            deltaTime;
-
-        player.speed +=
-            player.boostAcceleration *
-            deltaTime;
-
         player.speed =
-            Math.min(
+            moveToward(
                 player.speed,
-                player.boostMaxSpeed
+                player.maxSpeed,
+                20 *
+                deltaTime
             );
-
-        boostFlame.visible = true;
-
-    } else {
-
-        boostFlame.visible = false;
     }
-
+}
     // --------------------------------------------------------
     // DRIFT MOVEMENT
     // --------------------------------------------------------
