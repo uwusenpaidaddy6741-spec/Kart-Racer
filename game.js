@@ -746,9 +746,9 @@ const player = {
 
     boostTimer: 0,
 
-    boostAcceleration: 70,
+    boostAcceleration: 100,
 
-    boostMaxSpeed: 100,
+    boostMaxSpeed: 300,
 
     lap: 1,
 
