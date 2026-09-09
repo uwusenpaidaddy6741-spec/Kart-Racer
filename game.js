@@ -75,8 +75,8 @@ const player = {
 
     speed: 0,
 
-    maxSpeed: 3,
-    acceleration: 0.10,
+    maxSpeed: 4,
+    acceleration: 0.12,
     braking: 0.18,
 
     turnSpeed: 0.03,
