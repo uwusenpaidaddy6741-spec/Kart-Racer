@@ -66,20 +66,20 @@ const track = {
 // =====================================================
 
 const player = {
-    // Start near the bottom of the track
+    // START AT THE TOP OF THE TRACK
     x: 500,
-    y: 520,
+    y: 180,
 
-    // Facing upward
-    angle: -Math.PI / 2,
+    // Face toward the right
+    angle: 0,
 
     speed: 0,
 
-    maxSpeed: 6,
-    acceleration: 0.12,
+    maxSpeed: 3,
+    acceleration: 0.10,
     braking: 0.18,
 
-    turnSpeed: 0.045,
+    turnSpeed: 0.03,
 
     width: 32,
     height: 18,
