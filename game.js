@@ -321,13 +321,7 @@ function updatePlayer() {
             player.speed >= 0 ? 1 : -1;
 
         const steeringAmount =
-            player.turnSpeed *
-            direction *
-            (
-                Math.abs(player.speed) /
-                player.maxSpeed +
-                0.3
-            );
+    player.turnSpeed * direction;
 
         if (left) {
             player.angle -= steeringAmount;
