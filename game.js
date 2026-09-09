@@ -1317,10 +1317,10 @@ if (player.drifting) {
             player.boostTimer = 0.35;
 
             player.speed =
-                Math.min(
-                    player.speed + 4,
-                    player.boostMaxSpeed
-                );
+    Math.min(
+        player.speed + 4,
+        45
+    );
 
         }
 
@@ -1330,10 +1330,10 @@ if (player.drifting) {
             player.boostTimer = 0.65;
 
             player.speed =
-                Math.min(
-                    player.speed + 10,
-                    player.boostMaxSpeed
-                );
+    Math.min(
+        player.speed + 10,
+        50
+    );
 
         }
 
@@ -1342,11 +1342,11 @@ if (player.drifting) {
 
             player.boostTimer = 1.0;
 
-            player.speed =
-                Math.min(
-                    player.speed + 18,
-                    player.boostMaxSpeed
-                );
+           player.speed =
+    Math.min(
+        player.speed + 18,
+        55
+    );
         }
     }
 
