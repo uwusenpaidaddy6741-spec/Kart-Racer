@@ -1310,7 +1310,7 @@ function updatePlayer(deltaTime) {
         player.speed =
             Math.max(
                 player.speed,
-                50
+                40
             );
     }
 
@@ -1324,7 +1324,7 @@ function updatePlayer(deltaTime) {
         player.speed =
             Math.max(
                 player.speed,
-                75
+                47
             );
     }
 
@@ -1336,7 +1336,7 @@ function updatePlayer(deltaTime) {
         player.speed =
             Math.max(
                 player.speed,
-                110
+                55
             );
     }
 } 
