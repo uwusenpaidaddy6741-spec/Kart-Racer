@@ -1423,9 +1423,9 @@ function updatePlayer() {
     ) {
 
         const direction =
-            left()
-                ? 1
-                : -1;
+    left()
+        ? -1
+        : 1;
 
         let steering =
             player.turnSpeed;
