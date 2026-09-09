@@ -1540,6 +1540,20 @@ const TOTAL_LAPS = 3;
 let previousRaceX = player.x;
 let previousRaceZ = player.z;
 
+function circularDistance(a, b, length) {
+
+    const direct =
+        Math.abs(a - b);
+
+    const wrapped =
+        length - direct;
+
+    return Math.min(
+        direct,
+        wrapped
+    );
+}
+
 function updateRace() {
 
     const nearest =
