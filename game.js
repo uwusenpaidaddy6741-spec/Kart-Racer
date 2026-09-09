@@ -1282,71 +1282,75 @@ function updatePlayer(deltaTime) {
     // DRIFT CHARGE
     // --------------------------------------------------------
 
-    if (player.drifting) {
+    // ============================================================
+// DRIFT CHARGE
+// ============================================================
 
-        player.driftCharge +=
-            deltaTime;
+if (player.drifting) {
 
-        player.driftCharge =
-            Math.min(
-                player.driftCharge,
-                2.5
-            );
+    player.driftCharge +=
+        deltaTime;
 
-    } else {
+    player.driftCharge =
+        Math.min(
+            player.driftCharge,
+            2.5
+        );
 
-        if (
-    player.lastDrifting &&
-    player.driftCharge >= 0.35
-) {
+} else {
 
-    // MINI BOOST
     if (
-        player.driftCharge < 0.8
+        player.lastDrifting &&
+        player.driftCharge >= 0.35
     ) {
 
-        player.boostTimer = 0.45;
+        // MINI BOOST
+        if (
+            player.driftCharge < 0.8
+        ) {
 
-        player.speed =
-            Math.max(
-                player.speed,
-                40
-            );
+            player.boostTimer = 0.45;
+
+            player.speed =
+                Math.min(
+                    player.speed + 8,
+                    player.boostMaxSpeed
+                );
+        }
+
+        // MEDIUM BOOST
+        else if (
+            player.driftCharge < 1.5
+        ) {
+
+            player.boostTimer = 0.8;
+
+            player.speed =
+                Math.min(
+                    player.speed + 14,
+                    player.boostMaxSpeed
+                );
+        }
+
+        // MAX BOOST
+        else {
+
+            player.boostTimer = 1.25;
+
+            player.speed =
+                Math.min(
+                    player.speed + 22,
+                    player.boostMaxSpeed
+                );
+        }
     }
 
-    // MEDIUM BOOST
-    else if (
-        player.driftCharge < 1.5
-    ) {
+    player.driftCharge = 0;
+}
 
-        player.boostTimer = 0.8;
-
-        player.speed =
-            Math.max(
-                player.speed,
-                47
-            );
-    }
-
-    // MAX BOOST
-    else {
-
-        player.boostTimer = 1.25;
-
-        player.speed =
-            Math.max(
-                player.speed,
-                55
-            );
-    }
-} 
-
-        player.driftCharge = 0;
-    }
-
-    player.lastDrifting =
-        player.drifting;
-
+player.lastDrifting =
+    player.drifting;
+    
     // --------------------------------------------------------
     // BOOST
     // --------------------------------------------------------
@@ -1355,15 +1359,16 @@ function updatePlayer(deltaTime) {
     player.boostTimer > 0
 ) {
 
+    // Count down the boost.
     player.boostTimer -=
         deltaTime;
 
-    // BOOST ACCELERATION
+    // Strong acceleration during the burst.
     player.speed +=
         player.boostAcceleration *
         deltaTime;
 
-    // Allow the kart to go beyond normal max speed.
+    // Don't go past the boost speed limit.
     player.speed =
         Math.min(
             player.speed,
@@ -1376,8 +1381,7 @@ function updatePlayer(deltaTime) {
 
     boostFlame.visible = false;
 
-    // When boost ends, bring speed back
-    // toward the normal maximum.
+    // Smoothly return to normal driving speed.
     if (
         player.speed >
         player.maxSpeed
@@ -1387,10 +1391,10 @@ function updatePlayer(deltaTime) {
             moveToward(
                 player.speed,
                 player.maxSpeed,
-                20 *
+                30 *
                 deltaTime
             );
-    }
+    } 
 }
     // --------------------------------------------------------
     // DRIFT MOVEMENT
