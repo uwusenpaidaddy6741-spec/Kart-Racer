@@ -1384,7 +1384,7 @@ if (player.boostTimer > 0) {
             moveToward(
                 player.speed,
                 player.maxSpeed,
-                30 *
+                8 * 
                 deltaTime
             );
     }
