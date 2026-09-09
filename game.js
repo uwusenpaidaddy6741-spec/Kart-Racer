@@ -730,16 +730,12 @@ const player = {
 
     speed: 0,
 
+    // KEEPING ALL ORIGINAL NUMBERS
     maxSpeed: 36,
-
     acceleration: 18,
-
     braking: 30,
-
     reverseAcceleration: 10,
-
     reverseSpeed: 8,
-
     turnSpeed: 2.4,
 
     angle: 0,
@@ -789,13 +785,10 @@ kart.position.set(
     player.z
 );
 
-// IMPORTANT:
 // The kart model faces local -Z.
-// The movement system's angle points along +X at angle 0.
-// Therefore the model needs a -90 degree offset.
-
 kart.rotation.y =
-    player.angle - Math.PI / 2;
+    player.angle -
+    Math.PI / 2;
 
 // ============================================================
 // CHECKPOINTS
@@ -813,10 +806,12 @@ function createCheckpoint(index, number) {
         index < 0 ||
         index >= trackPoints.length
     ) {
+
         console.warn(
             "Invalid checkpoint index:",
             index
         );
+
         return;
     }
 
@@ -829,10 +824,12 @@ function createCheckpoint(index, number) {
         ];
 
     if (!p || !next) {
+
         console.warn(
             "Checkpoint track point does not exist:",
             index
         );
+
         return;
     }
 
@@ -847,6 +844,7 @@ function createCheckpoint(index, number) {
 
     const material =
         new THREE.MeshStandardMaterial({
+
             color:
                 number === 1
                     ? 0x00ff00
@@ -914,6 +912,7 @@ window.addEventListener(
                 "Space"
             ].includes(event.code)
         ) {
+
             event.preventDefault();
         }
     }
@@ -967,16 +966,6 @@ function space() {
 // ============================================================
 // TRACK DETECTION
 // ============================================================
-//
-// The old version checked the distance to individual
-// centerline POINTS.
-//
-// That caused the kart to get stuck because a position could
-// be close to a road SEGMENT while being too far from the
-// nearest sampled point.
-//
-// This version checks the actual line SEGMENTS between points.
-// ============================================================
 
 function closestTrackPoint(x, z) {
 
@@ -1011,6 +1000,7 @@ function closestTrackPoint(x, z) {
     }
 
     return {
+
         index: bestIndex,
 
         distance:
@@ -1043,7 +1033,6 @@ function distanceToSegment(
         abx * abx +
         abz * abz;
 
-    // Prevent division by zero.
     if (
         abLengthSquared === 0
     ) {
@@ -1054,7 +1043,6 @@ function distanceToSegment(
         );
     }
 
-    // Project point onto the segment.
     let t =
         (
             apx * abx +
@@ -1062,7 +1050,6 @@ function distanceToSegment(
         ) /
         abLengthSquared;
 
-    // Keep projection on the actual segment.
     t =
         Math.max(
             0,
@@ -1088,11 +1075,6 @@ function distanceToSegment(
 // ============================================================
 
 function isOnTrack(x, z) {
-
-    // Half of the road width is 7.
-    //
-    // The extra 1.8 gives the kart some room at the edges
-    // so it doesn't become stuck against the border.
 
     const allowedDistance =
         TRACK_WIDTH / 2 + 1.8;
@@ -1145,6 +1127,7 @@ function moveToward(
 ) {
 
     if (current < target) {
+
         return Math.min(
             current + amount,
             target
@@ -1152,6 +1135,7 @@ function moveToward(
     }
 
     if (current > target) {
+
         return Math.max(
             current - amount,
             target
@@ -1306,8 +1290,6 @@ function updatePlayer(deltaTime) {
 
     } else {
 
-        // Release drift and convert charge to boost.
-
         if (
             player.lastDrifting &&
             player.driftCharge >= 0.35
@@ -1413,17 +1395,9 @@ function updatePlayer(deltaTime) {
         player.z +
         moveZ;
 
-    // ========================================================
-    // IMPROVED TRACK COLLISION
-    // ========================================================
-    //
-    // First test the COMPLETE new position.
-    //
-    // This is much better than testing X and Z separately.
-    //
-    // If the complete position isn't valid, we test each axis
-    // independently so the kart can still slide along walls.
-    // ========================================================
+    // --------------------------------------------------------
+    // TRACK COLLISION
+    // --------------------------------------------------------
 
     if (
         isOnTrack(
@@ -1432,7 +1406,6 @@ function updatePlayer(deltaTime) {
         )
     ) {
 
-        // Entire movement is valid.
         player.x =
             newX;
 
@@ -1441,9 +1414,7 @@ function updatePlayer(deltaTime) {
 
     } else {
 
-        // ----------------------------------------------------
-        // TRY X MOVEMENT ONLY
-        // ----------------------------------------------------
+        // Try X movement separately.
 
         if (
             isOnTrack(
@@ -1454,12 +1425,9 @@ function updatePlayer(deltaTime) {
 
             player.x =
                 newX;
-
         }
 
-        // ----------------------------------------------------
-        // TRY Z MOVEMENT ONLY
-        // ----------------------------------------------------
+        // Try Z movement separately.
 
         if (
             isOnTrack(
@@ -1470,12 +1438,9 @@ function updatePlayer(deltaTime) {
 
             player.z =
                 newZ;
-
         }
 
-        // ----------------------------------------------------
-        // SLOW DOWN WHEN HITTING THE EDGE
-        // ----------------------------------------------------
+        // Slow down against edge.
 
         player.speed =
             moveToward(
@@ -1495,12 +1460,6 @@ function updatePlayer(deltaTime) {
 
     kart.position.z =
         player.z;
-
-    // IMPORTANT:
-    // The kart model faces -Z, while player.angle uses
-    // the movement direction system.
-    //
-    // - Math.PI / 2 keeps the model facing forward.
 
     kart.rotation.y =
         player.angle -
@@ -1537,10 +1496,11 @@ function updatePlayer(deltaTime) {
 
 const TOTAL_LAPS = 3;
 
-let previousRaceX = player.x;
-let previousRaceZ = player.z;
-
-function circularDistance(a, b, length) {
+function circularDistance(
+    a,
+    b,
+    length
+) {
 
     const direct =
         Math.abs(a - b);
@@ -1618,12 +1578,6 @@ function updateRace() {
     // --------------------------------------------------------
     // FINISH LINE
     // --------------------------------------------------------
-    //
-    // The visual finish line is located at trackPoints[0].
-    //
-    // Instead of ending the race anywhere in index 0-3,
-    // require the kart to actually be close to the finish line.
-    // --------------------------------------------------------
 
     if (
         player.nextCheckpoint === 4
@@ -1634,8 +1588,11 @@ function updateRace() {
 
         const finishDistance =
             Math.hypot(
-                player.x - finishPoint.x,
-                player.z - finishPoint.z
+                player.x -
+                    finishPoint.x,
+
+                player.z -
+                    finishPoint.z
             );
 
         const finishWindow =
@@ -1662,7 +1619,8 @@ function updateRace() {
                 player.finishTime =
                     raceElapsedTime;
 
-                boostFlame.visible = false;
+                boostFlame.visible =
+                    false;
 
                 showFinish();
             }
@@ -1681,24 +1639,69 @@ let raceElapsedTime = 0;
 // ============================================================
 
 let raceStarted = false;
-let countdownTime = 3.0;
+
+let countdownTime = 3;
+
 let countdownFinished = false;
-const countdownDisplay = document.createElement("div");
 
-countdownDisplay.style.position = "absolute";
-countdownDisplay.style.top = "50%";
-countdownDisplay.style.left = "50%";
-countdownDisplay.style.transform = "translate(-50%, -50%)";
-countdownDisplay.style.color = "white";
-countdownDisplay.style.fontFamily = "Arial, sans-serif";
-countdownDisplay.style.fontSize = "120px";
-countdownDisplay.style.fontWeight = "bold";
-countdownDisplay.style.textShadow = "0 5px 15px rgba(0,0,0,0.8)";
-countdownDisplay.style.zIndex = "30";
-countdownDisplay.style.pointerEvents = "none";
-countdownDisplay.style.textAlign = "center";
+let goShown = false;
 
-container.appendChild(countdownDisplay);
+// ------------------------------------------------------------
+// COUNTDOWN DISPLAY
+// ------------------------------------------------------------
+
+const countdownDisplay =
+    document.createElement("div");
+
+countdownDisplay.style.position =
+    "absolute";
+
+countdownDisplay.style.top =
+    "50%";
+
+countdownDisplay.style.left =
+    "50%";
+
+countdownDisplay.style.transform =
+    "translate(-50%, -50%)";
+
+countdownDisplay.style.color =
+    "white";
+
+countdownDisplay.style.fontFamily =
+    "Arial, sans-serif";
+
+countdownDisplay.style.fontSize =
+    "120px";
+
+countdownDisplay.style.fontWeight =
+    "bold";
+
+countdownDisplay.style.textShadow =
+    "0 5px 15px rgba(0,0,0,0.8)";
+
+countdownDisplay.style.zIndex =
+    "30";
+
+countdownDisplay.style.pointerEvents =
+    "none";
+
+countdownDisplay.style.textAlign =
+    "center";
+
+countdownDisplay.style.width =
+    "100%";
+
+container.style.position =
+    "relative";
+
+container.appendChild(
+    countdownDisplay
+);
+
+// ------------------------------------------------------------
+// UPDATE COUNTDOWN
+// ------------------------------------------------------------
 
 function updateCountdown(deltaTime) {
 
@@ -1706,33 +1709,53 @@ function updateCountdown(deltaTime) {
         return;
     }
 
-    countdownTime -= deltaTime;
+    countdownTime -=
+        deltaTime;
 
-    if (countdownTime > 2) {
+    if (
+        countdownTime > 2
+    ) {
 
-        countdownDisplay.textContent = "3";
+        countdownDisplay.textContent =
+            "3";
 
-    } else if (countdownTime > 1) {
+    } else if (
+        countdownTime > 1
+    ) {
 
-        countdownDisplay.textContent = "2";
+        countdownDisplay.textContent =
+            "2";
 
-    } else if (countdownTime > 0) {
+    } else if (
+        countdownTime > 0
+    ) {
 
-        countdownDisplay.textContent = "1";
+        countdownDisplay.textContent =
+            "1";
 
-    } else {
+    } else if (
+        !goShown
+    ) {
 
-        countdownDisplay.textContent = "GO!";
+        goShown = true;
 
         raceStarted = true;
 
-        setTimeout(() => {
+        countdownDisplay.textContent =
+            "GO!";
 
-            countdownDisplay.textContent = "";
+        setTimeout(
+            () => {
 
-            countdownFinished = true;
+                countdownDisplay.textContent =
+                    "";
 
-        }, 700);
+                countdownFinished =
+                    true;
+
+            },
+            700
+        );
     }
 }
 
@@ -1743,21 +1766,42 @@ function updateCountdown(deltaTime) {
 const hud =
     document.createElement("div");
 
-hud.style.position = "absolute";
-hud.style.top = "15px";
-hud.style.left = "15px";
-hud.style.padding = "12px 18px";
-hud.style.background = "rgba(0,0,0,0.65)";
-hud.style.color = "white";
-hud.style.fontFamily = "Arial, sans-serif";
-hud.style.fontSize = "18px";
-hud.style.borderRadius = "8px";
-hud.style.zIndex = "10";
-hud.style.pointerEvents = "none";
+hud.style.position =
+    "absolute";
 
-container.style.position = "relative";
+hud.style.top =
+    "15px";
 
-container.appendChild(hud);
+hud.style.left =
+    "15px";
+
+hud.style.padding =
+    "12px 18px";
+
+hud.style.background =
+    "rgba(0,0,0,0.65)";
+
+hud.style.color =
+    "white";
+
+hud.style.fontFamily =
+    "Arial, sans-serif";
+
+hud.style.fontSize =
+    "18px";
+
+hud.style.borderRadius =
+    "8px";
+
+hud.style.zIndex =
+    "10";
+
+hud.style.pointerEvents =
+    "none";
+
+container.appendChild(
+    hud
+);
 
 function updateHUD() {
 
@@ -1833,11 +1877,18 @@ function showFinish() {
     const finish =
         document.createElement("div");
 
-    finish.id = "finishScreen";
+    finish.id =
+        "finishScreen";
 
-    finish.style.position = "absolute";
-    finish.style.top = "50%";
-    finish.style.left = "50%";
+    finish.style.position =
+        "absolute";
+
+    finish.style.top =
+        "50%";
+
+    finish.style.left =
+        "50%";
+
     finish.style.transform =
         "translate(-50%, -50%)";
 
@@ -1847,17 +1898,20 @@ function showFinish() {
     finish.style.background =
         "rgba(0,0,0,0.9)";
 
-    finish.style.color = "white";
+    finish.style.color =
+        "white";
 
     finish.style.fontFamily =
         "Arial, sans-serif";
 
-    finish.style.textAlign = "center";
+    finish.style.textAlign =
+        "center";
 
     finish.style.borderRadius =
         "15px";
 
-    finish.style.zIndex = "20";
+    finish.style.zIndex =
+        "20";
 
     finish.innerHTML = `
 
@@ -1887,10 +1941,14 @@ function showFinish() {
         </button>
     `;
 
-    container.appendChild(finish);
+    container.appendChild(
+        finish
+    );
 
     document
-        .getElementById("restartButton")
+        .getElementById(
+            "restartButton"
+        )
         .addEventListener(
             "click",
             () => {
@@ -1909,6 +1967,7 @@ const cameraTarget =
 function updateCamera(deltaTime) {
 
     const cameraDistance = 12;
+
     const cameraHeight = 7;
 
     const behindX =
@@ -1972,11 +2031,13 @@ function resize() {
         width <= 0 ||
         height <= 0
     ) {
+
         return;
     }
 
     camera.aspect =
-        width / height;
+        width /
+        height;
 
     camera.updateProjectionMatrix();
 
@@ -2019,6 +2080,9 @@ function animate(currentTime) {
     previousTime =
         currentTime;
 
+    // Prevent huge physics jumps
+    // if the browser is temporarily paused.
+
     deltaTime =
         Math.min(
             deltaTime,
@@ -2026,28 +2090,38 @@ function animate(currentTime) {
         );
 
     // --------------------------------------------------------
+    // COUNTDOWN
+    // --------------------------------------------------------
+
+    updateCountdown(
+        deltaTime
+    );
+
+    // --------------------------------------------------------
     // RACE TIMER
     // --------------------------------------------------------
 
     if (
-    raceStarted &&
-    !player.finished
-) {
+        raceStarted &&
+        !player.finished
+    ) {
 
-    raceElapsedTime +=
-        deltaTime;
-}
+        raceElapsedTime +=
+            deltaTime;
+    }
 
     // --------------------------------------------------------
     // PHYSICS
     // --------------------------------------------------------
 
-    if (raceStarted) {
+    if (
+        raceStarted
+    ) {
 
-    updatePlayer(
-        deltaTime
-    );
-}
+        updatePlayer(
+            deltaTime
+        );
+    }
 
     // --------------------------------------------------------
     // CAMERA
