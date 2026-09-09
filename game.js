@@ -736,7 +736,7 @@ const player = {
     braking: 30,
     reverseAcceleration: 10,
     reverseSpeed: 8,
-    turnSpeed: 2.4,
+    turnSpeed: 2.8,
 
     angle: 0,
 
