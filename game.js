@@ -1161,13 +1161,19 @@ function updatePlayer(deltaTime) {
 
 if (forward()) {
 
-    player.speed +=
-        player.acceleration *
-        deltaTime;
+    // Only accelerate if we are below the normal
+    // speed limit, or if a boost is active.
+    if (
+        player.boostTimer > 0 ||
+        player.speed < player.maxSpeed
+    ) {
 
-    // Only accelerate normally up to max speed.
-    // If we are already above max speed from a boost,
-    // don't add normal acceleration.
+        player.speed +=
+            player.acceleration *
+            deltaTime;
+    }
+
+    // Normal driving can never exceed max speed.
     if (
         player.boostTimer <= 0 &&
         player.speed > player.maxSpeed
@@ -1180,18 +1186,7 @@ if (forward()) {
                 3 * deltaTime
             );
     }
-
-    else if (
-        player.boostTimer <= 0
-    ) {
-
-        player.speed =
-            Math.min(
-                player.speed,
-                player.maxSpeed
-            );
-    }
-} 
+}  
     
     // --------------------------------------------------------
     // BRAKING / REVERSE
