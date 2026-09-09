@@ -19,10 +19,19 @@ window.addEventListener("keydown", (event) => {
     keys[event.key.toLowerCase()] = true;
 
     if (
-        ["arrowup", "arrowdown", "arrowleft", "arrowright", " "]
-            .includes(event.key.toLowerCase())
+        ["arrowup", "arrowdown", "arrowleft", "arrowright", " "].includes(
+            event.key.toLowerCase()
+        )
     ) {
         event.preventDefault();
+    }
+
+    // Restart after finishing
+    if (
+        event.key.toLowerCase() === "r" &&
+        race.finished
+    ) {
+        resetRace();
     }
 });
 
@@ -71,136 +80,209 @@ const track = {
 };
 
 // =====================================================
-// RACE
+// RACE SETTINGS
 // =====================================================
 
-// 0 = waiting for checkpoint 1
-// 1 = waiting for checkpoint 2
-// 2 = waiting for checkpoint 3
-// 3 = waiting for finish line
+const race = {
+    totalLaps: 3,
 
-let nextCheckpoint = 0;
+    // 0 = checkpoint 1
+    // 1 = checkpoint 2
+    // 2 = checkpoint 3
+    // 3 = ready for finish line
+    checkpoint: 0,
 
-let currentLap = 1;
-const totalLaps = 3;
+    lap: 1,
 
-let raceFinished = false;
+    finished: false,
 
-let raceTime = 0;
+    startTime: performance.now(),
+    finishTime: 0
+};
 
 // =====================================================
 // CHECKPOINTS
 // =====================================================
-
-// These are deliberately large and placed in the
-// CENTER of the road.
+//
+// The checkpoints now stretch from one side of the
+// road to the other.
+//
+// 1 = RIGHT SIDE
+// 2 = BOTTOM
+// 3 = LEFT SIDE
+//
+// Finish = TOP
+// =====================================================
 
 const checkpoints = [
 
-    // CHECKPOINT 1 - RIGHT SIDE
+    // CHECKPOINT 1
+    // Horizontal line across the right side of the road
     {
-        x: 850,
-        y: 350,
-        width: 90,
-        height: 130
+        x: 710,
+        y: 300,
+        width: 190,
+        height: 40,
+        color: "#ffd400",
+        label: "1"
     },
 
-    // CHECKPOINT 2 - BOTTOM
+    // CHECKPOINT 2
+    // Vertical line across the bottom of the road
     {
-        x: 500,
-        y: 550,
-        width: 150,
-        height: 80
+        x: 580,
+        y: 600,
+        width: 40,
+        height: 100,
+        color: "#4da6ff",
+        label: "2"
     },
 
-    // CHECKPOINT 3 - LEFT SIDE
+    // CHECKPOINT 3
+    // Horizontal line across the left side of the road
     {
-        x: 150,
-        y: 350,
-        width: 90,
-        height: 130
+        x: 100,
+        y: 300,
+        width: 190,
+        height: 40,
+        color: "#4da6ff",
+        label: "3"
     }
 ];
 
 // =====================================================
 // FINISH LINE
 // =====================================================
+//
+// Spans the entire road at the top.
+// =====================================================
 
 const finishLine = {
-    x: 500,
-    y: 170,
-
-    // Much larger than before
-    width: 40,
-    height: 130
+    x: 290,
+    y: 100,
+    width: 420,
+    height: 40
 };
 
 // =====================================================
-// COLLISION HELPERS
+// RESET RACE
 // =====================================================
 
-function isInsideRectangle(object, zone) {
+function resetRace() {
+
+    player.x = 500;
+    player.y = 200;
+
+    player.angle = 0;
+
+    player.speed = 0;
+
+    player.drifting = false;
+    player.driftCharge = 0;
+    player.boostTimer = 0;
+
+    race.checkpoint = 0;
+    race.lap = 1;
+    race.finished = false;
+
+    race.startTime = performance.now();
+    race.finishTime = 0;
+}
+
+// =====================================================
+// RECTANGLE COLLISION
+// =====================================================
+
+function rectangleCollision(a, b) {
 
     return (
-        object.x > zone.x - zone.width / 2 &&
-        object.x < zone.x + zone.width / 2 &&
-        object.y > zone.y - zone.height / 2 &&
-        object.y < zone.y + zone.height / 2
+        a.x < b.x + b.width &&
+        a.x + a.width > b.x &&
+        a.y < b.y + b.height &&
+        a.y + a.height > b.y
     );
 }
 
 // =====================================================
-// CHECKPOINT / LAP SYSTEM
+// CHECKPOINT COLLISION
 // =====================================================
 
-function updateRaceProgress() {
+function checkCheckpointCollision() {
 
-    if (raceFinished) {
+    if (race.finished) {
         return;
     }
 
-    // ---------------------------------------------
-    // CHECKPOINT
-    // ---------------------------------------------
-
-    if (nextCheckpoint < checkpoints.length) {
-
-        const checkpoint = checkpoints[nextCheckpoint];
-
-        if (isInsideRectangle(player, checkpoint)) {
-
-            nextCheckpoint++;
-
-        }
+    if (race.checkpoint >= checkpoints.length) {
+        return;
     }
 
-    // ---------------------------------------------
-    // FINISH LINE
-    // ---------------------------------------------
+    const checkpoint = checkpoints[race.checkpoint];
 
-    // Only allow the finish line to count AFTER
-    // all 3 checkpoints have been collected.
+    // Give the kart a little collision box
+    const kartBox = {
+        x: player.x - 14,
+        y: player.y - 10,
+        width: 28,
+        height: 20
+    };
 
-    if (nextCheckpoint === checkpoints.length) {
+    if (rectangleCollision(kartBox, checkpoint)) {
 
-        if (isInsideRectangle(player, finishLine)) {
+        race.checkpoint++;
 
-            // Completed a lap
-            currentLap++;
+        console.log(
+            "Checkpoint reached:",
+            race.checkpoint
+        );
+    }
+}
 
-            // Reset checkpoint sequence
-            nextCheckpoint = 0;
+// =====================================================
+// FINISH LINE COLLISION
+// =====================================================
 
-            // Finished the race
-            if (currentLap > totalLaps) {
+function checkFinishLine() {
 
-                currentLap = totalLaps;
+    if (race.finished) {
+        return;
+    }
 
-                raceFinished = true;
+    // You MUST complete all 3 checkpoints first
+    if (race.checkpoint < checkpoints.length) {
+        return;
+    }
 
-                player.speed = 0;
-            }
+    const kartBox = {
+        x: player.x - 14,
+        y: player.y - 10,
+        width: 28,
+        height: 20
+    };
+
+    if (rectangleCollision(kartBox, finishLine)) {
+
+        // Finished the final lap
+        if (race.lap >= race.totalLaps) {
+
+            race.finished = true;
+            race.finishTime = performance.now();
+
+            player.speed = 0;
+
+            return;
         }
+
+        // Next lap
+        race.lap++;
+
+        // Start looking for checkpoint 1 again
+        race.checkpoint = 0;
+
+        console.log(
+            "Lap complete! Starting lap:",
+            race.lap
+        );
     }
 }
 
@@ -209,6 +291,10 @@ function updateRaceProgress() {
 // =====================================================
 
 function updatePlayer() {
+
+    if (race.finished) {
+        return;
+    }
 
     const accelerating =
         keys["w"] || keys["arrowup"];
@@ -225,31 +311,33 @@ function updatePlayer() {
     const drifting =
         keys[" "];
 
-    // ---------------------------------------------
+    // =================================================
     // ACCELERATION
-    // ---------------------------------------------
+    // =================================================
 
     if (accelerating) {
 
-        player.speed += player.acceleration;
+        player.speed +=
+            player.acceleration;
 
     } else {
 
         player.speed *= 0.985;
     }
 
-    // ---------------------------------------------
-    // BRAKING / REVERSE
-    // ---------------------------------------------
+    // =================================================
+    // BRAKE / REVERSE
+    // =================================================
 
     if (braking) {
 
-        player.speed -= player.braking;
+        player.speed -=
+            player.braking;
     }
 
-    // ---------------------------------------------
+    // =================================================
     // SPEED LIMIT
-    // ---------------------------------------------
+    // =================================================
 
     player.speed = Math.max(
         -2,
@@ -259,9 +347,9 @@ function updatePlayer() {
         )
     );
 
-    // ---------------------------------------------
+    // =================================================
     // STEERING
-    // ---------------------------------------------
+    // =================================================
 
     if (Math.abs(player.speed) > 0.1) {
 
@@ -278,19 +366,19 @@ function updatePlayer() {
             );
 
         if (left) {
-
-            player.angle -= steeringAmount;
+            player.angle -=
+                steeringAmount;
         }
 
         if (right) {
-
-            player.angle += steeringAmount;
+            player.angle +=
+                steeringAmount;
         }
     }
 
-    // ---------------------------------------------
+    // =================================================
     // DRIFT
-    // ---------------------------------------------
+    // =================================================
 
     player.drifting =
         drifting &&
@@ -301,25 +389,20 @@ function updatePlayer() {
         player.driftCharge += 0.5;
 
         if (right) {
-
             player.angle += 0.012;
         }
 
         if (left) {
-
             player.angle -= 0.012;
         }
 
         if (player.driftCharge > 100) {
-
             player.driftCharge = 100;
         }
 
     } else if (player.driftCharge > 0) {
 
-        // -----------------------------------------
-        // RELEASE DRIFT = BOOST
-        // -----------------------------------------
+        // Release drift = boost
 
         if (player.driftCharge > 70) {
 
@@ -337,9 +420,9 @@ function updatePlayer() {
         player.driftCharge = 0;
     }
 
-    // ---------------------------------------------
+    // =================================================
     // BOOST
-    // ---------------------------------------------
+    // =================================================
 
     if (player.boostTimer > 0) {
 
@@ -351,38 +434,36 @@ function updatePlayer() {
             player.speed >
             player.maxSpeed + 3
         ) {
-
             player.speed =
                 player.maxSpeed + 3;
         }
     }
 
-    // ---------------------------------------------
+    // =================================================
     // MOVE
-    // ---------------------------------------------
+    // =================================================
 
-    if (!raceFinished) {
+    player.x +=
+        Math.cos(player.angle) *
+        player.speed;
 
-        player.x +=
-            Math.cos(player.angle) *
-            player.speed;
-
-        player.y +=
-            Math.sin(player.angle) *
-            player.speed;
-    }
-
-    // ---------------------------------------------
-    // TRACK COLLISION
-    // ---------------------------------------------
+    player.y +=
+        Math.sin(player.angle) *
+        player.speed;
 
     keepPlayerOnTrack();
 
-    // ---------------------------------------------
-    // RACE PROGRESS
-    // ---------------------------------------------
+    // =================================================
+    // CHECKPOINTS
+    // =================================================
 
-    updateRaceProgress();
+    checkCheckpointCollision();
+
+    // =================================================
+    // FINISH
+    // =================================================
+
+    checkFinishLine();
 }
 
 // =====================================================
@@ -411,9 +492,9 @@ function keepPlayerOnTrack() {
     const innerY =
         track.innerHeight / 2;
 
-    // ---------------------------------------------
+    // =================================================
     // OUTSIDE TRACK
-    // ---------------------------------------------
+    // =================================================
 
     if (
         Math.abs(dx) > outerX ||
@@ -431,9 +512,9 @@ function keepPlayerOnTrack() {
         player.speed *= 0.5;
     }
 
-    // ---------------------------------------------
+    // =================================================
     // CENTER GRASS
-    // ---------------------------------------------
+    // =================================================
 
     if (
         Math.abs(dx) < innerX &&
@@ -458,10 +539,7 @@ function keepPlayerOnTrack() {
 
 function drawTrack() {
 
-    // ---------------------------------------------
-    // GRASS BACKGROUND
-    // ---------------------------------------------
-
+    // Grass
     ctx.fillStyle = "#397a32";
 
     ctx.fillRect(
@@ -471,9 +549,9 @@ function drawTrack() {
         canvas.height
     );
 
-    // ---------------------------------------------
-    // TRACK
-    // ---------------------------------------------
+    // =================================================
+    // ROAD
+    // =================================================
 
     ctx.fillStyle = "#444";
 
@@ -488,9 +566,9 @@ function drawTrack() {
         track.outerHeight
     );
 
-    // ---------------------------------------------
+    // =================================================
     // CENTER GRASS
-    // ---------------------------------------------
+    // =================================================
 
     ctx.fillStyle = "#397a32";
 
@@ -505,9 +583,9 @@ function drawTrack() {
         track.innerHeight
     );
 
-    // ---------------------------------------------
-    // OUTER BORDER
-    // ---------------------------------------------
+    // =================================================
+    // OUTER ROAD BORDER
+    // =================================================
 
     ctx.strokeStyle = "#fff";
     ctx.lineWidth = 5;
@@ -523,9 +601,9 @@ function drawTrack() {
         track.outerHeight
     );
 
-    // ---------------------------------------------
-    // INNER BORDER
-    // ---------------------------------------------
+    // =================================================
+    // INNER ROAD BORDER
+    // =================================================
 
     ctx.strokeRect(
         track.centerX -
@@ -537,29 +615,21 @@ function drawTrack() {
         track.innerWidth,
         track.innerHeight
     );
-
-    // ---------------------------------------------
-    // CHECKERED FINISH LINE
-    // ---------------------------------------------
-
-    drawFinishLine();
-
-    // ---------------------------------------------
-    // CHECKPOINTS
-    // ---------------------------------------------
-
-    drawCheckpoints();
 }
 
 // =====================================================
-// DRAW FINISH LINE
+// DRAW CHECKERED FINISH LINE
 // =====================================================
 
 function drawFinishLine() {
 
     const squareSize = 20;
 
-    const columns = 2;
+    const columns =
+        Math.floor(
+            finishLine.width /
+            squareSize
+        );
 
     const rows =
         Math.floor(
@@ -570,13 +640,13 @@ function drawFinishLine() {
     for (let row = 0; row < rows; row++) {
 
         for (
-            let column = 0;
-            column < columns;
-            column++
+            let col = 0;
+            col < columns;
+            col++
         ) {
 
             if (
-                (row + column) % 2 === 0
+                (row + col) % 2 === 0
             ) {
 
                 ctx.fillStyle = "#fff";
@@ -587,12 +657,10 @@ function drawFinishLine() {
             }
 
             ctx.fillRect(
-                finishLine.x -
-                    finishLine.width / 2 +
-                    column * squareSize,
+                finishLine.x +
+                    col * squareSize,
 
-                finishLine.y -
-                    finishLine.height / 2 +
+                finishLine.y +
                     row * squareSize,
 
                 squareSize,
@@ -611,70 +679,57 @@ function drawCheckpoints() {
     checkpoints.forEach(
         (checkpoint, index) => {
 
-            const active =
-                index === nextCheckpoint;
-
-            const completed =
-                index < nextCheckpoint;
-
             // Completed checkpoints
-            if (completed) {
+            if (
+                index <
+                race.checkpoint
+            ) {
 
                 ctx.fillStyle =
-                    "rgba(0,255,80,0.25)";
+                    "rgba(80, 200, 120, 0.45)";
+
+                ctx.strokeStyle =
+                    "#50c878";
 
             // Current checkpoint
-            } else if (active) {
+            } else if (
+                index ===
+                race.checkpoint
+            ) {
 
                 ctx.fillStyle =
-                    "rgba(255,220,0,0.35)";
+                    "rgba(255, 210, 0, 0.45)";
 
-            // Future checkpoint
+                ctx.strokeStyle =
+                    "#ffd400";
+
+            // Future checkpoints
             } else {
 
                 ctx.fillStyle =
-                    "rgba(0,150,255,0.18)";
+                    "rgba(70, 150, 220, 0.30)";
+
+                ctx.strokeStyle =
+                    "#4da6ff";
             }
 
+            ctx.lineWidth = 4;
+
             ctx.fillRect(
-                checkpoint.x -
-                    checkpoint.width / 2,
-
-                checkpoint.y -
-                    checkpoint.height / 2,
-
+                checkpoint.x,
+                checkpoint.y,
                 checkpoint.width,
                 checkpoint.height
             );
 
-            // Border
-
-            if (active) {
-
-                ctx.strokeStyle = "#ffd000";
-                ctx.lineWidth = 5;
-
-            } else {
-
-                ctx.strokeStyle =
-                    "rgba(255,255,255,0.4)";
-
-                ctx.lineWidth = 3;
-            }
-
             ctx.strokeRect(
-                checkpoint.x -
-                    checkpoint.width / 2,
-
-                checkpoint.y -
-                    checkpoint.height / 2,
-
+                checkpoint.x,
+                checkpoint.y,
                 checkpoint.width,
                 checkpoint.height
             );
 
             // Number
-
             ctx.fillStyle = "#fff";
 
             ctx.font =
@@ -684,9 +739,12 @@ function drawCheckpoints() {
             ctx.textBaseline = "middle";
 
             ctx.fillText(
-                String(index + 1),
-                checkpoint.x,
-                checkpoint.y
+                checkpoint.label,
+                checkpoint.x +
+                    checkpoint.width / 2,
+
+                checkpoint.y +
+                    checkpoint.height / 2
             );
 
             ctx.textAlign = "left";
@@ -712,11 +770,13 @@ function drawPlayer() {
         player.angle
     );
 
-    // ---------------------------------------------
+    // =================================================
     // BOOST FLAMES
-    // ---------------------------------------------
+    // =================================================
 
-    if (player.boostTimer > 0) {
+    if (
+        player.boostTimer > 0
+    ) {
 
         ctx.fillStyle = "#ff8c00";
 
@@ -744,9 +804,9 @@ function drawPlayer() {
         ctx.fill();
     }
 
-    // ---------------------------------------------
+    // =================================================
     // KART BODY
-    // ---------------------------------------------
+    // =================================================
 
     ctx.fillStyle = "#e53935";
 
@@ -757,9 +817,9 @@ function drawPlayer() {
         18
     );
 
-    // ---------------------------------------------
+    // =================================================
     // DRIVER
-    // ---------------------------------------------
+    // =================================================
 
     ctx.fillStyle = "#222";
 
@@ -775,9 +835,9 @@ function drawPlayer() {
 
     ctx.fill();
 
-    // ---------------------------------------------
+    // =================================================
     // WHEELS
-    // ---------------------------------------------
+    // =================================================
 
     ctx.fillStyle = "#111";
 
@@ -813,13 +873,13 @@ function drawPlayer() {
 }
 
 // =====================================================
-// RACE UI
+// DRAW UI
 // =====================================================
 
 function drawUI() {
 
     ctx.fillStyle =
-        "rgba(0,0,0,0.7)";
+        "rgba(0,0,0,0.65)";
 
     ctx.fillRect(
         20,
@@ -833,56 +893,90 @@ function drawUI() {
     ctx.font =
         "bold 18px Arial";
 
-    // SPEED
-
+    // Speed
     ctx.fillText(
         "SPEED: " +
-        Math.round(
-            Math.abs(player.speed) * 20
-        ),
+            Math.round(
+                Math.abs(
+                    player.speed
+                ) * 20
+            ),
+
         35,
         50
     );
 
-    // LAP
-
+    // Lap
     ctx.fillText(
         "LAP: " +
-        currentLap +
-        " / " +
-        totalLaps,
+            race.lap +
+            " / " +
+            race.totalLaps,
+
         35,
-        82
+        80
     );
 
-    // DRIFT
-
+    // Drift
     ctx.fillText(
         "DRIFT: " +
-        Math.round(
-            player.driftCharge
-        ) +
-        "%",
+            Math.round(
+                player.driftCharge
+            ) +
+            "%",
+
         35,
-        114
+        110
     );
 
-    // CHECKPOINT
-
+    // Checkpoint
     ctx.fillText(
         "CHECKPOINT: " +
-        Math.min(
-            nextCheckpoint + 1,
-            3
-        ) +
-        " / 3",
+            Math.min(
+                race.checkpoint,
+                3
+            ) +
+            " / 3",
+
         35,
-        146
+        140
     );
 
-    // BOOST
+    // Time
+    let elapsed;
 
-    if (player.boostTimer > 0) {
+    if (race.finished) {
+
+        elapsed =
+            (
+                race.finishTime -
+                race.startTime
+            ) / 1000;
+
+    } else {
+
+        elapsed =
+            (
+                performance.now() -
+                race.startTime
+            ) / 1000;
+    }
+
+    ctx.fillText(
+        "TIME: " +
+            elapsed.toFixed(2),
+
+        35,
+        170
+    );
+
+    // =================================================
+    // BOOST
+    // =================================================
+
+    if (
+        player.boostTimer > 0
+    ) {
 
         ctx.fillStyle = "#ffd000";
 
@@ -892,52 +986,121 @@ function drawUI() {
         ctx.fillText(
             "BOOST!",
             35,
-            180
+            205
         );
     }
+}
 
-    // ---------------------------------------------
-    // FINISH MESSAGE
-    // ---------------------------------------------
+// =====================================================
+// FINISH SCREEN
+// =====================================================
 
-    if (raceFinished) {
+function drawFinishScreen() {
 
-        ctx.fillStyle =
-            "rgba(0,0,0,0.8)";
-
-        ctx.fillRect(
-            canvas.width / 2 - 200,
-            canvas.height / 2 - 70,
-            400,
-            140
-        );
-
-        ctx.fillStyle = "#ffd000";
-
-        ctx.font =
-            "bold 36px Arial";
-
-        ctx.textAlign = "center";
-
-        ctx.fillText(
-            "RACE FINISHED!",
-            canvas.width / 2,
-            canvas.height / 2
-        );
-
-        ctx.fillStyle = "#fff";
-
-        ctx.font =
-            "18px Arial";
-
-        ctx.fillText(
-            "Great driving!",
-            canvas.width / 2,
-            canvas.height / 2 + 40
-        );
-
-        ctx.textAlign = "left";
+    if (!race.finished) {
+        return;
     }
+
+    // Dark overlay
+    ctx.fillStyle =
+        "rgba(0,0,0,0.55)";
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    // Box
+    const boxWidth = 420;
+    const boxHeight = 190;
+
+    const boxX =
+        canvas.width / 2 -
+        boxWidth / 2;
+
+    const boxY =
+        canvas.height / 2 -
+        boxHeight / 2;
+
+    ctx.fillStyle =
+        "rgba(5,25,5,0.95)";
+
+    ctx.fillRect(
+        boxX,
+        boxY,
+        boxWidth,
+        boxHeight
+    );
+
+    ctx.strokeStyle =
+        "#ffd400";
+
+    ctx.lineWidth = 4;
+
+    ctx.strokeRect(
+        boxX,
+        boxY,
+        boxWidth,
+        boxHeight
+    );
+
+    // Finished
+    ctx.fillStyle =
+        "#ffd400";
+
+    ctx.font =
+        "bold 32px Arial";
+
+    ctx.textAlign = "center";
+
+    ctx.fillText(
+        "RACE FINISHED!",
+        canvas.width / 2,
+        boxY + 60
+    );
+
+    // Time
+    const finalTime =
+        (
+            race.finishTime -
+            race.startTime
+        ) / 1000;
+
+    ctx.fillStyle = "#fff";
+
+    ctx.font =
+        "bold 22px Arial";
+
+    ctx.fillText(
+        "TIME: " +
+            finalTime.toFixed(2) +
+            " seconds",
+
+        canvas.width / 2,
+        boxY + 105
+    );
+
+    ctx.font =
+        "18px Arial";
+
+    ctx.fillText(
+        "Great driving!",
+        canvas.width / 2,
+        boxY + 140
+    );
+
+    ctx.font =
+        "15px Arial";
+
+    ctx.fillText(
+        "Press R to race again",
+        canvas.width / 2,
+        boxY + 170
+    );
+
+    ctx.textAlign = "left";
 }
 
 // =====================================================
@@ -946,22 +1109,28 @@ function drawUI() {
 
 function gameLoop() {
 
-    if (!raceFinished) {
-
-        raceTime += 1 / 60;
-    }
-
     updatePlayer();
 
     drawTrack();
 
+    drawFinishLine();
+
+    drawCheckpoints();
+
     drawPlayer();
 
     drawUI();
+
+    drawFinishScreen();
 
     requestAnimationFrame(
         gameLoop
     );
 }
 
+// =====================================================
+// START
+// =====================================================
+
+resetRace();
 gameLoop();
