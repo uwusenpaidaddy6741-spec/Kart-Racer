@@ -746,7 +746,7 @@ const player = {
 
     boostTimer: 0,
 
-    boostAcceleration: 1.5,
+    boostAcceleration: 0.5,
 
     boostMaxSpeed: 55,
 
