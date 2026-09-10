@@ -1398,6 +1398,37 @@ const lookAheadIndex =
 const target =
     trackPoints[lookAheadIndex];
 
+        // Detect how sharply the track is turning ahead.
+const cornerLookAhead =
+    (ai.trackIndex + 10) %
+    trackPoints.length;
+
+const cornerLookAhead2 =
+    (ai.trackIndex + 16) %
+    trackPoints.length;
+
+const cornerPoint1 =
+    trackPoints[cornerLookAhead];
+
+const cornerPoint2 =
+    trackPoints[cornerLookAhead2];
+
+const cornerDX =
+    cornerPoint2.x -
+    cornerPoint1.x;
+
+const cornerDZ =
+    cornerPoint2.z -
+    cornerPoint1.z;
+
+const cornerAngle =
+    Math.abs(
+        Math.atan2(
+            cornerDZ,
+            cornerDX
+        )
+    );
+
 // Give each AI its own racing line.
 // AI 1 = inside
 // AI 2 = center
