@@ -1691,10 +1691,30 @@ if (
 
     ai.driftCharge = 0;
 }
-        
+  
         // ----------------------------------------------------
         // MOVEMENT
         // ----------------------------------------------------
+
+        // ----------------------------------------------------
+// AI BOOST
+// ----------------------------------------------------
+
+if (ai.driftBoostTimer > 0) {
+
+    ai.driftBoostTimer -=
+        deltaTime;
+
+    ai.speed +=
+        40 *
+        deltaTime;
+
+    ai.speed =
+        Math.min(
+            ai.speed,
+            ai.maxSpeed + 10
+        );
+}
 
         const moveDistance =
             ai.speed *
