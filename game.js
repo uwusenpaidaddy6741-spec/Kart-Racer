@@ -1308,9 +1308,11 @@ function updateAI(deltaTime) {
 // ============================================================
 
 function updateKartCollisions() {
+
     const collisionDistance = 2.2;
 
     for (const ai of aiKarts) {
+
         const dx =
             player.x -
             ai.kart.position.x;
@@ -1326,6 +1328,7 @@ function updateKartCollisions() {
             distance < collisionDistance &&
             distance > 0.01
         ) {
+
             const pushX =
                 dx / distance;
 
@@ -1336,22 +1339,57 @@ function updateKartCollisions() {
                 collisionDistance -
                 distance;
 
-            // Push the karts apart.
-            player.x +=
+            // Calculate the player's new position.
+            const newPlayerX =
+                player.x +
                 pushX * overlap * 0.7;
 
-            player.z +=
+            const newPlayerZ =
+                player.z +
                 pushZ * overlap * 0.7;
 
-            ai.kart.position.x -=
+            // Only push the player if the new
+            // position is still on the track.
+            if (
+                isOnTrack(
+                    newPlayerX,
+                    newPlayerZ
+                )
+            ) {
+
+                player.x =
+                    newPlayerX;
+
+                player.z =
+                    newPlayerZ;
+            }
+
+            // Push the AI away from the player.
+            const newAIx =
+                ai.kart.position.x -
                 pushX * overlap * 0.3;
 
-            ai.kart.position.z -=
+            const newAIz =
+                ai.kart.position.z -
                 pushZ * overlap * 0.3;
 
-            // Slow them down when they collide.
-            player.speed *= 0.9;
-            ai.speed *= 0.9;
+            if (
+                isOnTrack(
+                    newAIx,
+                    newAIz
+                )
+            ) {
+
+                ai.kart.position.x =
+                    newAIx;
+
+                ai.kart.position.z =
+                    newAIz;
+            }
+
+            // Small speed reduction from the impact.
+            player.speed *= 0.92;
+            ai.speed *= 0.92;
         }
     }
 }
