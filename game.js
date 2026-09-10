@@ -2641,6 +2641,7 @@ function animate(currentTime) {
         scene,
         camera
     );
+    } 
 }
 
 requestAnimationFrame(
