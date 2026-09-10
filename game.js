@@ -1594,15 +1594,28 @@ const dz =
             );
 
         // KEEPING YOUR ORIGINAL TURN SPEED
-        const turnSpeed = 3.5;
+        let turnSpeed = 3.5;
 
-        ai.angle +=
-            angleDifference *
-            Math.min(
-                1,
-                turnSpeed *
-                deltaTime
-            );
+// AI steers harder while drifting.
+// Purple gets the strongest cornering ability.
+if (ai.drifting) {
+
+    if (ai.driftLevel === 3) {
+        turnSpeed = 4.5;
+    } else if (ai.driftLevel === 2) {
+        turnSpeed = 4.1;
+    } else {
+        turnSpeed = 3.8;
+    }
+}
+
+ai.angle +=
+    angleDifference *
+    Math.min(
+        1,
+        turnSpeed *
+        deltaTime
+    );
 
         // ----------------------------------------------------
         // ACCELERATION
