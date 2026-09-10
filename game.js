@@ -1241,7 +1241,9 @@ for (let i = 0; i < AI_COUNT; i++) {
         speed: 0,
 
         maxSpeed:
-            30 + Math.random() * 4,
+    i === 0 ? 34 :
+    i === 1 ? 35 :
+    33.5,
 
         acceleration: 12,
 
