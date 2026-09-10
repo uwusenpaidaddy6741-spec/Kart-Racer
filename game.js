@@ -200,54 +200,26 @@ function roundedRectanglePoints() {
 
 function forestRunPoints() {
 
-   const controlPoints = [
-
-    { x: -42, z: -18 },
-    { x: -25, z: -30 },
-    { x: 5, z: -32 },
-    { x: 32, z: -27 },
-    { x: 47, z: -12 },
-
-    { x: 45, z: 5 },
-    { x: 32, z: 18 },
-    { x: 12, z: 20 },
-
-    { x: 18, z: 34 },
-    { x: -2, z: 40 },
-    { x: -25, z: 36 },
-    { x: -43, z: 25 },
-
-    { x: -50, z: 8 },
-    { x: -43, z: -4 },
-    { x: -30, z: -8 }
-
-];
-
-    const curve = new THREE.CatmullRomCurve3(
-        controlPoints.map(
-            point => new THREE.Vector3(
-                point.x,
-                0,
-                point.z
-            )
-        ),
-        true,
-        "centripetal",
-        0.5
-    );
-
     const points = [];
     const samples = 120;
 
     for (let i = 0; i < samples; i++) {
 
-        const point = curve.getPoint(i / samples);
+        const t =
+            (i / samples) * Math.PI * 2;
+
+        // Smooth, wide racing shape
+        const x =
+            48 * Math.cos(t) +
+            8 * Math.cos(2 * t);
+
+        const z =
+            32 * Math.sin(t);
 
         points.push({
-            x: point.x,
-            z: point.z
+            x: x,
+            z: z
         });
-
     }
 
     return points;
