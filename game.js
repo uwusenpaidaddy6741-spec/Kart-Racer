@@ -1645,11 +1645,51 @@ if (
     ai.speed > 12
 ) {
     ai.drifting = true;
+
     ai.driftCharge +=
         deltaTime *
         ai.driftChargeMultiplier;
-} else {
+
+    // Each AI has a different maximum drift.
+    const maxDriftCharge =
+        ai.driftLevel === 1 ? 0.8 :
+        ai.driftLevel === 2 ? 1.5 :
+        2.5;
+
+    ai.driftCharge =
+        Math.min(
+            ai.driftCharge,
+            maxDriftCharge
+        );
+
+} else if (ai.drifting) {
+
     ai.drifting = false;
+
+    // Release the drift and determine the boost.
+    if (ai.driftCharge >= 0.35) {
+
+        if (
+            ai.driftLevel >= 3 &&
+            ai.driftCharge >= 2.2
+        ) {
+            // PURPLE — MAX BOOST
+            ai.driftBoostTimer = 1.0;
+
+        } else if (
+            ai.driftLevel >= 2 &&
+            ai.driftCharge >= 1.0
+        ) {
+            // RED — MEDIUM BOOST
+            ai.driftBoostTimer = 0.65;
+
+        } else {
+            // YELLOW — MINI BOOST
+            ai.driftBoostTimer = 0.35;
+        }
+    }
+
+    ai.driftCharge = 0;
 }
         
         // ----------------------------------------------------
