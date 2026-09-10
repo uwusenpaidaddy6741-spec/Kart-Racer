@@ -1533,9 +1533,11 @@ const dz =
 // ============================================================
 
 function updateKartCollisions() {
+
     const collisionDistance = 2.2;
 
     for (const ai of aiKarts) {
+
         if (ai.finished) {
             continue;
         }
@@ -1553,45 +1555,86 @@ function updateKartCollisions() {
             distance > 0 &&
             distance < collisionDistance
         ) {
-            // Direction from AI toward player
-            const pushX = dx / distance;
-            const pushZ = dz / distance;
 
-            // Push the player away from the AI
+            // Direction from AI toward player
+            const pushX =
+                dx / distance;
+
+            const pushZ =
+                dz / distance;
+
             const overlap =
                 collisionDistance - distance;
 
-            player.x -=
+            // ------------------------------------------------
+            // CALCULATE PLAYER PUSH
+            // ------------------------------------------------
+
+            const newPlayerX =
+                player.x -
                 pushX * overlap * 0.6;
 
-            player.z -=
+            const newPlayerZ =
+                player.z -
                 pushZ * overlap * 0.6;
 
-            // Push the AI away from the player
-            ai.kart.position.x +=
+            // Only push the player if the new position
+            // is still on the track.
+            if (
+                isOnTrack(
+                    newPlayerX,
+                    newPlayerZ
+                )
+            ) {
+
+                player.x =
+                    newPlayerX;
+
+                player.z =
+                    newPlayerZ;
+            }
+
+            // ------------------------------------------------
+            // PUSH AI
+            // ------------------------------------------------
+
+            const newAIX =
+                ai.kart.position.x +
                 pushX * overlap * 0.4;
 
-            ai.kart.position.z +=
+            const newAIZ =
+                ai.kart.position.z +
                 pushZ * overlap * 0.4;
 
-            // Slow both karts when they collide
+            if (
+                isOnTrack(
+                    newAIX,
+                    newAIZ
+                )
+            ) {
+
+                ai.kart.position.x =
+                    newAIX;
+
+                ai.kart.position.z =
+                    newAIZ;
+            }
+
+            // ------------------------------------------------
+            // SLOW BOTH KARTS
+            // ------------------------------------------------
+
             player.speed *= 0.55;
             ai.speed *= 0.75;
         }
     }
 
-    // Keep the player inside the track
-    if (!isOnTrack(player.x, player.z)) {
-        const oldX = player.x;
-        const oldZ = player.z;
+    // Keep visual player kart synced
+    kart.position.x =
+        player.x;
 
-        player.x = oldX;
-        player.z = oldZ;
-    }
-
-    // Keep the visual kart synced with the player
-    kart.position.x = player.x;
-    kart.position.z = player.z;
+    kart.position.z =
+        player.z;
 }
 
 // ============================================================
