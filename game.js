@@ -1479,7 +1479,7 @@ const dz =
         // CHECK IF AI REACHED NEXT POINT
         // ----------------------------------------------------
 
-        if (distance < 3) {
+        if (nextDistance < 3) {
 
             const previousIndex =
                 ai.trackIndex;
