@@ -194,6 +194,65 @@ function roundedRectanglePoints() {
     return points;
 }
 
+// ============================================================
+// TRACK 2 - FOREST RUN
+// ============================================================
+
+function forestRunPoints() {
+
+    const controlPoints = [
+
+        { x: -42, z: -18 },
+        { x: -24, z: -30 },
+        { x: 4, z: -32 },
+        { x: 30, z: -28 },
+        { x: 46, z: -12 },
+
+        { x: 42, z: 5 },
+        { x: 28, z: 14 },
+        { x: 10, z: 10 },
+
+        { x: 18, z: 30 },
+        { x: 0, z: 38 },
+        { x: -25, z: 34 },
+        { x: -45, z: 22 },
+
+        { x: -50, z: 5 },
+        { x: -32, z: -2 },
+        { x: -52, z: -10 }
+
+    ];
+
+    const curve = new THREE.CatmullRomCurve3(
+        controlPoints.map(
+            point => new THREE.Vector3(
+                point.x,
+                0,
+                point.z
+            )
+        ),
+        true,
+        "centripetal",
+        0.5
+    );
+
+    const points = [];
+    const samples = 120;
+
+    for (let i = 0; i < samples; i++) {
+
+        const point = curve.getPoint(i / samples);
+
+        points.push({
+            x: point.x,
+            z: point.z
+        });
+
+    }
+
+    return points;
+}
+
 const trackPoints = roundedRectanglePoints();
 
 // ============================================================
