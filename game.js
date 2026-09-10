@@ -233,7 +233,6 @@ function forestRunPoints() {
         { x: -90, z: 45 },
         { x: -90, z: 15 },
         { x: -90, z: -20 },
-        { x: -90, z: -60 }
 
     ];
 
