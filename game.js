@@ -1891,6 +1891,58 @@ function updateAI(deltaTime) {
 }
 
 // ============================================================
+// RACE POSITION
+// ============================================================
+
+function getRaceProgress(racer) {
+
+    return (
+        (racer.lap - 1) *
+        trackPoints.length +
+        racer.trackIndex
+    );
+}
+
+function getPlayerProgress() {
+
+    const nearest =
+        closestTrackPoint(
+            player.x,
+            player.z
+        );
+
+    return (
+        (player.lap - 1) *
+        trackPoints.length +
+        nearest.index
+    );
+}
+
+function getPlayerPosition() {
+
+    const playerProgress =
+        getPlayerProgress();
+
+    let position = 1;
+
+    for (const ai of aiKarts) {
+
+        const aiProgress =
+            getRaceProgress(ai);
+
+        if (
+            aiProgress >
+            playerProgress
+        ) {
+
+            position++;
+        }
+    }
+
+    return position;
+}
+
+// ============================================================
 // RACE SYSTEM
 // ============================================================
 
@@ -2233,6 +2285,12 @@ function updateHUD() {
 
         <br>
 
+Position:
+${getPlayerPosition()} /
+${AI_COUNT + 1}
+
+        <br>
+
         Lap:
         ${player.lap}
         /
@@ -2557,11 +2615,151 @@ function animate(currentTime) {
         deltaTime
     );
 
-    updateAI(
-        deltaTime
-    );
-} 
+    // ============================================================
+// AI MOVEMENT + LAP TRACKING
+// ============================================================
 
+function updateAI(deltaTime) {
+
+    for (const ai of aiKarts) {
+
+        if (ai.finished) {
+            continue;
+        }
+
+        // ----------------------------------------------------
+        // TARGET NEXT TRACK POINT
+        // ----------------------------------------------------
+
+        const nextIndex =
+            (ai.trackIndex + 1) %
+            trackPoints.length;
+
+        const target =
+            trackPoints[nextIndex];
+
+        // ----------------------------------------------------
+        // DIRECTION TO NEXT POINT
+        // ----------------------------------------------------
+
+        const dx =
+            target.x -
+            ai.kart.position.x;
+
+        const dz =
+            target.z -
+            ai.kart.position.z;
+
+        const distance =
+            Math.hypot(dx, dz);
+
+        // ----------------------------------------------------
+        // UPDATE AI ANGLE
+        // ----------------------------------------------------
+
+        const targetAngle =
+            -Math.atan2(
+                dz,
+                dx
+            );
+
+        let angleDifference =
+            targetAngle -
+            ai.angle;
+
+        angleDifference =
+            Math.atan2(
+                Math.sin(angleDifference),
+                Math.cos(angleDifference)
+            );
+
+        const turnSpeed = 3.5;
+
+        ai.angle +=
+            angleDifference *
+            Math.min(
+                1,
+                turnSpeed *
+                deltaTime
+            );
+
+        // ----------------------------------------------------
+        // ACCELERATION
+        // ----------------------------------------------------
+
+        if (ai.speed < ai.maxSpeed) {
+
+            ai.speed +=
+                ai.acceleration *
+                deltaTime;
+
+            ai.speed =
+                Math.min(
+                    ai.speed,
+                    ai.maxSpeed
+                );
+        }
+
+        // ----------------------------------------------------
+        // MOVEMENT
+        // ----------------------------------------------------
+
+        const moveDistance =
+            ai.speed *
+            deltaTime;
+
+        ai.kart.position.x +=
+            Math.cos(ai.angle) *
+            moveDistance;
+
+        ai.kart.position.z +=
+            -Math.sin(ai.angle) *
+            moveDistance;
+
+        // ----------------------------------------------------
+        // NEXT TRACK POINT
+        // ----------------------------------------------------
+
+        if (distance < 3) {
+
+            // Detect crossing from the
+            // final track point back to 0.
+            if (
+                ai.trackIndex ===
+                trackPoints.length - 1
+            ) {
+
+                ai.lap++;
+
+                // ------------------------------------------------
+                // AI FINISH
+                // ------------------------------------------------
+
+                if (
+                    ai.lap >
+                    TOTAL_LAPS
+                ) {
+
+                    ai.finished = true;
+                    ai.speed = 0;
+
+                    continue;
+                }
+            }
+
+            ai.trackIndex =
+                nextIndex;
+        }
+
+        // ----------------------------------------------------
+        // ROTATE AI KART
+        // ----------------------------------------------------
+
+        ai.kart.rotation.y =
+            ai.angle -
+            Math.PI / 2;
+    }
+} 
     // --------------------------------------------------------
     // CAMERA
     // --------------------------------------------------------
