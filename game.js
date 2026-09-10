@@ -1496,12 +1496,12 @@ const dz =
             // ------------------------------------------------
 
             if (
-                previousIndex ===
-                    trackPoints.length - 1 &&
-                nextIndex === 0
-            ) {
-
-                ai.lap++;
+    previousIndex ===
+        trackPoints.length - 1 &&
+    nextIndex === 0 &&
+    ai.raceProgress > 0
+) {
+    ai.lap++;
 
                 // AI has completed all 3 laps.
                 if (
