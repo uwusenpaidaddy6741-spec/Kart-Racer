@@ -1367,26 +1367,46 @@ function updateAI(deltaTime) {
         // ----------------------------------------------------
 
         const nextIndex =
-            (ai.trackIndex + 1) %
-            trackPoints.length;
+    (ai.trackIndex + 1) %
+    trackPoints.length;
 
-        const target =
-            trackPoints[nextIndex];
+const nextPoint =
+    trackPoints[nextIndex];
 
-        // ----------------------------------------------------
-        // DIRECTION TO NEXT POINT
-        // ----------------------------------------------------
+// Look several points ahead so the AI
+// starts preparing for upcoming turns.
+const lookAheadIndex =
+    (ai.trackIndex + 5) %
+    trackPoints.length;
 
-        const dx =
-            target.x -
-            ai.kart.position.x;
+const target =
+    trackPoints[lookAheadIndex];
 
-        const dz =
-            target.z -
-            ai.kart.position.z;
+// Distance to the immediate next point.
+// This is still used to advance the AI's
+// official race progress.
+const nextDX =
+    nextPoint.x -
+    ai.kart.position.x;
 
-        const distance =
-            Math.hypot(dx, dz);
+const nextDZ =
+    nextPoint.z -
+    ai.kart.position.z;
+
+const nextDistance =
+    Math.hypot(
+        nextDX,
+        nextDZ
+    );
+
+// Direction toward the look-ahead point.
+const dx =
+    target.x -
+    ai.kart.position.x;
+
+const dz =
+    target.z -
+    ai.kart.position.z;
 
         // ----------------------------------------------------
         // UPDATE AI ANGLE
