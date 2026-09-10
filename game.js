@@ -1245,6 +1245,16 @@ for (let i = 0; i < AI_COUNT; i++) {
     i === 1 ? 35 :
     33.5,
 
+        driftLevel:
+    i === 0 ? 2 :   // Red: Mini + Medium
+    i === 1 ? 1 :   // Yellow: Mini only
+    3,              // Purple: Mini + Medium + Max
+
+driftChargeMultiplier:
+    i === 0 ? 1 :
+    i === 1 ? 0.8 :
+    0.9,
+
         acceleration: 12,
 
         angle: angle,
