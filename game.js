@@ -1304,97 +1304,6 @@ function updateAI(deltaTime) {
 }
 
 // ============================================================
-// KART COLLISIONS
-// ============================================================
-
-function updateKartCollisions() {
-
-    const collisionDistance = 2.2;
-
-    for (const ai of aiKarts) {
-
-        const dx =
-            player.x -
-            ai.kart.position.x;
-
-        const dz =
-            player.z -
-            ai.kart.position.z;
-
-        const distance =
-            Math.hypot(dx, dz);
-
-        if (
-            distance < collisionDistance &&
-            distance > 0.01
-        ) {
-
-            const pushX =
-                dx / distance;
-
-            const pushZ =
-                dz / distance;
-
-            const overlap =
-                collisionDistance -
-                distance;
-
-            // Calculate the player's new position.
-            const newPlayerX =
-                player.x +
-                pushX * overlap * 0.7;
-
-            const newPlayerZ =
-                player.z +
-                pushZ * overlap * 0.7;
-
-            // Only push the player if the new
-            // position is still on the track.
-            if (
-                isOnTrack(
-                    newPlayerX,
-                    newPlayerZ
-                )
-            ) {
-
-                player.x =
-                    newPlayerX;
-
-                player.z =
-                    newPlayerZ;
-            }
-
-            // Push the AI away from the player.
-            const newAIx =
-                ai.kart.position.x -
-                pushX * overlap * 0.3;
-
-            const newAIz =
-                ai.kart.position.z -
-                pushZ * overlap * 0.3;
-
-            if (
-                isOnTrack(
-                    newAIx,
-                    newAIz
-                )
-            ) {
-
-                ai.kart.position.x =
-                    newAIx;
-
-                ai.kart.position.z =
-                    newAIz;
-            }
-
-            // Small speed reduction from the impact.
-            player.speed *= 0.92;
-            ai.speed *= 0.92;
-        }
-    }
-}
-
-// ============================================================
 // RACE POSITION
 // ============================================================
 
@@ -2526,15 +2435,13 @@ function animate(currentTime) {
     raceStarted
 ) {
 
-    updatePlayer(
-        deltaTime
-    );
+   updatePlayer(
+    deltaTime
+);
 
-    updateAI(
-        deltaTime
-    );
-
-    updateKartCollisions();
+updateAI(
+    deltaTime
+);
         
     // --------------------------------------------------------
     // CAMERA
