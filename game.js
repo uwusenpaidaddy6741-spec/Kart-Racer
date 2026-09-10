@@ -1392,10 +1392,63 @@ const lineOffsets = [
     3
 ];
 
-const lineOffset =
+let lineOffset =
     lineOffsets[
         aiKarts.indexOf(ai)
     ];
+
+// Look for another AI directly ahead.
+for (const otherAI of aiKarts) {
+
+    if (otherAI === ai || otherAI.finished) {
+        continue;
+    }
+
+    const otherDX =
+        otherAI.kart.position.x -
+        ai.kart.position.x;
+
+    const otherDZ =
+        otherAI.kart.position.z -
+        ai.kart.position.z;
+
+    const otherDistance =
+        Math.hypot(
+            otherDX,
+            otherDZ
+        );
+
+    // Is the other kart in front of this AI?
+    const forwardAmount =
+        otherDX * Math.cos(ai.angle) +
+        otherDZ * -Math.sin(ai.angle);
+
+    if (
+        otherDistance < 7 &&
+        forwardAmount > 0 &&
+        forwardAmount < 7
+    ) {
+
+        // Move sideways to try to pass.
+        if (aiKarts.indexOf(ai) % 2 === 0) {
+            lineOffset -= 2.5;
+        } else {
+            lineOffset += 2.5;
+        }
+
+        // Keep the AI safely inside the track.
+        lineOffset =
+            Math.max(
+                -5.5,
+                Math.min(
+                    5.5,
+                    lineOffset
+                )
+            );
+
+        break;
+    }
+}
 
 // Find the direction of the track
 // around the look-ahead point.
