@@ -388,14 +388,14 @@ function createTrack() {
         const d = next * 2 + 1;
 
         indices.push(
-            a,
-            b,
-            c,
+    a,
+    c,
+    b,
 
-            b,
-            d,
-            c
-        );
+    b,
+    c,
+    d
+);
     }
 
     const geometry = new THREE.BufferGeometry();
