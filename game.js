@@ -1479,7 +1479,7 @@ const dz =
         // CHECK IF AI REACHED NEXT POINT
         // ----------------------------------------------------
 
-        if (nextDistance < 3) {
+        if (nextDistance < 5 || (nextDX * Math.cos(ai.angle) + nextDZ * -Math.sin(ai.angle)) < 0) {
 
             const previousIndex =
                 ai.trackIndex;
