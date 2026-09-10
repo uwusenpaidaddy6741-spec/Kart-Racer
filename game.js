@@ -720,6 +720,216 @@ boostFlame.visible = false;
 kart.add(boostFlame);
 
 // ============================================================
+// AI OPPONENTS
+// ============================================================
+
+const aiKarts = [];
+
+const AI_COUNT = 3;
+
+function createAIKart(color) {
+
+    const aiKart = new THREE.Group();
+
+    // --------------------------------------------------------
+    // BODY
+    // --------------------------------------------------------
+
+    const body = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            2.8,
+            0.7,
+            4.2
+        ),
+        new THREE.MeshStandardMaterial({
+            color: color,
+            roughness: 0.7
+        })
+    );
+
+    body.position.y = 0.75;
+    body.castShadow = true;
+
+    aiKart.add(body);
+
+    // --------------------------------------------------------
+    // HOOD
+    // --------------------------------------------------------
+
+    const aiHood = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            2.5,
+            0.45,
+            1.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color: color
+        })
+    );
+
+    aiHood.position.set(
+        0,
+        1.1,
+        -1.1
+    );
+
+    aiHood.castShadow = true;
+
+    aiKart.add(aiHood);
+
+    // --------------------------------------------------------
+    // SEAT
+    // --------------------------------------------------------
+
+    const aiSeat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.3,
+            1.2,
+            1.3
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x222222
+        })
+    );
+
+    aiSeat.position.set(
+        0,
+        1.25,
+        0.5
+    );
+
+    aiSeat.castShadow = true;
+
+    aiKart.add(aiSeat);
+
+    // --------------------------------------------------------
+    // WHEELS
+    // --------------------------------------------------------
+
+    function addAIWheel(x, z) {
+
+        const wheel = new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                0.65,
+                0.65,
+                0.45,
+                16
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0x111111,
+                roughness: 1
+            })
+        );
+
+        wheel.rotation.z =
+            Math.PI / 2;
+
+        wheel.position.set(
+            x,
+            0.55,
+            z
+        );
+
+        wheel.castShadow = true;
+
+        aiKart.add(wheel);
+    }
+
+    addAIWheel(-1.5, -1.35);
+    addAIWheel(1.5, -1.35);
+    addAIWheel(-1.5, 1.35);
+    addAIWheel(1.5, 1.35);
+
+    scene.add(aiKart);
+
+    return aiKart;
+} 
+
+const aiColors = [
+    0xff3333,
+    0xffff33,
+    0x9933ff
+];
+
+for (let i = 0; i < AI_COUNT; i++) {
+
+    const aiKart = createAIKart(
+        aiColors[i]
+    );
+
+    // --------------------------------------------------------
+    // STARTING GRID
+    // --------------------------------------------------------
+
+    const startingIndices = [
+        116,
+        112,
+        108
+    ];
+
+    const startIndex =
+        startingIndices[i];
+
+    const startPoint =
+        trackPoints[startIndex];
+
+    const nextPoint =
+        trackPoints[
+            (startIndex + 1) %
+            trackPoints.length
+        ];
+
+    // Get the direction of the track
+    const dx =
+        nextPoint.x -
+        startPoint.x;
+
+    const dz =
+        nextPoint.z -
+        startPoint.z;
+
+    const angle =
+        -Math.atan2(
+            dz,
+            dx
+        );
+
+    // Put the AI on the starting grid
+    aiKart.position.set(
+        startPoint.x,
+        0,
+        startPoint.z
+    );
+
+    // The kart model faces local -Z
+    aiKart.rotation.y =
+        angle -
+        Math.PI / 2;
+
+    aiKarts.push({
+
+        kart: aiKart,
+
+        trackIndex:
+            startIndex,
+
+        speed: 0,
+
+        maxSpeed:
+            30 + Math.random() * 4,
+
+        acceleration: 12,
+
+        angle: angle,
+
+        lap: 1,
+
+        finished: false
+
+    });
+}
+
+// ============================================================
 // PLAYER PHYSICS
 // ============================================================
 
@@ -1559,6 +1769,128 @@ if (forward()) {
 }
 
 // ============================================================
+// AI MOVEMENT
+// ============================================================
+
+function updateAI(deltaTime) {
+
+    for (const ai of aiKarts) {
+
+        if (ai.finished) {
+            continue;
+        }
+
+        // ----------------------------------------------------
+        // TARGET NEXT TRACK POINT
+        // ----------------------------------------------------
+
+        const nextIndex =
+            (ai.trackIndex + 1) %
+            trackPoints.length;
+
+        const target =
+            trackPoints[nextIndex];
+
+        // ----------------------------------------------------
+        // DIRECTION TO NEXT POINT
+        // ----------------------------------------------------
+
+        const dx =
+            target.x -
+            ai.kart.position.x;
+
+        const dz =
+            target.z -
+            ai.kart.position.z;
+
+        const distance =
+            Math.hypot(dx, dz);
+
+        // ----------------------------------------------------
+        // UPDATE AI ANGLE
+        // ----------------------------------------------------
+
+        const targetAngle =
+            -Math.atan2(
+                dz,
+                dx
+            );
+
+        let angleDifference =
+            targetAngle -
+            ai.angle;
+
+        // Keep angle between -PI and PI
+        angleDifference =
+            Math.atan2(
+                Math.sin(angleDifference),
+                Math.cos(angleDifference)
+            );
+
+        const turnSpeed = 3.5;
+
+        ai.angle +=
+            angleDifference *
+            Math.min(
+                1,
+                turnSpeed *
+                deltaTime
+            );
+
+        // ----------------------------------------------------
+        // ACCELERATION
+        // ----------------------------------------------------
+
+        if (ai.speed < ai.maxSpeed) {
+
+            ai.speed +=
+                ai.acceleration *
+                deltaTime;
+
+            ai.speed =
+                Math.min(
+                    ai.speed,
+                    ai.maxSpeed
+                );
+        }
+
+        // ----------------------------------------------------
+        // MOVEMENT
+        // ----------------------------------------------------
+
+        const moveDistance =
+            ai.speed *
+            deltaTime;
+
+        ai.kart.position.x +=
+            Math.cos(ai.angle) *
+            moveDistance;
+
+        ai.kart.position.z +=
+            -Math.sin(ai.angle) *
+            moveDistance;
+
+        // ----------------------------------------------------
+        // CHECK IF AI REACHED NEXT POINT
+        // ----------------------------------------------------
+
+        if (distance < 3) {
+
+            ai.trackIndex =
+                nextIndex;
+        }
+
+        // ----------------------------------------------------
+        // ROTATE AI KART
+        // ----------------------------------------------------
+
+        ai.kart.rotation.y =
+            ai.angle -
+            Math.PI / 2;
+    }
+}
+
+// ============================================================
 // RACE SYSTEM
 // ============================================================
 
@@ -2218,13 +2550,17 @@ function animate(currentTime) {
     // --------------------------------------------------------
 
     if (
-        raceStarted
-    ) {
+    raceStarted
+) {
 
-        updatePlayer(
-            deltaTime
-        );
-    }
+    updatePlayer(
+        deltaTime
+    );
+
+    updateAI(
+        deltaTime
+    );
+} 
 
     // --------------------------------------------------------
     // CAMERA
