@@ -200,14 +200,32 @@ const trackPoints = roundedRectanglePoints();
 // PLAYER / CONTROL HELPERS
 // ============================================================
 
+// PLAYER / CONTROL HELPERS
 const keys = {};
 
-window.addEventListener("keydown", (event) => {
+document.addEventListener("keydown", (event) => {
     keys[event.code] = true;
+
+    // Prevent the arrow keys and spacebar from scrolling the page
+    if (
+        event.code === "ArrowUp" ||
+        event.code === "ArrowDown" ||
+        event.code === "ArrowLeft" ||
+        event.code === "ArrowRight" ||
+        event.code === "Space"
+    ) {
+        event.preventDefault();
+    }
 });
 
-window.addEventListener("keyup", (event) => {
+document.addEventListener("keyup", (event) => {
     keys[event.code] = false;
+});
+
+window.addEventListener("blur", () => {
+    for (const key in keys) {
+        keys[key] = false;
+    }
 });
 
 function forward() {
@@ -1186,7 +1204,7 @@ const player = {
         0,
 
     boostAcceleration:
-        25,
+        40,
 
     boostMaxSpeed:
         55,
