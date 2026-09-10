@@ -684,6 +684,48 @@ function createTrackBorders() {
 
         const length = Math.hypot(dx, dz);
 
+                // Hide borders where another section of the track
+        // comes too close, preventing ugly overlaps.
+        const midX = (p.x + next.x) / 2;
+        const midZ = (p.z + next.z) / 2;
+
+        let nearAnotherSection = false;
+
+        for (let j = 0; j < trackPoints.length; j += 2) {
+
+            const indexDistance =
+                Math.abs(j - i);
+
+            const circularDistance =
+                Math.min(
+                    indexDistance,
+                    trackPoints.length - indexDistance
+                );
+
+            // Ignore nearby points that belong to this
+            // same section of road.
+            if (circularDistance < 8) {
+                continue;
+            }
+
+            const other = trackPoints[j];
+
+            const distanceToOther =
+                Math.hypot(
+                    midX - other.x,
+                    midZ - other.z
+                );
+
+            if (distanceToOther < 16) {
+                nearAnotherSection = true;
+                break;
+            }
+        }
+
+        if (nearAnotherSection) {
+            continue;
+        }
+
         if (length === 0) {
             continue;
         }
