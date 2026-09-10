@@ -1379,8 +1379,77 @@ const lookAheadIndex =
     (ai.trackIndex + 5) %
     trackPoints.length;
 
+// Look several points ahead so the AI
+// starts preparing for upcoming turns.
+const lookAheadIndex =
+    (ai.trackIndex + 5) %
+    trackPoints.length;
+
 const target =
     trackPoints[lookAheadIndex];
+
+// Give each AI its own racing line.
+// AI 1 = inside
+// AI 2 = center
+// AI 3 = outside
+const lineOffsets = [
+    -3,
+    0,
+    3
+];
+
+const lineOffset =
+    lineOffsets[
+        aiKarts.indexOf(ai)
+    ];
+
+// Find the direction of the track
+// around the look-ahead point.
+const beforeIndex =
+    (lookAheadIndex - 1 + trackPoints.length) %
+    trackPoints.length;
+
+const afterIndex =
+    (lookAheadIndex + 1) %
+    trackPoints.length;
+
+const beforePoint =
+    trackPoints[beforeIndex];
+
+const afterPoint =
+    trackPoints[afterIndex];
+
+const tangentX =
+    afterPoint.x -
+    beforePoint.x;
+
+const tangentZ =
+    afterPoint.z -
+    beforePoint.z;
+
+const tangentLength =
+    Math.hypot(
+        tangentX,
+        tangentZ
+    );
+
+const normalX =
+    -tangentZ /
+    tangentLength;
+
+const normalZ =
+    tangentX /
+    tangentLength;
+
+// Move the target sideways from
+// the center of the track.
+const targetX =
+    target.x +
+    normalX * lineOffset;
+
+const targetZ =
+    target.z +
+    normalZ * lineOffset;
 
 // Distance to the immediate next point.
 // This is still used to advance the AI's
@@ -1399,13 +1468,14 @@ const nextDistance =
         nextDZ
     );
 
-// Direction toward the look-ahead point.
+// Direction toward the AI's
+// individual racing line.
 const dx =
-    target.x -
+    targetX -
     ai.kart.position.x;
 
 const dz =
-    target.z -
+    targetZ -
     ai.kart.position.z;
 
         // ----------------------------------------------------
