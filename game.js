@@ -307,11 +307,76 @@ function closestTrackPoint(x, z) {
 
 function isOnTrack(x, z) {
 
-    const nearest =
-        closestTrackPoint(x, z);
+    let closestDistance = Infinity;
+
+    for (
+        let i = 0;
+        i < trackPoints.length;
+        i++
+    ) {
+
+        const current =
+            trackPoints[i];
+
+        const next =
+            trackPoints[
+                (i + 1) %
+                trackPoints.length
+            ];
+
+        const dx =
+            next.x -
+            current.x;
+
+        const dz =
+            next.z -
+            current.z;
+
+        const lengthSquared =
+            dx * dx +
+            dz * dz;
+
+        let t = 0;
+
+        if (lengthSquared > 0) {
+
+            t =
+                (
+                    (x - current.x) * dx +
+                    (z - current.z) * dz
+                ) /
+                lengthSquared;
+
+            t =
+                Math.max(
+                    0,
+                    Math.min(1, t)
+                );
+        }
+
+        const closestX =
+            current.x +
+            dx * t;
+
+        const closestZ =
+            current.z +
+            dz * t;
+
+        const distance =
+            Math.hypot(
+                x - closestX,
+                z - closestZ
+            );
+
+        closestDistance =
+            Math.min(
+                closestDistance,
+                distance
+            );
+    }
 
     return (
-        nearest.distance <=
+        closestDistance <=
         TRACK_WIDTH / 2
     );
 }
