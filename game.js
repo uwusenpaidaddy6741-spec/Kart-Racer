@@ -1311,29 +1311,47 @@ function updateKartCollisions() {
     const collisionDistance = 2.2;
 
     for (const ai of aiKarts) {
-        const dx = player.x - ai.kart.position.x;
-        const dz = player.z - ai.kart.position.z;
+        const dx =
+            player.x -
+            ai.kart.position.x;
 
-        const distance = Math.hypot(dx, dz);
+        const dz =
+            player.z -
+            ai.kart.position.z;
 
-        if (distance < collisionDistance && distance > 0.01) {
-            const pushX = dx / distance;
-            const pushZ = dz / distance;
+        const distance =
+            Math.hypot(dx, dz);
+
+        if (
+            distance < collisionDistance &&
+            distance > 0.01
+        ) {
+            const pushX =
+                dx / distance;
+
+            const pushZ =
+                dz / distance;
 
             const overlap =
-                collisionDistance - distance;
+                collisionDistance -
+                distance;
 
-            player.x += pushX * overlap * 0.5;
-            player.z += pushZ * overlap * 0.5;
+            // Push the karts apart.
+            player.x +=
+                pushX * overlap * 0.7;
+
+            player.z +=
+                pushZ * overlap * 0.7;
 
             ai.kart.position.x -=
-                pushX * overlap * 0.5;
+                pushX * overlap * 0.3;
 
             ai.kart.position.z -=
-                pushZ * overlap * 0.5;
+                pushZ * overlap * 0.3;
 
-            player.speed *= 0.75;
-            ai.speed *= 0.85;
+            // Slow them down when they collide.
+            player.speed *= 0.9;
+            ai.speed *= 0.9;
         }
     }
 }
