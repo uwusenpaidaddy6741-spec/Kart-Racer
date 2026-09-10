@@ -1387,6 +1387,72 @@ function updateAI(deltaTime) {
 }
 
 // ============================================================
+// PLAYER / AI KART COLLISION
+// ============================================================
+
+function updateKartCollisions() {
+    const collisionDistance = 2.2;
+
+    for (const ai of aiKarts) {
+        if (ai.finished) {
+            continue;
+        }
+
+        const dx =
+            ai.kart.position.x - player.x;
+
+        const dz =
+            ai.kart.position.z - player.z;
+
+        const distance =
+            Math.hypot(dx, dz);
+
+        if (
+            distance > 0 &&
+            distance < collisionDistance
+        ) {
+            // Direction from AI toward player
+            const pushX = dx / distance;
+            const pushZ = dz / distance;
+
+            // Push the player away from the AI
+            const overlap =
+                collisionDistance - distance;
+
+            player.x -=
+                pushX * overlap * 0.6;
+
+            player.z -=
+                pushZ * overlap * 0.6;
+
+            // Push the AI away from the player
+            ai.kart.position.x +=
+                pushX * overlap * 0.4;
+
+            ai.kart.position.z +=
+                pushZ * overlap * 0.4;
+
+            // Slow both karts when they collide
+            player.speed *= 0.55;
+            ai.speed *= 0.75;
+        }
+    }
+
+    // Keep the player inside the track
+    if (!isOnTrack(player.x, player.z)) {
+        const oldX = player.x;
+        const oldZ = player.z;
+
+        player.x = oldX;
+        player.z = oldZ;
+    }
+
+    // Keep the visual kart synced with the player
+    kart.position.x = player.x;
+    kart.position.z = player.z;
+}
+
+// ============================================================
 // RACE POSITION
 // ============================================================
 
@@ -2525,6 +2591,8 @@ function animate(currentTime) {
 updateAI(
     deltaTime
 );
+
+updateKartCollisions();
         
     // --------------------------------------------------------
     // CAMERA
