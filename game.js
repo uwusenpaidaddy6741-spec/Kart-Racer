@@ -1379,12 +1379,6 @@ const lookAheadIndex =
     (ai.trackIndex + 5) %
     trackPoints.length;
 
-// Look several points ahead so the AI
-// starts preparing for upcoming turns.
-const lookAheadIndex =
-    (ai.trackIndex + 5) %
-    trackPoints.length;
-
 const target =
     trackPoints[lookAheadIndex];
 
