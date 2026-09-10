@@ -253,7 +253,7 @@ function forestRunPoints() {
     return points;
 }
 
-const trackPoints = roundedRectanglePoints();
+const trackPoints = forestRunPoints();
 
 // ============================================================
 // PLAYER / CONTROL HELPERS
