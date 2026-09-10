@@ -202,39 +202,46 @@ function forestRunPoints() {
 
     const controlPoints = [
 
-        // Bottom straight
-        { x: -90, z: -60 },
-        { x: 60, z: -60 },
+    // Start / long bottom straight
+    { x: -85, z: -55 },
+    { x: -45, z: -65 },
+    { x: 10, z: -65 },
+    { x: 60, z: -55 },
+    { x: 80, z: -35 },
 
-        // Right hairpin
-        { x: 85, z: -45 },
-        { x: 85, z: -30 },
+    // Right-hand turn
+    { x: 85, z: -10 },
+    { x: 70, z: 5 },
 
-        // Second straight
-        { x: 60, z: -15 },
-        { x: -60, z: -15 },
+    // Middle straight
+    { x: 35, z: 12 },
+    { x: -15, z: 12 },
+    { x: -55, z: 8 },
 
-        // Left hairpin
-        { x: -85, z: 0 },
-        { x: -85, z: 15 },
+    // Left-hand turn
+    { x: -75, z: 20 },
+    { x: -70, z: 38 },
 
-        // Third straight
-        { x: -60, z: 30 },
-        { x: 60, z: 30 },
+    // Upper straight
+    { x: -40, z: 52 },
+    { x: 10, z: 58 },
+    { x: 55, z: 52 },
 
-        // Right hairpin
-        { x: 85, z: 45 },
-        { x: 85, z: 60 },
+    // Upper-right turn
+    { x: 75, z: 38 },
+    { x: 72, z: 20 },
 
-        // Top straight
-        { x: -70, z: 60 },
+    // Return section
+    { x: 50, z: -2 },
+    { x: 20, z: -15 },
+    { x: -15, z: -25 },
+    { x: -50, z: -20 },
 
-        // Final left turn back toward start
-        { x: -90, z: 45 },
-        { x: -90, z: 15 },
-        { x: -90, z: -20 },
+    // Final turn back to start
+    { x: -75, z: -10 },
+    { x: -85, z: -30 }
 
-    ];
+];
 
     const curve = new THREE.CatmullRomCurve3(
         controlPoints.map(
