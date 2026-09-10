@@ -1255,6 +1255,10 @@ driftChargeMultiplier:
     i === 1 ? 0.8 :
     0.9,
 
+driftCharge: 0,
+drifting: false,
+driftBoostTimer: 0,
+
         acceleration: 12,
 
         angle: angle,
