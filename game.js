@@ -2528,7 +2528,8 @@ let raceElapsedTime = 0;
 
 let raceStarted = false;
 
-let trackSelected = false;
+let trackSelected =
+    new URLSearchParams(window.location.search).has("track");
 
 let countdownTime = 3;
 
