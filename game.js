@@ -1029,6 +1029,82 @@ for (const [x, z] of treeLocations) {
 }
 
 // ============================================================
+// OASIS PALM TREES
+// ============================================================
+
+if (new URLSearchParams(window.location.search).get("track") === "3") {
+
+    function createPalmTree(x, z) {
+        const palm = new THREE.Group();
+
+        // Trunk
+        const trunk = new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                0.45,
+                0.65,
+                5,
+                8
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0x8b5a2b
+            })
+        );
+
+        trunk.position.y = 2.5;
+        trunk.rotation.z = -0.08;
+        trunk.castShadow = true;
+        palm.add(trunk);
+
+        // Palm leaves
+        for (let i = 0; i < 7; i++) {
+            const leaf = new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    0.3,
+                    0.12,
+                    3.2
+                ),
+                new THREE.MeshStandardMaterial({
+                    color: 0x2f8f3a
+                })
+            );
+
+            const angle = (i / 7) * Math.PI * 2;
+
+            leaf.position.set(
+                Math.sin(angle) * 1.2,
+                5.15,
+                Math.cos(angle) * 1.2
+            );
+
+            leaf.rotation.y = angle;
+            leaf.rotation.x = -0.35;
+
+            leaf.castShadow = true;
+            palm.add(leaf);
+        }
+
+        palm.position.set(x, 0, z);
+
+        scene.add(palm);
+    }
+
+    const palmTreeLocations = [
+        [-10, -15],
+        [17, -12],
+        [23, 6],
+        [18, 22],
+        [-8, 23],
+        [-20, 10],
+        [-22, -8],
+        [4, 25]
+    ];
+
+    for (const [x, z] of palmTreeLocations) {
+        createPalmTree(x, z);
+    }
+}
+
+// ============================================================
 // KART
 // ============================================================
 
