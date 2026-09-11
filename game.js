@@ -3047,16 +3047,16 @@ function animate(currentTime) {
     raceStarted
 ) {
 
-   updatePlayer(
-    deltaTime
-);
+    updatePlayer(
+        deltaTime
+    );
 
-updateAI(
-    deltaTime
-);
+    updateAI(
+        deltaTime
+    );
 
-updateKartCollisions();
-        
+    updateKartCollisions();
+
     // --------------------------------------------------------
     // CAMERA
     // --------------------------------------------------------
@@ -3070,6 +3070,12 @@ updateKartCollisions();
     // --------------------------------------------------------
 
     updateHUD();
+}
+
+renderer.render(
+    scene,
+    camera
+);
 
     // --------------------------------------------------------
     // RENDER
