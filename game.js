@@ -2531,6 +2531,10 @@ let raceStarted = false;
 let trackSelected =
     new URLSearchParams(window.location.search).has("track");
 
+if (trackSelected) {
+    document.getElementById("trackSelect").style.display = "none";
+}
+
 let countdownTime = 3;
 
 let countdownFinished = false;
