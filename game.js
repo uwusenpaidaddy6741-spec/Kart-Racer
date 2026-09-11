@@ -1691,6 +1691,10 @@ if (
 
     ai.drifting = false;
 
+    if (ai.kart.userData.driftSpark) {
+    ai.kart.userData.driftSpark.visible = false;
+}
+
     // Release the drift and determine the boost.
     if (ai.driftCharge >= 0.35) {
 
