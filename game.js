@@ -2621,7 +2621,7 @@ function updateCountdown(deltaTime) {
 
         goShown = true;
 
-        raceStarted = true;
+        raceStarted = false;
 
         countdownDisplay.textContent =
             "GO!";
