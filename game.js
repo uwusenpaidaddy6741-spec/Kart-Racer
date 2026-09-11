@@ -118,6 +118,38 @@ grass.receiveShadow = true;
 scene.add(grass);
 
 // ============================================================
+// OASIS WATER
+// ============================================================
+
+if (
+    new URLSearchParams(window.location.search).get("track") === "3"
+) {
+    const oasisWater = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            18,
+            18,
+            0.12,
+            48
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x2aa9d6,
+            roughness: 0.25,
+            metalness: 0.05
+        })
+    );
+
+    oasisWater.position.set(
+        5,
+        0.08,
+        5
+    );
+
+    oasisWater.receiveShadow = true;
+
+    scene.add(oasisWater);
+}
+
+// ============================================================
 // TRACK SETTINGS
 // ============================================================
 
