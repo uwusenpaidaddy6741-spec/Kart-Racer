@@ -3092,7 +3092,7 @@ requestAnimationFrame(
     animate
 );
 
-document.getElementById("track1Button").addEventListener("click", () => {
+document.getElementById("track1Button").onclick = () => {
     trackSelected = true;
     document.getElementById("trackSelect").style.display = "none";
-});
+};
