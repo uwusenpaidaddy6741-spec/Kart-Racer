@@ -3226,3 +3226,7 @@ document.getElementById("track2Button").onclick = () => {
     trackSelected = true;
     document.getElementById("trackSelect").style.display = "none";
 };
+
+document.getElementById("track3Button").onclick = () => {
+    window.location.href = "?track=3";
+};
