@@ -274,7 +274,13 @@ function forestRunPoints() {
     return points;
 }
 
-const trackPoints = forestRunPoints();
+const selectedTrack =
+    new URLSearchParams(window.location.search).get("track");
+
+const trackPoints =
+    selectedTrack === "1"
+        ? roundedRectanglePoints()
+        : forestRunPoints();
 
 // ============================================================
 // PLAYER / CONTROL HELPERS
