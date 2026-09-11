@@ -2875,6 +2875,17 @@ function showFinish() {
                 location.reload();
             }
         );
+
+    document
+    .getElementById(
+        "trackSelectButton"
+    )
+    .addEventListener(
+        "click",
+        () => {
+            window.location.href = "index.html";
+        }
+    );
 }
 
 // ============================================================
