@@ -3072,11 +3072,6 @@ function animate(currentTime) {
     updateHUD();
 }
 
-renderer.render(
-    scene,
-    camera
-);
-
     // --------------------------------------------------------
     // RENDER
     // --------------------------------------------------------
@@ -3086,7 +3081,7 @@ renderer.render(
         camera
     );
     } 
-}
+
 
 requestAnimationFrame(
     animate
