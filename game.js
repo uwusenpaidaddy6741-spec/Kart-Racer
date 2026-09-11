@@ -2844,6 +2844,21 @@ function showFinish() {
         >
             RACE AGAIN
         </button>
+
+        <br>
+
+<button
+    id="trackSelectButton"
+    style="
+        padding: 12px 24px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 8px;
+        border: none;
+    "
+>
+    TRACK SELECT
+</button>
     `;
 
     container.appendChild(
