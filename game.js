@@ -3091,3 +3091,8 @@ document.getElementById("track1Button").onclick = () => {
     trackSelected = true;
     document.getElementById("trackSelect").style.display = "none";
 };
+
+document.getElementById("track2Button").onclick = () => {
+    trackSelected = true;
+    document.getElementById("trackSelect").style.display = "none";
+};
