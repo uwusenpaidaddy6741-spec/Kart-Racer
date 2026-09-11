@@ -100,7 +100,10 @@ const grassGeometry = new THREE.PlaneGeometry(
 );
 
 const grassMaterial = new THREE.MeshStandardMaterial({
-    color: 0x3f8f3f,
+    color:
+        new URLSearchParams(window.location.search).get("track") === "3"
+            ? 0xc2a15a
+            : 0x3f8f3f,
     roughness: 1
 });
 
