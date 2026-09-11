@@ -69,8 +69,9 @@ body {
 
 #controls p {
     margin: 3px;
+}
 
-    #trackSelect {
+#trackSelect {
     position: fixed;
     top: 50%;
     left: 50%;
