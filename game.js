@@ -2160,7 +2160,7 @@ if (forward()) {
 
                 // MINI BOOST
                 player.boostTimer = 0.35;
-                player.currentBoostCap = 45;
+                player.currentBoostCap = 47;
 
                 player.speed =
                     Math.min(
@@ -2173,7 +2173,7 @@ if (forward()) {
 
                 // MEDIUM BOOST
                 player.boostTimer = 0.65;
-                player.currentBoostCap = 50;
+                player.currentBoostCap = 53;
 
                 player.speed =
                     Math.min(
@@ -2186,7 +2186,7 @@ if (forward()) {
 
                 // MAX BOOST
                 player.boostTimer = 1.0;
-                player.currentBoostCap = 55;
+                player.currentBoostCap = 59;
 
                 player.speed =
                     Math.min(
