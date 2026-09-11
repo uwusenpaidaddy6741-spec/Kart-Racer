@@ -69,4 +69,30 @@ body {
 
 #controls p {
     margin: 3px;
+
+    #trackSelect {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    color: white;
+}
+
+#trackSelect h2 {
+    margin-bottom: 25px;
+}
+
+#trackSelect button {
+    display: block;
+    width: 220px;
+    margin: 12px auto;
+    padding: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
 }
