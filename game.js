@@ -1180,6 +1180,8 @@ aiKart.add(driftSpark);
 
     scene.add(aiKart);
 
+    aiKart.userData.driftSpark = driftSpark;
+
     return aiKart;
 }
 
