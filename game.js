@@ -3094,8 +3094,7 @@ requestAnimationFrame(
 );
 
 document.getElementById("track1Button").onclick = () => {
-    trackSelected = true;
-    document.getElementById("trackSelect").style.display = "none";
+    window.location.href = "?track=1";
 };
 
 document.getElementById("track2Button").onclick = () => {
