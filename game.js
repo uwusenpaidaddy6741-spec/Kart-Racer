@@ -1348,7 +1348,7 @@ const player = {
         8,
 
     turnSpeed:
-        3.2,
+        2.6,
 
     angle:
         playerStartAngle,
