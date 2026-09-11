@@ -1056,6 +1056,19 @@ function createAIKart(color) {
 
     const aiKart = new THREE.Group();
 
+// AI drift sparks
+const driftSpark = new THREE.Mesh(
+    new THREE.SphereGeometry(0.18, 8, 8),
+    new THREE.MeshBasicMaterial({
+        color: 0xffff00
+    })
+);
+
+driftSpark.visible = false;
+driftSpark.position.set(0, 0.35, 0.9);
+
+aiKart.add(driftSpark);
+    
     // --------------------------------------------------------
     // BODY
     // --------------------------------------------------------
