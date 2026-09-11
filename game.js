@@ -1262,9 +1262,9 @@ for (let i = 0; i < AI_COUNT; i++) {
         speed: 0,
 
         maxSpeed:
-    i === 0 ? 34 :
-    i === 1 ? 35 :
-    33.5,
+    i === 0 ? 33 :
+    i === 1 ? 33.5 :
+    32.5,
 
         driftLevel:
     i === 0 ? 2 :   // Red: Mini + Medium
