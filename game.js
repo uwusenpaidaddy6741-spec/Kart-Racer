@@ -2522,6 +2522,8 @@ let raceElapsedTime = 0;
 
 let raceStarted = false;
 
+let trackSelected = false;
+
 let countdownTime = 3;
 
 let countdownFinished = false;
@@ -2586,6 +2588,10 @@ container.appendChild(
 // ------------------------------------------------------------
 
 function updateCountdown(deltaTime) {
+
+        if (!trackSelected) {
+        return;
+    }
 
     if (countdownFinished) {
         return;
