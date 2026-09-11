@@ -1013,7 +1013,6 @@ function createTree(x, z) {
 
 const treeLocations = [
 
-    [-70, -45],
     [-60, 45],
     [-25, -48],
     [20, -50],
