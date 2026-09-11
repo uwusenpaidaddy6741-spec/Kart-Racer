@@ -3085,3 +3085,7 @@ updateKartCollisions();
 requestAnimationFrame(
     animate
 );
+
+document.getElementById("track1Button").addEventListener("click", () => {
+    trackSelected = true;
+});
