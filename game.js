@@ -1333,7 +1333,7 @@ const player = {
         0,
 
     maxSpeed:
-        36,
+        40,
 
     acceleration:
         18,
@@ -1366,10 +1366,10 @@ const player = {
         40,
 
     boostMaxSpeed:
-        55,
+        59,
 
     currentBoostCap:
-        45,
+        47,
 
     lap:
         1,
