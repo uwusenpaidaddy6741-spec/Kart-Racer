@@ -1659,6 +1659,10 @@ if (
 ) {
     ai.drifting = true;
 
+    if (ai.kart.userData.driftSpark) {
+    ai.kart.userData.driftSpark.visible = true;
+}
+
     ai.driftCharge +=
         deltaTime *
         ai.driftChargeMultiplier;
