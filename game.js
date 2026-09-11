@@ -3088,4 +3088,5 @@ requestAnimationFrame(
 
 document.getElementById("track1Button").addEventListener("click", () => {
     trackSelected = true;
+    document.getElementById("trackSelect").style.display = "none";
 });
