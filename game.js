@@ -274,13 +274,103 @@ function forestRunPoints() {
     return points;
 }
 
+// ============================================================
+// TRACK 3 - OASIS
+// ============================================================
+
+function oasisPoints() {
+    const controlPoints = [
+        // Start / short straight
+        { x: -75, z: -50 },
+        { x: -48, z: -50 },
+
+        // Tight turn
+        { x: -30, z: -40 },
+        { x: -25, z: -20 },
+
+        // Medium straight toward ramp
+        { x: -5, z: -10 },
+        { x: 25, z: -10 },
+        { x: 45, z: -5 },
+
+        // Top of ramp / small straight
+        { x: 60, z: 5 },
+        { x: 62, z: 15 },
+
+        // Sharp turn
+        { x: 52, z: 25 },
+
+        // Medium straight
+        { x: 25, z: 30 },
+        { x: 5, z: 30 },
+
+        // Spiral entrance
+        { x: -10, z: 35 },
+        { x: -22, z: 28 },
+        { x: -25, z: 15 },
+        { x: -18, z: 5 },
+        { x: -5, z: 0 },
+
+        // Spiral continues downward
+        { x: 10, z: 5 },
+        { x: 18, z: 15 },
+        { x: 12, z: 25 },
+        { x: 0, z: 30 },
+
+        // Spiral exit
+        { x: -12, z: 25 },
+        { x: -20, z: 15 },
+        { x: -15, z: 5 },
+
+        // Final straight
+        { x: -25, z: -10 },
+        { x: -45, z: -25 },
+        { x: -65, z: -40 }
+    ];
+
+    const curve = new THREE.CatmullRomCurve3(
+        controlPoints.map(
+            point =>
+                new THREE.Vector3(
+                    point.x,
+                    0,
+                    point.z
+                )
+        ),
+        true,
+        "centripetal",
+        0.5
+    );
+
+    const points = [];
+    const samples = 120;
+
+    for (let i = 0; i < samples; i++) {
+        const point =
+            curve.getPoint(i / samples);
+
+        points.push({
+            x: point.x,
+            z: point.z
+        });
+    }
+
+    return points;
+}
+
+// ============================================================
+// TRACK SELECTION
+// ============================================================
+
 const selectedTrack =
     new URLSearchParams(window.location.search).get("track");
 
 const trackPoints =
     selectedTrack === "1"
         ? roundedRectanglePoints()
-        : forestRunPoints();
+        : selectedTrack === "3"
+            ? oasisPoints()
+            : forestRunPoints();
 
 // ============================================================
 // PLAYER / CONTROL HELPERS
