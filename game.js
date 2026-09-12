@@ -2819,7 +2819,7 @@ async function saveTimeTrialTime(track, time) {
                 },
                 body: JSON.stringify({
                     track: track,
-                    name: "PLAYER",
+                    name: document.getElementById("playerName").value.trim() || "PLAYER",
                     time: time
                 })
             });
