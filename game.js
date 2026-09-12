@@ -2790,7 +2790,11 @@ let trackSelected =
     new URLSearchParams(window.location.search).has("track");
 
 if (trackSelected) {
-    document.getElementById("trackSelect").style.display = "none";
+    const trackSelect = document.getElementById("trackSelect");
+
+    if (trackSelect) {
+        trackSelect.style.display = "none";
+    }
 }
 
 let countdownTime = 3;
