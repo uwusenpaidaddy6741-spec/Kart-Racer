@@ -126,11 +126,11 @@ if (
 ) {
     const oasisWater = new THREE.Mesh(
         new THREE.CylinderGeometry(
-            18,
-            18,
-            0.12,
-            48
-        ),
+    11,
+    11,
+    0.12,
+    48
+)
         new THREE.MeshStandardMaterial({
             color: 0x2aa9d6,
             roughness: 0.25,
