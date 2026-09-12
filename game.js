@@ -611,6 +611,46 @@ function isOnTrack(x, z) {
 }
 
 // ============================================================
+// OASIS RAMP HEIGHT
+// ============================================================
+
+function getTrackHeight(index) {
+
+    // Only Oasis gets elevation
+    if (selectedTrack !== "3") {
+        return 0;
+    }
+
+    // Ramp section
+    const rampStart = 24;
+    const rampTopStart = 29;
+    const rampTopEnd = 33;
+    const rampEnd = 38;
+
+    if (index >= rampStart && index < rampTopStart) {
+        const t =
+            (index - rampStart) /
+            (rampTopStart - rampStart);
+
+        return t * 6;
+    }
+
+    if (index >= rampTopStart && index <= rampTopEnd) {
+        return 6;
+    }
+
+    if (index > rampTopEnd && index <= rampEnd) {
+        const t =
+            (index - rampTopEnd) /
+            (rampEnd - rampTopEnd);
+
+        return 6 * (1 - t);
+    }
+
+    return 0;
+}
+
+// ============================================================
 // ROAD
 // ============================================================
 
@@ -659,15 +699,17 @@ function createTrack() {
         const o = outer[i];
         const inn = inner[i];
 
-        positions.push(
-            o.x,
-            0.05,
-            o.z,
+       const height = getTrackHeight(i);
 
-            inn.x,
-            0.05,
-            inn.z
-        );
+positions.push(
+    o.x,
+    height + 0.05,
+    o.z,
+
+    inn.x,
+    height + 0.05,
+    inn.z
+);
     }
 
     for (let i = 0; i < trackPoints.length; i++) {
