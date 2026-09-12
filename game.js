@@ -621,13 +621,18 @@ function getTrackHeight(index) {
         return 0;
     }
 
-    // Ramp section
+    // --------------------------------------------------------
+    // RAMP UP
+    // --------------------------------------------------------
+
     const rampStart = 24;
     const rampTopStart = 29;
-    const rampTopEnd = 33;
-    const rampEnd = 48;
 
-    if (index >= rampStart && index < rampTopStart) {
+    if (
+        index >= rampStart &&
+        index < rampTopStart
+    ) {
+
         const t =
             (index - rampStart) /
             (rampTopStart - rampStart);
@@ -635,23 +640,32 @@ function getTrackHeight(index) {
         return t * 6;
     }
 
-    if (index >= rampTopStart && index <= rampTopEnd) {
+    // --------------------------------------------------------
+    // ELEVATED STRAIGHT
+    // --------------------------------------------------------
+
+    const elevatedEnd = 48;
+
+    if (
+        index >= rampTopStart &&
+        index <= elevatedEnd
+    ) {
+
         return 6;
     }
 
-    if (index > rampTopEnd && index <= rampEnd) {
-        const t =
-            (index - rampTopEnd) /
-            (rampEnd - rampTopEnd);
+    // --------------------------------------------------------
+    // SPIRAL DOWNHILL
+    // --------------------------------------------------------
 
-        return 6 * (1 - t);
-    }
-
-        // Spiral downhill section
-    const spiralStart = 39;
+    const spiralStart = 48;
     const spiralEnd = 88;
 
-    if (index >= spiralStart && index <= spiralEnd) {
+    if (
+        index >= spiralStart &&
+        index <= spiralEnd
+    ) {
+
         const t =
             (index - spiralStart) /
             (spiralEnd - spiralStart);
