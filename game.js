@@ -538,7 +538,7 @@ function closestTrackPoint(x, z) {
 
 function stablePlayerTrackPoint(x, z) {
 
-    const searchRange = 15;
+    const searchRange = 30;
 
     let bestIndex =
         player.trackIndex;
