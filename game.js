@@ -1262,14 +1262,14 @@ if (new URLSearchParams(window.location.search).get("track") === "3") {
     }
 
     const palmTreeLocations = [
-    [-65,-35],
-    [35,-35],
-    [65,5],
-    [35,35],
-    [-50,35],
-    [-55,5],
-    [45,15],
-    [-45,20]
+    [-70, -10],
+    [-68, 25],
+    [-5, -58],
+    [30, -55],
+    [72, -15],
+    [70, 30],
+    [-5, 58],
+    [45, 52]
 ];
 
     for (const [x, z] of palmTreeLocations) {
