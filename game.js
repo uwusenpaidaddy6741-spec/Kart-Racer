@@ -3203,10 +3203,10 @@ function updateCamera(deltaTime) {
         cameraDistance;
 
     cameraTarget.set(
-        behindX,
-        cameraHeight,
-        behindZ
-    );
+    behindX,
+    cameraHeight + getTrackHeight(closestTrackPoint(player.x, player.z).index),
+    behindZ
+);
 
     const smoothing =
         1 -
