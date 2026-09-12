@@ -648,7 +648,7 @@ function getTrackHeight(index) {
     }
 
         // Spiral downhill section
-    const spiralStart = 48;
+    const spiralStart = 39;
     const spiralEnd = 88;
 
     if (index >= spiralStart && index <= spiralEnd) {
