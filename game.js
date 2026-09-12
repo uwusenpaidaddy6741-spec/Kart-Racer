@@ -647,6 +647,18 @@ function getTrackHeight(index) {
         return 6 * (1 - t);
     }
 
+        // Spiral downhill section
+    const spiralStart = 48;
+    const spiralEnd = 88;
+
+    if (index >= spiralStart && index <= spiralEnd) {
+        const t =
+            (index - spiralStart) /
+            (spiralEnd - spiralStart);
+
+        return 6 * (1 - t);
+    }
+
     return 0;
 }
 
