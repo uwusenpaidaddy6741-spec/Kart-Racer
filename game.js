@@ -138,11 +138,12 @@ if (
         })
     );
 
-   oasisWater.position.set(
-    0,
-    0.08,
-    0
-);
+   new THREE.CylinderGeometry(
+    8,
+    8,
+    0.12,
+    48
+),
 
     oasisWater.receiveShadow = true;
 
