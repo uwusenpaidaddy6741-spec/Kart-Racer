@@ -13,13 +13,24 @@
     <h1>KART RACER</h1>
 
     <div id="trackSelect">
-        <h2>SELECT TRACK</h2>
-        <button id="track1Button">TRACK 1</button>
-<button id="track2Button">FOREST RUN</button>
-<button id="track3Button">OASIS</button>
+    <h2>SELECT TRACK</h2>
 
-<button id="timeTrialButton">TIME TRIAL</button>
+    <div id="normalTracks">
+        <button id="track1Button">TRACK 1</button>
+        <button id="track2Button">FOREST RUN</button>
+        <button id="track3Button">OASIS</button>
+
+        <button id="timeTrialButton">TIME TRIAL</button>
     </div>
+
+    <div id="timeTrialTracks" style="display: none;">
+        <h2>TIME TRIAL</h2>
+
+        <button id="timeTrialTrack1Button">TRACK 1</button>
+        <button id="timeTrialTrack2Button">FOREST RUN</button>
+        <button id="timeTrialTrack3Button">OASIS</button>
+    </div>
+</div>
 
         <div id="gameCanvasContainer">
             <canvas id="gameCanvas"></canvas>
