@@ -340,22 +340,22 @@ function oasisPoints() {
         { x: 5, z: 30 },
 
         // Spiral entrance
-        { x: -10, z: 35 },
-        { x: -22, z: 28 },
-        { x: -25, z: 15 },
-        { x: -18, z: 5 },
-        { x: -5, z: 0 },
+{ x: -14, z: 38 },
+{ x: -30, z: 30 },
+{ x: -34, z: 16 },
+{ x: -24, z: 5 },
+{ x: -7, z: 0 },
 
-        // Spiral continues downward
-        { x: 10, z: 5 },
-        { x: 18, z: 15 },
-        { x: 12, z: 25 },
-        { x: 0, z: 30 },
+// Spiral continues downward
+{ x: 14, z: 7 },
+{ x: 24, z: 17 },
+{ x: 16, z: 30 },
+{ x: 0, z: 37 },
 
-        // Spiral exit
-        { x: -12, z: 25 },
-        { x: -20, z: 15 },
-        { x: -15, z: 5 },
+// Spiral exit
+{ x: -16, z: 31 },
+{ x: -27, z: 17 },
+{ x: -20, z: 5 },
 
         // Final straight
         { x: -25, z: -10 },
