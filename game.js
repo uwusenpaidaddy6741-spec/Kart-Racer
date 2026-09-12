@@ -3236,10 +3236,10 @@ function updateCamera(deltaTime) {
         lookAhead;
 
     camera.lookAt(
-        lookX,
-        1.2,
-        lookZ
-    );
+    lookX,
+    1.2 + playerTrackHeight,
+    lookZ
+);
 } 
 
 // ============================================================
