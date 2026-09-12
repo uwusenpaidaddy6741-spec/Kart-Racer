@@ -719,8 +719,8 @@ function getTrackHeight(index) {
     // SPIRAL DOWNHILL
     // --------------------------------------------------------
 
-    const spiralStart = 48;
-    const spiralEnd = 88;
+    const spiralStart = 40;
+const spiralEnd = 88;
 
     if (
         index >= spiralStart &&
