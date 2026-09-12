@@ -2623,10 +2623,16 @@ const playerTrackPoint =
         player.z
     );
 
-kart.position.y =
+const targetTrackHeight =
     getTrackHeight(
         playerTrackPoint.index
     );
+
+kart.position.y = THREE.MathUtils.lerp(
+    kart.position.y,
+    targetTrackHeight,
+    1 - Math.exp(-10 * deltaTime)
+);
 
 kart.rotation.y =
     player.angle -
