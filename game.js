@@ -2862,6 +2862,31 @@ function formatLeaderboardTime(time) {
     return `${minutes}:${seconds}`;
 }
 
+const playerNameInput =
+    document.getElementById("playerName");
+
+if (playerNameInput) {
+
+    const savedName =
+        localStorage.getItem("playerName");
+
+    if (savedName) {
+        playerNameInput.value = savedName;
+    }
+
+    playerNameInput.addEventListener(
+        "input",
+        () => {
+
+            localStorage.setItem(
+                "playerName",
+                playerNameInput.value
+            );
+
+        }
+    );
+}
+
 async function loadTimeTrialLeaderboard() {
 
     const trackIds = ["1", "2", "3"];
