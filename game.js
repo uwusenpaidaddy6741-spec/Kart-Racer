@@ -397,8 +397,14 @@ function oasisPoints() {
 // TRACK SELECTION
 // ============================================================
 
+const urlParams =
+    new URLSearchParams(window.location.search);
+
 const selectedTrack =
-    new URLSearchParams(window.location.search).get("track");
+    urlParams.get("track");
+
+const timeTrial =
+    urlParams.get("mode") === "timeTrial";
 
 const trackPoints =
     selectedTrack === "1"
