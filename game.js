@@ -531,6 +531,67 @@ function closestTrackPoint(x, z) {
 }
 
 // ============================================================
+// STABLE PLAYER TRACK POINT
+// Prevents the player from jumping between nearby
+// sections of the Oasis spiral.
+// ============================================================
+
+function stablePlayerTrackPoint(x, z) {
+
+    const searchRange = 15;
+
+    let bestIndex =
+        player.trackIndex;
+
+    let bestDistance =
+        Infinity;
+
+    for (
+        let offset = -searchRange;
+        offset <= searchRange;
+        offset++
+    ) {
+
+        const index =
+            (
+                player.trackIndex +
+                offset +
+                trackPoints.length
+            ) %
+            trackPoints.length;
+
+        const point =
+            trackPoints[index];
+
+        const distance =
+            Math.hypot(
+                x - point.x,
+                z - point.z
+            );
+
+        if (
+            distance <
+            bestDistance
+        ) {
+
+            bestDistance =
+                distance;
+
+            bestIndex =
+                index;
+        }
+    }
+
+    player.trackIndex =
+        bestIndex;
+
+    return {
+        index: bestIndex,
+        distance: bestDistance
+    };
+}
+
+// ============================================================
 // TRACK COLLISION
 // ============================================================
 
@@ -1591,6 +1652,9 @@ const playerStartAngle =
 
 const player = {
 
+    trackIndex:
+        0,
+
     x:
         startPoint.x,
 
@@ -2617,13 +2681,15 @@ kart.position.z =
     player.z;
 
 // Follow the height of the Oasis ramp
+// while staying on the player's current section
+// of the track.
 const playerTrackPoint =
-    closestTrackPoint(
+    stablePlayerTrackPoint(
         player.x,
         player.z
     );
 
-let targetTrackHeight =
+const targetTrackHeight =
     getTrackHeight(
         playerTrackPoint.index
     );
