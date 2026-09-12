@@ -2806,29 +2806,49 @@ const TOTAL_LAPS = 3;
 // TIME TRIAL LEADERBOARD STORAGE
 // ============================================================
 
-function saveTimeTrialTime(track, time) {
+async function saveTimeTrialTime(track, time) {
 
-    const key =
-        `timeTrialTimes_track${track}`;
+    try {
 
-    const times =
-        JSON.parse(
-            localStorage.getItem(key) || "[]"
+        const response =
+            await fetch("/api/leaderboard", {
+                method: "POST",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify({
+                    track: track,
+                    name: "PLAYER",
+                    time: time
+                })
+            });
+
+        const result =
+            await response.json();
+
+        if (!response.ok) {
+
+            console.error(
+                "Failed to save leaderboard time:",
+                result
+            );
+
+            return;
+        }
+
+        console.log(
+            "Global leaderboard time saved:",
+            result
         );
 
-    times.push(time);
+    } catch (error) {
 
-    times.sort(
-        (a, b) => a - b
-    );
-
-    const bestTimes =
-        times.slice(0, 5);
-
-    localStorage.setItem(
-        key,
-        JSON.stringify(bestTimes)
-    );
+        console.error(
+            "Leaderboard connection error:",
+            error
+        );
+    }
 }
 
 function formatLeaderboardTime(time) {
