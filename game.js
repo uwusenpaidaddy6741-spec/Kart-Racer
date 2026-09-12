@@ -2132,13 +2132,29 @@ if (ai.driftBoostTimer > 0) {
             }
         }
 
-        // ----------------------------------------------------
-        // ROTATE AI KART
-        // ----------------------------------------------------
+       // ----------------------------------------------------
+// FOLLOW TRACK HEIGHT
+// ----------------------------------------------------
 
-        ai.kart.rotation.y =
-            ai.angle -
-            Math.PI / 2;
+const aiTrackHeight =
+    getTrackHeight(
+        ai.trackIndex
+    );
+
+ai.kart.position.y =
+    THREE.MathUtils.lerp(
+        ai.kart.position.y,
+        aiTrackHeight,
+        1 - Math.exp(-10 * deltaTime)
+    );
+
+// ----------------------------------------------------
+// ROTATE AI KART
+// ----------------------------------------------------
+
+ai.kart.rotation.y =
+    ai.angle -
+    Math.PI / 2;
     }
 }
 
