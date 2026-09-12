@@ -625,7 +625,7 @@ function getTrackHeight(index) {
     const rampStart = 24;
     const rampTopStart = 29;
     const rampTopEnd = 33;
-    const rampEnd = 38;
+    const rampEnd = 48;
 
     if (index >= rampStart && index < rampTopStart) {
         const t =
