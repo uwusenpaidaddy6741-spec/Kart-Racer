@@ -2689,7 +2689,7 @@ const playerTrackPoint =
         player.z
     );
 
-const targetTrackHeight =
+let targetTrackHeight =
     getTrackHeight(
         playerTrackPoint.index
     );
