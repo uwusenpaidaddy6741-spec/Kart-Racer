@@ -3535,3 +3535,15 @@ document.getElementById("timeTrialButton").onclick = () => {
     document.getElementById("normalTracks").style.display = "none";
     document.getElementById("timeTrialTracks").style.display = "block";
 };
+
+document.getElementById("timeTrialTrack1Button").onclick = () => {
+    window.location.href = "?track=1&mode=timeTrial";
+};
+
+document.getElementById("timeTrialTrack2Button").onclick = () => {
+    window.location.href = "?track=2&mode=timeTrial";
+};
+
+document.getElementById("timeTrialTrack3Button").onclick = () => {
+    window.location.href = "?track=3&mode=timeTrial";
+};
