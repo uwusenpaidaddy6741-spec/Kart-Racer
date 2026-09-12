@@ -126,24 +126,23 @@ if (
 ) {
     const oasisWater = new THREE.Mesh(
         new THREE.CylinderGeometry(
-    11,
-    11,
-    0.12,
-    48
-    ),
-    new THREE.MeshStandardMaterial({
+            8,
+            8,
+            0.12,
+            48
+        ),
+        new THREE.MeshStandardMaterial({
             color: 0x2aa9d6,
             roughness: 0.25,
             metalness: 0.05
         })
     );
 
-   new THREE.CylinderGeometry(
-    8,
-    8,
-    0.12,
-    48
-),
+    oasisWater.position.set(
+        -10,
+        0.08,
+        19
+    );
 
     oasisWater.receiveShadow = true;
 
