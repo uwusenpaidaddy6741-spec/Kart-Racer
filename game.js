@@ -2580,19 +2580,31 @@ if (forward()) {
             );
     }
 
-    // --------------------------------------------------------
-    // KART POSITION
-    // --------------------------------------------------------
+   // --------------------------------------------------------
+// KART POSITION
+// --------------------------------------------------------
 
-    kart.position.x =
-        player.x;
+kart.position.x =
+    player.x;
 
-    kart.position.z =
-        player.z;
+kart.position.z =
+    player.z;
 
-    kart.rotation.y =
-        player.angle -
-        Math.PI / 2;
+// Follow the height of the Oasis ramp
+const playerTrackPoint =
+    closestTrackPoint(
+        player.x,
+        player.z
+    );
+
+kart.position.y =
+    getTrackHeight(
+        playerTrackPoint.index
+    );
+
+kart.rotation.y =
+    player.angle -
+    Math.PI / 2;
 
     // --------------------------------------------------------
     // WHEEL ROTATION
