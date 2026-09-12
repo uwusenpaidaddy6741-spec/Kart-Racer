@@ -406,6 +406,10 @@ const selectedTrack =
 const timeTrial =
     urlParams.get("mode") === "timeTrial";
 
+let timeTrialStartTime = null;
+let timeTrialElapsedTime = 0;
+let timeTrialFinished = false;
+
 const trackPoints =
     selectedTrack === "1"
         ? roundedRectanglePoints()
