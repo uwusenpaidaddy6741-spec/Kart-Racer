@@ -2694,32 +2694,6 @@ let targetTrackHeight =
         playerTrackPoint.index
     );
 
-// ------------------------------------------------------------
-// Keep the kart on the same vertical layer when the spiral
-// overlaps itself in X/Z space.
-// ------------------------------------------------------------
-
-if (selectedTrack === "3") {
-
-    const currentHeight =
-        kart.position.y;
-
-    const alternateHeight =
-        targetTrackHeight === 6
-            ? 0
-            : 6;
-
-    // If the nearest point suddenly belongs to the other
-    // layer, stay on the layer we are already driving on.
-    if (
-        Math.abs(currentHeight - alternateHeight) <
-        Math.abs(currentHeight - targetTrackHeight)
-    ) {
-        targetTrackHeight =
-            alternateHeight;
-    }
-}
-
 kart.position.y = THREE.MathUtils.lerp(
     kart.position.y,
     targetTrackHeight,
