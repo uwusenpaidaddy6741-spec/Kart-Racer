@@ -3239,11 +3239,22 @@ function updateCamera(deltaTime) {
         Math.sin(player.angle) *
         lookAhead;
 
-    camera.lookAt(
+    const cameraTrackPoint =
+    closestTrackPoint(
+        player.x,
+        player.z
+    );
+
+const cameraTrackHeight =
+    getTrackHeight(
+        cameraTrackPoint.index
+    );
+
+camera.lookAt(
     lookX,
-    1.2 + playerTrackHeight,
+    1.2 + cameraTrackHeight,
     lookZ
-);
+    );
 } 
 
 // ============================================================
