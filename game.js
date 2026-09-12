@@ -2831,6 +2831,59 @@ function saveTimeTrialTime(track, time) {
     );
 }
 
+function formatLeaderboardTime(time) {
+    const minutes = Math.floor(time / 60);
+
+    const seconds =
+        (time % 60)
+            .toFixed(2)
+            .padStart(5, "0");
+
+    return `${minutes}:${seconds}`;
+}
+
+function loadTimeTrialLeaderboard() {
+
+    const trackIds = ["1", "2", "3"];
+
+    const boards =
+        document.querySelectorAll(
+            ".leaderboardTrack"
+        );
+
+    boards.forEach((board, index) => {
+
+        const track =
+            trackIds[index];
+
+        const times =
+            JSON.parse(
+                localStorage.getItem(
+                    `timeTrialTimes_track${track}`
+                ) || "[]"
+            );
+
+        const rows =
+            board.querySelectorAll("p");
+
+        rows.forEach((row, i) => {
+
+            if (times[i] !== undefined) {
+
+                row.textContent =
+                    `${i + 1}. ${formatLeaderboardTime(times[i])}`;
+
+            } else {
+
+                row.textContent =
+                    `${i + 1}. --:--.--`;
+            }
+        });
+    });
+}
+
+loadTimeTrialLeaderboard();
+
 function circularDistance(
     a,
     b,
