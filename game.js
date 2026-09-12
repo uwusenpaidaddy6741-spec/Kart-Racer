@@ -2842,7 +2842,7 @@ function formatLeaderboardTime(time) {
     return `${minutes}:${seconds}`;
 }
 
-function loadTimeTrialLeaderboard() {
+async function loadTimeTrialLeaderboard() {
 
     const trackIds = ["1", "2", "3"];
 
@@ -2851,34 +2851,51 @@ function loadTimeTrialLeaderboard() {
             ".leaderboardTrack"
         );
 
-    boards.forEach((board, index) => {
+    boards.forEach(async (board, index) => {
 
         const track =
             trackIds[index];
 
-        const times =
-            JSON.parse(
-                localStorage.getItem(
-                    `timeTrialTimes_track${track}`
-                ) || "[]"
-            );
-
         const rows =
             board.querySelectorAll("p");
 
-        rows.forEach((row, i) => {
+        try {
 
-            if (times[i] !== undefined) {
+            const response =
+                await fetch(
+                    `/api/leaderboard?track=${track}`
+                );
 
-                row.textContent =
-                    `${i + 1}. ${formatLeaderboardTime(times[i])}`;
+            const times =
+                await response.json();
 
-            } else {
+            rows.forEach((row, i) => {
+
+                if (times[i] !== undefined) {
+
+                    row.textContent =
+                        `${i + 1}. ${times[i].name} — ${formatLeaderboardTime(times[i].time)}`;
+
+                } else {
+
+                    row.textContent =
+                        `${i + 1}. --:--.--`;
+                }
+            });
+
+        } catch (error) {
+
+            console.error(
+                "Failed to load leaderboard:",
+                error
+            );
+
+            rows.forEach((row, i) => {
 
                 row.textContent =
                     `${i + 1}. --:--.--`;
-            }
-        });
+            });
+        }
     });
 }
 
