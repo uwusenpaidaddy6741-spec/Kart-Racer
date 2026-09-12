@@ -1391,7 +1391,8 @@ kart.add(boostFlame);
 
 const aiKarts = [];
 
-const AI_COUNT = 3;
+const AI_COUNT =
+    timeTrial ? 0 : 3;
 
 function createAIKart(color) {
 
