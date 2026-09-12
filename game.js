@@ -126,8 +126,8 @@ if (
 ) {
     const oasisWater = new THREE.Mesh(
         new THREE.CylinderGeometry(
-            8,
-            8,
+            7.5,
+            7.5,
             0.12,
             48
         ),
@@ -138,11 +138,12 @@ if (
         })
     );
 
+    // Water sits in the center of the spiral
     oasisWater.position.set(
-    -5,
-    0.08,
-    19
-);
+        -35,
+        0.08,
+        16
+    );
 
     oasisWater.receiveShadow = true;
 
