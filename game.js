@@ -138,11 +138,11 @@ if (
         })
     );
 
-    oasisWater.position.set(
-        5,
-        0.08,
-        5
-    );
+   oasisWater.position.set(
+    0,
+    0.08,
+    0
+);
 
     oasisWater.receiveShadow = true;
 
