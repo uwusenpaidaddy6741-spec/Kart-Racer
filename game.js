@@ -3523,3 +3523,7 @@ document.getElementById("track2Button").onclick = () => {
 document.getElementById("track3Button").onclick = () => {
     window.location.href = "?track=3";
 };
+
+document.getElementById("timeTrialButton").onclick = () => {
+    window.location.href = "?mode=timeTrial";
+};
