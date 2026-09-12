@@ -987,49 +987,8 @@ function createTrackBorders() {
         const dx = next.x - p.x;
         const dz = next.z - p.z;
 
-        const length = Math.hypot(dx, dz);
-
-                // Hide borders where another section of the track
-        // comes too close, preventing ugly overlaps.
-        const midX = (p.x + next.x) / 2;
-        const midZ = (p.z + next.z) / 2;
-
-        let nearAnotherSection = false;
-
-        for (let j = 0; j < trackPoints.length; j += 2) {
-
-            const indexDistance =
-                Math.abs(j - i);
-
-            const circularDistance =
-                Math.min(
-                    indexDistance,
-                    trackPoints.length - indexDistance
-                );
-
-            // Ignore nearby points that belong to this
-            // same section of road.
-            if (circularDistance < 8) {
-                continue;
-            }
-
-            const other = trackPoints[j];
-
-            const distanceToOther =
-                Math.hypot(
-                    midX - other.x,
-                    midZ - other.z
-                );
-
-            if (distanceToOther < 16) {
-                nearAnotherSection = true;
-                break;
-            }
-        }
-
-        if (nearAnotherSection) {
-            continue;
-        }
+        const length =
+            Math.hypot(dx, dz);
 
         if (length === 0) {
             continue;
@@ -1040,23 +999,27 @@ function createTrackBorders() {
 
         for (const side of [-1, 1]) {
 
-            const border = new THREE.Mesh(
-                new THREE.BoxGeometry(
-                    Math.max(length + 0.15, 1),
-                    0.35,
-                    0.35
-                ),
-                borderMaterial
-            );
+            const border =
+                new THREE.Mesh(
+                    new THREE.BoxGeometry(
+                        Math.max(length + 0.25, 1),
+                        0.5,
+                        0.55
+                    ),
+                    borderMaterial
+                );
 
             border.position.set(
-                (p.x + next.x) / 2 +
-                    nx * side * TRACK_WIDTH / 2,
 
-                0.25,
+                (p.x + next.x) / 2 +
+                    nx * side *
+                    TRACK_WIDTH / 2,
+
+                0.32,
 
                 (p.z + next.z) / 2 +
-                    nz * side * TRACK_WIDTH / 2
+                    nz * side *
+                    TRACK_WIDTH / 2
             );
 
             border.rotation.y =
