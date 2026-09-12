@@ -1,0 +1,16 @@
+{
+  "name": "kart-racer",
+  "compatibility_date": "2026-09-12",
+
+  "assets": {
+    "directory": "."
+  },
+
+  "d1_databases": [
+    {
+      "binding": "MY_DB",
+      "database_name": "kart-racer-leaderboard",
+      "database_id": "e3db849e-5c65-42bb-afe2-076965470546"
+    }
+  ]
+}
