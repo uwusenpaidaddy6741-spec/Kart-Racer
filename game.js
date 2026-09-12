@@ -3532,5 +3532,6 @@ document.getElementById("track3Button").onclick = () => {
 };
 
 document.getElementById("timeTrialButton").onclick = () => {
-    window.location.href = "?mode=timeTrial";
+    document.getElementById("normalTracks").style.display = "none";
+    document.getElementById("timeTrialTracks").style.display = "block";
 };
