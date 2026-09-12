@@ -2802,6 +2802,35 @@ kart.rotation.y =
 
 const TOTAL_LAPS = 3;
 
+// ============================================================
+// TIME TRIAL LEADERBOARD STORAGE
+// ============================================================
+
+function saveTimeTrialTime(track, time) {
+
+    const key =
+        `timeTrialTimes_track${track}`;
+
+    const times =
+        JSON.parse(
+            localStorage.getItem(key) || "[]"
+        );
+
+    times.push(time);
+
+    times.sort(
+        (a, b) => a - b
+    );
+
+    const bestTimes =
+        times.slice(0, 5);
+
+    localStorage.setItem(
+        key,
+        JSON.stringify(bestTimes)
+    );
+}
+
 function circularDistance(
     a,
     b,
@@ -2923,10 +2952,20 @@ function updateRace() {
                 player.finished = true;
 
                 player.finishTime =
-                    raceElapsedTime;
+    raceElapsedTime;
 
-                boostFlame.visible =
-                    false;
+if (timeTrial) {
+    const track =
+        selectedTrack;
+
+    saveTimeTrialTime(
+        track,
+        player.finishTime
+    );
+}
+
+boostFlame.visible =
+    false;
 
                 showFinish();
             }
