@@ -714,6 +714,8 @@ kartButtons.forEach((button) => {
             selectedKart =
                 button.dataset.kart;
 
+            applyKartStats();
+
             kartButtons.forEach(
                 (kartButton) => {
                     kartButton.classList.remove(
