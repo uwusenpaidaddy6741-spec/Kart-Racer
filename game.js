@@ -656,6 +656,50 @@ const customizationToggle =
 
 let selectedKart = "speedster";
 
+const kartStats = {
+
+    speedster: {
+        maxSpeed: 44,
+        acceleration: 16,
+        braking: 30,
+        turnSpeed: 2.7,
+        driftChargeRate: 1
+    },
+
+    balanced: {
+        maxSpeed: 40,
+        acceleration: 18,
+        braking: 30,
+        turnSpeed: 3.0,
+        driftChargeRate: 1
+    },
+
+    rocket: {
+        maxSpeed: 42,
+        acceleration: 24,
+        braking: 28,
+        turnSpeed: 2.6,
+        driftChargeRate: 1
+    },
+
+    heavy: {
+        maxSpeed: 42,
+        acceleration: 13,
+        braking: 35,
+        turnSpeed: 2.4,
+        driftChargeRate: 1
+    },
+
+    drifter: {
+        maxSpeed: 40,
+        acceleration: 18,
+        braking: 30,
+        turnSpeed: 3.5,
+        driftChargeRate: 1.75
+    }
+
+};
+
 const kartButtons =
     document.querySelectorAll(
         "#kartOptions button"
