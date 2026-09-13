@@ -2008,6 +2008,30 @@ const player = {
         false
 };
 
+function applyKartStats() {
+
+    const stats =
+        kartStats[selectedKart];
+
+    if (!stats) {
+        return;
+    }
+
+    player.maxSpeed =
+        stats.maxSpeed;
+
+    player.acceleration =
+        stats.acceleration;
+
+    player.braking =
+        stats.braking;
+
+    player.turnSpeed =
+        stats.turnSpeed;
+}
+
+applyKartStats();
+
 // ============================================================
 // AI MOVEMENT
 // ============================================================
