@@ -747,6 +747,45 @@ if (defaultKartButton) {
 
 let selectedWheels = "street";
 
+const wheelStats = {
+
+    street: {
+        maxSpeed: 0,
+        acceleration: 0,
+        turnSpeed: 0,
+        driftChargeRate: 1
+    },
+
+    grip: {
+        maxSpeed: -2,
+        acceleration: 0,
+        turnSpeed: 0.5,
+        driftChargeRate: 1
+    },
+
+    speed: {
+        maxSpeed: 4,
+        acceleration: -1,
+        turnSpeed: -0.2,
+        driftChargeRate: 1
+    },
+
+    offroad: {
+        maxSpeed: -2,
+        acceleration: 2,
+        turnSpeed: 0.2,
+        driftChargeRate: 1
+    },
+
+    drift: {
+        maxSpeed: -1,
+        acceleration: 0,
+        turnSpeed: 0.3,
+        driftChargeRate: 1.5
+    }
+
+};
+
 const wheelButtons =
     document.querySelectorAll(
         "#wheelOptions button"
