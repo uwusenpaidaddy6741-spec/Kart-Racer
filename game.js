@@ -3342,10 +3342,9 @@ function updateKartCollisions() {
                 dz / distance;
 
             // ------------------------------------------------
-            // MARIO-KART-STYLE BUMP
+            // MARIO-KART-STYLE PLAYER BUMP
             // ------------------------------------------------
 
-            // Push the player away from the AI.
             const playerBump =
                 0.7;
 
@@ -3372,7 +3371,7 @@ function updateKartCollisions() {
             }
 
             // ------------------------------------------------
-            // PUSH THE AI
+            // PUSH AI
             // ------------------------------------------------
 
             const aiBump =
@@ -3405,7 +3404,6 @@ function updateKartCollisions() {
             // ------------------------------------------------
 
             player.speed *= 0.88;
-
             ai.speed *= 0.90;
 
             // ------------------------------------------------
@@ -3414,49 +3412,6 @@ function updateKartCollisions() {
 
             ai.bumpCooldownUntil =
                 performance.now() + 250;
-        }
-    }
-
-    // Keep visual player kart synced
-    kart.position.x =
-        player.x;
-
-    kart.position.z =
-        player.z;
-}
-
-            // ------------------------------------------------
-            // PUSH AI
-            // ------------------------------------------------
-
-            const newAIX =
-                ai.kart.position.x +
-                pushX * overlap * 0.4;
-
-            const newAIZ =
-                ai.kart.position.z +
-                pushZ * overlap * 0.4;
-
-            if (
-                isOnTrack(
-                    newAIX,
-                    newAIZ
-                )
-            ) {
-
-                ai.kart.position.x =
-                    newAIX;
-
-                ai.kart.position.z =
-                    newAIZ;
-            }
-
-            // ------------------------------------------------
-            // SLOW BOTH KARTS
-            // ------------------------------------------------
-
-           player.speed *= 0.95;
-            ai.speed *= 0.75;
         }
     }
 
