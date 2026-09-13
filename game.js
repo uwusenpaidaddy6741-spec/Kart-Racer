@@ -1582,75 +1582,234 @@ if (new URLSearchParams(window.location.search).get("track") === "3") {
 const kart = new THREE.Group();
 
 // ------------------------------------------------------------
-// BODY
+// KART BODY
 // ------------------------------------------------------------
 
-const kartBody = new THREE.Mesh(
-    new THREE.BoxGeometry(
-        2.8,
-        0.7,
-        4.2
-    ),
-    new THREE.MeshStandardMaterial({
-        color: 0x2196f3,
-        roughness: 0.7
-    })
-);
+let kartBody;
+let hood;
+let seat;
 
-kartBody.position.y = 0.75;
-kartBody.castShadow = true;
+if (selectedKart === "rocket") {
 
-kart.add(kartBody);
+    // --------------------------------------------------------
+    // ROCKET KART
+    // --------------------------------------------------------
 
-// ------------------------------------------------------------
-// HOOD
-// ------------------------------------------------------------
+    // Main rocket body
+    kartBody = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            1.35,
+            1.7,
+            3.8,
+            16
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xd32f2f,
+            roughness: 0.6
+        })
+    );
 
-const hood = new THREE.Mesh(
-    new THREE.BoxGeometry(
-        2.5,
-        0.45,
-        1.5
-    ),
-    new THREE.MeshStandardMaterial({
-        color: 0x1976d2
-    })
-);
+    kartBody.rotation.x = Math.PI / 2;
+    kartBody.position.y = 0.95;
+    kartBody.castShadow = true;
 
-hood.position.set(
-    0,
-    1.1,
-    -1.1
-);
+    kart.add(kartBody);
 
-hood.castShadow = true;
 
-kart.add(hood);
+    // Rocket nose
+    const rocketNose = new THREE.Mesh(
+        new THREE.ConeGeometry(
+            1.35,
+            2.0,
+            16
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xff5252,
+            roughness: 0.5
+        })
+    );
 
-// ------------------------------------------------------------
-// SEAT
-// ------------------------------------------------------------
+    rocketNose.rotation.x = -Math.PI / 2;
 
-const seat = new THREE.Mesh(
-    new THREE.BoxGeometry(
-        1.3,
-        1.2,
-        1.3
-    ),
-    new THREE.MeshStandardMaterial({
-        color: 0x222222
-    })
-);
+    rocketNose.position.set(
+        0,
+        0.95,
+        -2.8
+    );
 
-seat.position.set(
-    0,
-    1.25,
-    0.5
-);
+    rocketNose.castShadow = true;
 
-seat.castShadow = true;
+    kart.add(rocketNose);
 
-kart.add(seat);
+
+    // Left rocket fin
+    const leftFin = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.25,
+            1.0,
+            1.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xb71c1c
+        })
+    );
+
+    leftFin.position.set(
+        -1.35,
+        0.8,
+        1.0
+    );
+
+    leftFin.rotation.z = -0.25;
+
+    leftFin.castShadow = true;
+
+    kart.add(leftFin);
+
+
+    // Right rocket fin
+    const rightFin = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.25,
+            1.0,
+            1.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xb71c1c
+        })
+    );
+
+    rightFin.position.set(
+        1.35,
+        0.8,
+        1.0
+    );
+
+    rightFin.rotation.z = 0.25;
+
+    rightFin.castShadow = true;
+
+    kart.add(rightFin);
+
+
+    // Rocket engine
+    const engine = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            0.8,
+            0.8,
+            0.6,
+            16
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x555555,
+            roughness: 0.8
+        })
+    );
+
+    engine.rotation.x = Math.PI / 2;
+
+    engine.position.set(
+        0,
+        0.95,
+        2.1
+    );
+
+    engine.castShadow = true;
+
+    kart.add(engine);
+
+
+    // Driver seat
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.2,
+            1.0,
+            1.2
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x222222
+        })
+    );
+
+    seat.position.set(
+        0,
+        1.6,
+        0.3
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
+} else {
+
+    // --------------------------------------------------------
+    // NORMAL KART
+    // --------------------------------------------------------
+
+    kartBody = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            2.8,
+            0.7,
+            4.2
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x2196f3,
+            roughness: 0.7
+        })
+    );
+
+    kartBody.position.y = 0.75;
+    kartBody.castShadow = true;
+
+    kart.add(kartBody);
+
+
+    // Hood
+    hood = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            2.5,
+            0.45,
+            1.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x1976d2
+        })
+    );
+
+    hood.position.set(
+        0,
+        1.1,
+        -1.1
+    );
+
+    hood.castShadow = true;
+
+    kart.add(hood);
+
+
+    // Seat
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.3,
+            1.2,
+            1.3
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x222222
+        })
+    );
+
+    seat.position.set(
+        0,
+        1.25,
+        0.5
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+}
 
 // ------------------------------------------------------------
 // WHEELS
