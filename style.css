@@ -235,3 +235,79 @@ body {
         font-size: 16px !important;
     }
 }
+
+/* ============================================================
+   KART & WHEEL CUSTOMIZATION
+   ============================================================ */
+
+#kartSelect {
+    position: fixed;
+
+    top: 25px;
+    left: 25px;
+
+    width: 230px;
+
+    z-index: 200;
+}
+
+#customizationToggle {
+    width: 100%;
+
+    padding: 14px 10px;
+
+    border: 2px solid white;
+    border-radius: 10px;
+
+    background: rgba(0, 0, 0, 0.85);
+    color: white;
+
+    font-size: 17px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+#customizationOptions {
+    display: none;
+
+    margin-top: 8px;
+
+    padding: 15px;
+
+    background: rgba(0, 0, 0, 0.9);
+
+    border-radius: 12px;
+}
+
+#customizationOptions h3 {
+    color: white;
+
+    font-size: 15px;
+
+    margin: 8px 0;
+}
+
+#kartOptions,
+#wheelOptions {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+#customizationOptions button:not(#customizationToggle) {
+    width: 100%;
+
+    padding: 9px 5px;
+
+    border: 2px solid white;
+    border-radius: 7px;
+
+    background: white;
+    color: black;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
