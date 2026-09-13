@@ -4513,7 +4513,7 @@ function showFinish() {
 
         <p>
             Race Time:
-            ${player.finishTime.toFixed(2)}
+            ${player.finishTime.toFixed(3)}
             seconds
         </p>
 
