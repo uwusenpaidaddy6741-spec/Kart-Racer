@@ -3303,7 +3303,7 @@ ai.kart.rotation.y =
 
 function updateKartCollisions() {
 
-    const collisionDistance = 2.2;
+    const collisionDistance = 2.5;
 
     for (const ai of aiKarts) {
 
@@ -3320,35 +3320,43 @@ function updateKartCollisions() {
         const distance =
             Math.hypot(dx, dz);
 
+        // Prevent the same collision from triggering
+        // repeatedly every frame.
+        if (
+            ai.bumpCooldownUntil &&
+            performance.now() < ai.bumpCooldownUntil
+        ) {
+            continue;
+        }
+
         if (
             distance > 0 &&
             distance < collisionDistance
         ) {
 
-            // Direction from AI toward player
+            // Direction from the player toward the AI
             const pushX =
                 dx / distance;
 
             const pushZ =
                 dz / distance;
 
-            const overlap =
-                collisionDistance - distance;
+            // ------------------------------------------------
+            // MARIO-KART-STYLE BUMP
+            // ------------------------------------------------
 
-            // ------------------------------------------------
-            // CALCULATE PLAYER PUSH
-            // ------------------------------------------------
+            // Push the player away from the AI.
+            const playerBump =
+                0.7;
 
             const newPlayerX =
                 player.x -
-                pushX * overlap * 0.6;
+                pushX * playerBump;
 
             const newPlayerZ =
                 player.z -
-                pushZ * overlap * 0.6;
+                pushZ * playerBump;
 
-            // Only push the player if the new position
-            // is still on the track.
             if (
                 isOnTrack(
                     newPlayerX,
@@ -3362,6 +3370,60 @@ function updateKartCollisions() {
                 player.z =
                     newPlayerZ;
             }
+
+            // ------------------------------------------------
+            // PUSH THE AI
+            // ------------------------------------------------
+
+            const aiBump =
+                0.45;
+
+            const newAIX =
+                ai.kart.position.x +
+                pushX * aiBump;
+
+            const newAIZ =
+                ai.kart.position.z +
+                pushZ * aiBump;
+
+            if (
+                isOnTrack(
+                    newAIX,
+                    newAIZ
+                )
+            ) {
+
+                ai.kart.position.x =
+                    newAIX;
+
+                ai.kart.position.z =
+                    newAIZ;
+            }
+
+            // ------------------------------------------------
+            // SMALL SPEED HIT
+            // ------------------------------------------------
+
+            player.speed *= 0.88;
+
+            ai.speed *= 0.90;
+
+            // ------------------------------------------------
+            // COLLISION COOLDOWN
+            // ------------------------------------------------
+
+            ai.bumpCooldownUntil =
+                performance.now() + 250;
+        }
+    }
+
+    // Keep visual player kart synced
+    kart.position.x =
+        player.x;
+
+    kart.position.z =
+        player.z;
+}
 
             // ------------------------------------------------
             // PUSH AI
