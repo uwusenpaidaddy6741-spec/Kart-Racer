@@ -2854,6 +2854,8 @@ function applyKartStats() {
     kart.driftChargeRate *
     wheels.driftChargeRate;
 
+}
+
 applyKartStats();
 
 // ============================================================
