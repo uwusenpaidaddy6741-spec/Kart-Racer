@@ -3626,7 +3626,8 @@ if (forward()) {
     if (player.drifting) {
 
         player.driftCharge +=
-            deltaTime;
+    deltaTime *
+    player.driftChargeRate;
 
         player.driftCharge =
             Math.min(
