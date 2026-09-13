@@ -654,6 +654,44 @@ function moveToward(current, target, amount) {
 const customizationToggle =
     document.getElementById("customizationToggle");
 
+let selectedKart = "speedster";
+
+const kartButtons =
+    document.querySelectorAll(
+        "#kartOptions button"
+    );
+
+kartButtons.forEach((button) => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            selectedKart =
+                button.dataset.kart;
+
+            kartButtons.forEach(
+                (kartButton) => {
+                    kartButton.classList.remove(
+                        "selected"
+                    );
+                }
+            );
+
+            button.classList.add("selected");
+        }
+    );
+});
+
+const defaultKartButton =
+    document.querySelector(
+        '#kartOptions button[data-kart="speedster"]'
+    );
+
+if (defaultKartButton) {
+    defaultKartButton.classList.add("selected");
+}
+
 const customizationOptions =
     document.getElementById("customizationOptions");
 
