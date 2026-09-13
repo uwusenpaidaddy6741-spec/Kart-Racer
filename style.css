@@ -311,3 +311,9 @@ body {
 
     cursor: pointer;
 }
+
+#kartOptions button.selected {
+    background: #22c55e;
+    color: white;
+    border-color: #22c55e;
+}
