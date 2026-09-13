@@ -2851,8 +2851,8 @@ function applyKartStats() {
         kart.turnSpeed + wheels.turnSpeed;
 
     player.driftChargeRate =
-        wheels.driftChargeRate;
-}
+    kart.driftChargeRate *
+    wheels.driftChargeRate;
 
 applyKartStats();
 
