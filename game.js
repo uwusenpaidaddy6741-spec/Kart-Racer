@@ -2019,6 +2019,156 @@ if (selectedKart === "rocket") {
 
     kart.add(seat);
 
+} else if (selectedKart === "drifter") {
+
+        // DRIFTER KART
+
+    kartBody = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.4,
+            0.6,
+            4.2
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x8b5cf6,
+            roughness: 0.5,
+            metalness: 0.1
+        })
+    );
+
+    kartBody.position.y = 0.72;
+    kartBody.castShadow = true;
+
+    kart.add(kartBody);
+
+    // Angled drift nose
+
+    const drifterNose = new THREE.Mesh(
+        new THREE.ConeGeometry(
+            1.45,
+            2.2,
+            4
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xa855f7,
+            roughness: 0.45
+        })
+    );
+
+    drifterNose.rotation.x = -Math.PI / 2;
+
+    drifterNose.position.set(
+        0,
+        0.73,
+        -2.7
+    );
+
+    drifterNose.scale.x = 1.05;
+
+    drifterNose.castShadow = true;
+
+    kart.add(drifterNose);
+
+    // Left side drift panel
+
+    const leftPanel = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.3,
+            0.8,
+            2.7
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x6d28d9,
+            roughness: 0.5
+        })
+    );
+
+    leftPanel.position.set(
+        -1.7,
+        0.8,
+        0.2
+    );
+
+    leftPanel.rotation.z = -0.15;
+
+    leftPanel.castShadow = true;
+
+    kart.add(leftPanel);
+
+    // Right side drift panel
+
+    const rightPanel = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.3,
+            0.8,
+            2.7
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x6d28d9,
+            roughness: 0.5
+        })
+    );
+
+    rightPanel.position.set(
+        1.7,
+        0.8,
+        0.2
+    );
+
+    rightPanel.rotation.z = 0.15;
+
+    rightPanel.castShadow = true;
+
+    kart.add(rightPanel);
+
+    // Low rear spoiler
+
+    const drifterSpoiler = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.0,
+            0.18,
+            0.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x4c1d95,
+            roughness: 0.5
+        })
+    );
+
+    drifterSpoiler.position.set(
+        0,
+        1.15,
+        1.8
+    );
+
+    drifterSpoiler.castShadow = true;
+
+    kart.add(drifterSpoiler);
+
+    // Seat
+
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.25,
+            0.9,
+            1.25
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x171717,
+            roughness: 0.8
+        })
+    );
+
+    seat.position.set(
+        0,
+        1.15,
+        0.4
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
 } else {
 
     // OTHER KARTS — TEMPORARY NORMAL LOOK
