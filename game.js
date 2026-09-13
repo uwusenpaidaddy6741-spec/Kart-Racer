@@ -4204,6 +4204,7 @@ boostFlame.visible =
 // ============================================================
 
 let raceElapsedTime = 0;
+let raceStartTime = null;
 
 // ============================================================
 // RACE COUNTDOWN
@@ -4326,9 +4327,10 @@ function updateCountdown(deltaTime) {
         goShown = true;
 
         raceStarted = true;
+raceStartTime = performance.now();
 
-        countdownDisplay.textContent =
-            "GO!";
+countdownDisplay.textContent =
+    "GO!";
 
         setTimeout(
             () => {
@@ -4766,13 +4768,15 @@ function animate(currentTime) {
     // --------------------------------------------------------
 
     if (
-        raceStarted &&
-        !player.finished
-    ) {
+    raceStarted &&
+    !player.finished &&
+    raceStartTime !== null
+) {
 
-        raceElapsedTime +=
-            deltaTime;
-    }
+    raceElapsedTime =
+        (performance.now() -
+            raceStartTime) / 1000;
+}
 
     // --------------------------------------------------------
     // PHYSICS
