@@ -459,6 +459,33 @@ const trackPoints =
 // PLAYER / CONTROL HELPERS
 const keys = {};
 
+let mobileDriftToggle = false;
+
+const mobileDriftButton =
+    document.getElementById("driftButton");
+
+if (mobileDriftButton) {
+
+    mobileDriftButton.addEventListener(
+        "click",
+        () => {
+
+            mobileDriftToggle =
+                !mobileDriftToggle;
+
+            mobileDriftButton.textContent =
+                mobileDriftToggle
+                    ? "DRIFT ON"
+                    : "DRIFT";
+
+            mobileDriftButton.style.background =
+                mobileDriftToggle
+                    ? "rgba(255, 255, 255, 0.35)"
+                    : "rgba(0, 0, 0, 0.55)";
+        }
+    );
+}
+
 document.addEventListener("keydown", (event) => {
     keys[event.code] = true;
 
@@ -2446,9 +2473,9 @@ if (forward()) {
     // --------------------------------------------------------
 
     const wantsDrift =
-        space() &&
-        Math.abs(player.speed) > 5 &&
-        (left() || right());
+    (space() || mobileDriftToggle) &&
+    Math.abs(player.speed) > 5 &&
+    (left() || right());
 
     player.drifting =
         wantsDrift;
