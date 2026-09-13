@@ -99,26 +99,26 @@ body {
 }
 
 /* ============================================================
-   MOBILE SUPPORT
+   MOBILE LANDSCAPE SUPPORT
    ============================================================ */
 
-@media (max-width: 700px) {
+@media (max-width: 700px) and (orientation: landscape) {
 
     #game {
         width: 100vw;
         height: 100dvh;
-        padding: 5px;
+        padding: 3px;
     }
 
     h1 {
-        font-size: 22px;
-        margin-bottom: 8px;
+        font-size: 20px;
+        margin-bottom: 4px;
         letter-spacing: 2px;
     }
 
     #gameCanvasContainer {
         width: 100vw;
-        height: 75dvh;
+        height: 82dvh;
         border-width: 2px;
     }
 
@@ -128,7 +128,7 @@ body {
     }
 
     #controls {
-        font-size: 13px;
-        margin-top: 5px;
+        font-size: 11px;
+        margin-top: 3px;
     }
 }
