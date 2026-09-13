@@ -317,3 +317,9 @@ body {
     color: white !important;
     border-color: #22c55e !important;
 }
+
+#wheelOptions button.selected {
+    background: #22c55e !important;
+    color: white !important;
+    border-color: #22c55e !important;
+}
