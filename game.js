@@ -2042,10 +2042,10 @@ const player = {
         40,
 
     boostMaxSpeed:
-        59,
+        61,
 
     currentBoostCap:
-        47,
+        49,
 
     lap:
         1,
@@ -2886,7 +2886,7 @@ if (forward()) {
 
                 // MINI BOOST
                 player.boostTimer = 0.35;
-                player.currentBoostCap = 47;
+                player.currentBoostCap = 49;
 
                 player.speed =
                     Math.min(
@@ -2899,7 +2899,7 @@ if (forward()) {
 
                 // MEDIUM BOOST
                 player.boostTimer = 0.65;
-                player.currentBoostCap = 53;
+                player.currentBoostCap = 55;
 
                 player.speed =
                     Math.min(
@@ -2912,7 +2912,7 @@ if (forward()) {
 
                 // MAX BOOST
                 player.boostTimer = 1.0;
-                player.currentBoostCap = 59;
+                player.currentBoostCap = 61;
 
                 player.speed =
                     Math.min(
