@@ -745,7 +745,9 @@ if (defaultKartButton) {
     defaultKartButton.classList.add("selected");
 }
 
-let selectedWheels = "street";
+let selectedWheels =
+    localStorage.getItem("selectedWheels") ||
+    "street";
 
 const wheelStats = {
 
@@ -799,6 +801,11 @@ wheelButtons.forEach((button) => {
 
             selectedWheels =
                 button.dataset.wheels;
+
+            localStorage.setItem(
+    "selectedWheels",
+    selectedWheels
+);
 
             wheelButtons.forEach(
                 (wheelButton) => {
