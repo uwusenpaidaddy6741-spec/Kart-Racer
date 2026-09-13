@@ -651,6 +651,38 @@ function moveToward(current, target, amount) {
     return target;
 }
 
+const customizationToggle =
+    document.getElementById("customizationToggle");
+
+const customizationOptions =
+    document.getElementById("customizationOptions");
+
+if (
+    customizationToggle &&
+    customizationOptions
+) {
+
+    customizationToggle.addEventListener(
+        "click",
+        () => {
+
+            const isOpen =
+                customizationOptions.style.display ===
+                "block";
+
+            customizationOptions.style.display =
+                isOpen
+                    ? "none"
+                    : "block";
+
+            customizationToggle.textContent =
+                isOpen
+                    ? "🏎️ KART & WHEELS ▼"
+                    : "🏎️ KART & WHEELS ▲";
+        }
+    );
+}
+
 // ============================================================
 // TRACK CHECKPOINTS
 // ============================================================
