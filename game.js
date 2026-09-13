@@ -3335,6 +3335,14 @@ function updateKartCollisions() {
             const overlap =
                 collisionDistance - distance;
 
+            const bumpStrength = 3.5;
+
+player.x -= pushX * bumpStrength;
+player.z -= pushZ * bumpStrength;
+
+ai.kart.position.x += pushX * bumpStrength;
+ai.kart.position.z += pushZ * bumpStrength;
+
             // ------------------------------------------------
             // CALCULATE PLAYER PUSH
             // ------------------------------------------------
