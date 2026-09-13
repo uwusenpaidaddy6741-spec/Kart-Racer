@@ -697,7 +697,7 @@ const kartStats = {
         acceleration: 18,
         braking: 30,
         turnSpeed: 3.5,
-        driftChargeRate: 1.75
+        driftChargeRate: 1.5
     }
 
 };
