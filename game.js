@@ -511,25 +511,126 @@ window.addEventListener("blur", () => {
     }
 });
 
+let mobileForward = false;
+let mobileBackward = false;
+let mobileLeft = false;
+let mobileRight = false;
+
 function forward() {
-    return keys["KeyW"] || keys["ArrowUp"];
+    return keys["KeyW"] ||
+           keys["ArrowUp"] ||
+           mobileForward;
 }
 
 function backward() {
-    return keys["KeyS"] || keys["ArrowDown"];
+    return keys["KeyS"] ||
+           keys["ArrowDown"] ||
+           mobileBackward;
 }
 
 function left() {
-    return keys["KeyA"] || keys["ArrowLeft"];
+    return keys["KeyA"] ||
+           keys["ArrowLeft"] ||
+           mobileLeft;
 }
 
 function right() {
-    return keys["KeyD"] || keys["ArrowRight"];
+    return keys["KeyD"] ||
+           keys["ArrowRight"] ||
+           mobileRight;
 }
 
 function space() {
     return keys["Space"];
 }
+
+const mobileControls = {
+    accelerate:
+        document.getElementById("accelerateButton"),
+
+    brake:
+        document.getElementById("brakeButton"),
+
+    left:
+        document.getElementById("leftButton"),
+
+    right:
+        document.getElementById("rightButton")
+};
+
+function setupTouchButton(button, onStart, onEnd) {
+
+    if (!button) {
+        return;
+    }
+
+    button.addEventListener(
+        "touchstart",
+        (event) => {
+            event.preventDefault();
+            onStart();
+        },
+        { passive: false }
+    );
+
+    button.addEventListener(
+        "touchend",
+        (event) => {
+            event.preventDefault();
+            onEnd();
+        },
+        { passive: false }
+    );
+
+    button.addEventListener(
+        "touchcancel",
+        (event) => {
+            event.preventDefault();
+            onEnd();
+        },
+        { passive: false }
+    );
+}
+
+setupTouchButton(
+    mobileControls.accelerate,
+    () => {
+        mobileForward = true;
+    },
+    () => {
+        mobileForward = false;
+    }
+);
+
+setupTouchButton(
+    mobileControls.brake,
+    () => {
+        mobileBackward = true;
+    },
+    () => {
+        mobileBackward = false;
+    }
+);
+
+setupTouchButton(
+    mobileControls.left,
+    () => {
+        mobileLeft = true;
+    },
+    () => {
+        mobileLeft = false;
+    }
+);
+
+setupTouchButton(
+    mobileControls.right,
+    () => {
+        mobileRight = true;
+    },
+    () => {
+        mobileRight = false;
+    }
+);
 
 function moveToward(current, target, amount) {
 
