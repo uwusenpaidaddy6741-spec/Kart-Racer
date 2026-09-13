@@ -142,7 +142,7 @@ body {
 
 
 /* PHONE HELD HORIZONTALLY */
-@media (max-width: 700px) and (orientation: landscape) {
+@media (max-width: 1000px) and (orientation: landscape) {
 
     #game {
         width: 100vw;
