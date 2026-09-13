@@ -1741,10 +1741,154 @@ if (selectedKart === "rocket") {
 
     kart.add(seat);
 
+} else if (selectedKart === "speedster") {
+
+    // --------------------------------------------------------
+    // SPEEDSTER KART
+    // --------------------------------------------------------
+
+    // Low racing body
+    kartBody = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            2.8,
+            0.55,
+            4.3
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x2196f3,
+            roughness: 0.45,
+            metalness: 0.15
+        })
+    );
+
+    kartBody.position.y = 0.7;
+    kartBody.castShadow = true;
+
+    kart.add(kartBody);
+
+
+    // Long aerodynamic nose
+    const speedsterNose = new THREE.Mesh(
+        new THREE.ConeGeometry(
+            1.35,
+            2.4,
+            4
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x42a5f5,
+            roughness: 0.4,
+            metalness: 0.2
+        })
+    );
+
+    speedsterNose.rotation.x = -Math.PI / 2;
+
+    speedsterNose.position.set(
+        0,
+        0.72,
+        -2.7
+    );
+
+    speedsterNose.scale.x = 0.9;
+
+    speedsterNose.castShadow = true;
+
+    kart.add(speedsterNose);
+
+
+    // Rear spoiler
+    const spoiler = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.2,
+            0.18,
+            0.55
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x0d47a1,
+            roughness: 0.5
+        })
+    );
+
+    spoiler.position.set(
+        0,
+        1.35,
+        1.8
+    );
+
+    spoiler.castShadow = true;
+
+    kart.add(spoiler);
+
+
+    // Spoiler supports
+    const spoilerLeft = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.18,
+            0.65,
+            0.18
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x111111
+        })
+    );
+
+    spoilerLeft.position.set(
+        -1.15,
+        1.05,
+        1.8
+    );
+
+    kart.add(spoilerLeft);
+
+
+    const spoilerRight = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.18,
+            0.65,
+            0.18
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x111111
+        })
+    );
+
+    spoilerRight.position.set(
+        1.15,
+        1.05,
+        1.8
+    );
+
+    kart.add(spoilerRight);
+
+
+    // Racing seat
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.15,
+            0.95,
+            1.2
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x151515,
+            roughness: 0.8
+        })
+    );
+
+    seat.position.set(
+        0,
+        1.15,
+        0.35
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
+
 } else {
 
     // --------------------------------------------------------
-    // NORMAL KART
+    // OTHER KARTS — TEMPORARY NORMAL LOOK
     // --------------------------------------------------------
 
     kartBody = new THREE.Mesh(
@@ -1765,7 +1909,6 @@ if (selectedKart === "rocket") {
     kart.add(kartBody);
 
 
-    // Hood
     hood = new THREE.Mesh(
         new THREE.BoxGeometry(
             2.5,
@@ -1788,7 +1931,6 @@ if (selectedKart === "rocket") {
     kart.add(hood);
 
 
-    // Seat
     seat = new THREE.Mesh(
         new THREE.BoxGeometry(
             1.3,
