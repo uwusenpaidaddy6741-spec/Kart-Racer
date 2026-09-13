@@ -3393,7 +3393,7 @@ function updateKartCollisions() {
             // SLOW BOTH KARTS
             // ------------------------------------------------
 
-            player.speed *= 0.55;
+           player.speed *= 0.95;
             ai.speed *= 0.75;
         }
     }
