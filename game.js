@@ -2169,6 +2169,188 @@ if (selectedKart === "rocket") {
 
     kart.add(seat);
 
+} else if (selectedKart === "heavy") {
+
+        // HEAVY KART
+
+    kartBody = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.6,
+            1.0,
+            4.4
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xf97316,
+            roughness: 0.75,
+            metalness: 0.05
+        })
+    );
+
+    kartBody.position.y = 0.9;
+    kartBody.castShadow = true;
+
+    kart.add(kartBody);
+
+    // Large front bumper
+
+    const heavyBumper = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.5,
+            0.55,
+            0.7
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xea580c,
+            roughness: 0.7
+        })
+    );
+
+    heavyBumper.position.set(
+        0,
+        0.75,
+        -2.25
+    );
+
+    heavyBumper.castShadow = true;
+
+    kart.add(heavyBumper);
+
+    // Heavy left side panel
+
+    const heavyLeftPanel = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.4,
+            0.9,
+            3.0
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xc2410c,
+            roughness: 0.7
+        })
+    );
+
+    heavyLeftPanel.position.set(
+        -1.8,
+        0.85,
+        0.2
+    );
+
+    heavyLeftPanel.castShadow = true;
+
+    kart.add(heavyLeftPanel);
+
+    // Heavy right side panel
+
+    const heavyRightPanel = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.4,
+            0.9,
+            3.0
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xc2410c,
+            roughness: 0.7
+        })
+    );
+
+    heavyRightPanel.position.set(
+        1.8,
+        0.85,
+        0.2
+    );
+
+    heavyRightPanel.castShadow = true;
+
+    kart.add(heavyRightPanel);
+
+    // Large rear spoiler
+
+    const heavySpoiler = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.5,
+            0.3,
+            0.65
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x7c2d12,
+            roughness: 0.65
+        })
+    );
+
+    heavySpoiler.position.set(
+        0,
+        1.65,
+        1.8
+    );
+
+    heavySpoiler.castShadow = true;
+
+    kart.add(heavySpoiler);
+
+    // Spoiler supports
+
+    const heavySupportLeft = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.22,
+            0.8,
+            0.22
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x222222
+        })
+    );
+
+    heavySupportLeft.position.set(
+        -1.15,
+        1.35,
+        1.8
+    );
+
+    kart.add(heavySupportLeft);
+
+    const heavySupportRight = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.22,
+            0.8,
+            0.22
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x222222
+        })
+    );
+
+    heavySupportRight.position.set(
+        1.15,
+        1.35,
+        1.8
+    );
+
+    kart.add(heavySupportRight);
+
+    // Heavy seat
+
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.5,
+            1.2,
+            1.4
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x171717,
+            roughness: 0.9
+        })
+    );
+
+    seat.position.set(
+        0,
+        1.45,
+        0.35
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
 } else {
 
     // OTHER KARTS — TEMPORARY NORMAL LOOK
