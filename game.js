@@ -1885,11 +1885,143 @@ if (selectedKart === "rocket") {
     kart.add(seat);
 
 
+} else if (selectedKart === "balanced") {
+
+    // BALANCED KART
+
+    kartBody = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.1,
+            0.85,
+            4.0
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x22c55e,
+            roughness: 0.65,
+            metalness: 0.05
+        })
+    );
+
+    kartBody.position.y = 0.8;
+    kartBody.castShadow = true;
+
+    kart.add(kartBody);
+
+    // Rounded front bumper
+
+    const balancedFront = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            2.8,
+            0.5,
+            1.0
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x16a34a,
+            roughness: 0.6
+        })
+    );
+
+    balancedFront.position.set(
+        0,
+        0.95,
+        -2.0
+    );
+
+    balancedFront.castShadow = true;
+
+    kart.add(balancedFront);
+
+    // Small rear spoiler
+
+    const balancedSpoiler = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            2.7,
+            0.2,
+            0.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x166534,
+            roughness: 0.55
+        })
+    );
+
+    balancedSpoiler.position.set(
+        0,
+        1.45,
+        1.65
+    );
+
+    balancedSpoiler.castShadow = true;
+
+    kart.add(balancedSpoiler);
+
+    // Spoiler supports
+
+    const balancedSupportLeft = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.15,
+            0.55,
+            0.15
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x222222
+        })
+    );
+
+    balancedSupportLeft.position.set(
+        -0.9,
+        1.2,
+        1.65
+    );
+
+    kart.add(balancedSupportLeft);
+
+    const balancedSupportRight = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.15,
+            0.55,
+            0.15
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x222222
+        })
+    );
+
+    balancedSupportRight.position.set(
+        0.9,
+        1.2,
+        1.65
+    );
+
+    kart.add(balancedSupportRight);
+
+    // Seat
+
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.35,
+            1.1,
+            1.25
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x222222,
+            roughness: 0.8
+        })
+    );
+
+    seat.position.set(
+        0,
+        1.35,
+        0.45
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
 } else {
 
-    // --------------------------------------------------------
     // OTHER KARTS — TEMPORARY NORMAL LOOK
-    // --------------------------------------------------------
 
     kartBody = new THREE.Mesh(
         new THREE.BoxGeometry(
@@ -1907,7 +2039,6 @@ if (selectedKart === "rocket") {
     kartBody.castShadow = true;
 
     kart.add(kartBody);
-
 
     hood = new THREE.Mesh(
         new THREE.BoxGeometry(
@@ -1929,7 +2060,6 @@ if (selectedKart === "rocket") {
     hood.castShadow = true;
 
     kart.add(hood);
-
 
     seat = new THREE.Mesh(
         new THREE.BoxGeometry(
