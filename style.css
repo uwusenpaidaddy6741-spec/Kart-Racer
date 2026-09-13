@@ -313,7 +313,7 @@ body {
 }
 
 #kartOptions button.selected {
-    background: ##008000;
-    color: Green;
-    border-color: ##008000;
+    background: #22c55e;
+    color: white;
+    border-color: #22c55e;
 }
