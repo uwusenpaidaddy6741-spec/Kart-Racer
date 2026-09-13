@@ -692,6 +692,44 @@ if (defaultKartButton) {
     defaultKartButton.classList.add("selected");
 }
 
+let selectedWheels = "street";
+
+const wheelButtons =
+    document.querySelectorAll(
+        "#wheelOptions button"
+    );
+
+wheelButtons.forEach((button) => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            selectedWheels =
+                button.dataset.wheels;
+
+            wheelButtons.forEach(
+                (wheelButton) => {
+                    wheelButton.classList.remove(
+                        "selected"
+                    );
+                }
+            );
+
+            button.classList.add("selected");
+        }
+    );
+});
+
+const defaultWheelButton =
+    document.querySelector(
+        '#wheelOptions button[data-wheels="street"]'
+    );
+
+if (defaultWheelButton) {
+    defaultWheelButton.classList.add("selected");
+}
+
 const customizationOptions =
     document.getElementById("customizationOptions");
 
