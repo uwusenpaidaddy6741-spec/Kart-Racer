@@ -2058,24 +2058,30 @@ const player = {
 
 function applyKartStats() {
 
-    const stats =
+    const kart =
         kartStats[selectedKart];
 
-    if (!stats) {
+    const wheels =
+        wheelStats[selectedWheels];
+
+    if (!kart || !wheels) {
         return;
     }
 
     player.maxSpeed =
-        stats.maxSpeed;
+        kart.maxSpeed + wheels.maxSpeed;
 
     player.acceleration =
-        stats.acceleration;
+        kart.acceleration + wheels.acceleration;
 
     player.braking =
-        stats.braking;
+        kart.braking;
 
     player.turnSpeed =
-        stats.turnSpeed;
+        kart.turnSpeed + wheels.turnSpeed;
+
+    player.driftChargeRate =
+        wheels.driftChargeRate;
 }
 
 applyKartStats();
