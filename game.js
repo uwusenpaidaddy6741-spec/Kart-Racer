@@ -654,7 +654,9 @@ function moveToward(current, target, amount) {
 const customizationToggle =
     document.getElementById("customizationToggle");
 
-let selectedKart = "speedster";
+let selectedKart =
+    localStorage.getItem("selectedKart") ||
+    "speedster";
 
 const kartStats = {
 
@@ -713,6 +715,11 @@ kartButtons.forEach((button) => {
 
             selectedKart =
                 button.dataset.kart;
+
+            localStorage.setItem(
+    "selectedKart",
+    selectedKart
+);
 
             applyKartStats();
 
