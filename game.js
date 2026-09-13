@@ -4177,11 +4177,9 @@ function updateRace() {
 
                 player.finished = true;
 
-               player.finishTime =
-    performance.now() -
-    raceStartTime;
-
-player.finishTime /= 1000;
+              player.finishTime =
+    (performance.now() -
+        raceStartTime) / 1000;
 
 if (timeTrial) {
     const track =
