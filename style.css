@@ -243,9 +243,9 @@ body {
 #kartSelect {
     position: fixed;
 
-    top: 340px;
+       top: 335px;
     left: 48px;
-
+    
     transform: none;
 
     width: 230px;
