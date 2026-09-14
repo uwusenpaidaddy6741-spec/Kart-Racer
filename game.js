@@ -2358,8 +2358,128 @@ if (selectedKart === "rocket") {
 
     kart.add(seat);
 
-} else {
+} else if (selectedKart === "blaze") {
 
+    // ========================================================
+    // BLAZE KART
+    // ========================================================
+
+    // Main body
+    kartBody = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.2,
+            0.75,
+            4.3
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xd62828,
+            roughness: 0.45,
+            metalness: 0.15
+        })
+    );
+
+    kartBody.position.y = 0.78;
+    kartBody.castShadow = true;
+
+    kart.add(kartBody);
+
+    // Bright orange front section
+    const blazeNose = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            2.8,
+            0.5,
+            1.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xff7a00,
+            roughness: 0.4,
+            metalness: 0.1
+        })
+    );
+
+    blazeNose.position.set(
+        0,
+        0.98,
+        -1.45
+    );
+
+    blazeNose.castShadow = true;
+
+    kart.add(blazeNose);
+
+    // Yellow fire stripe
+    const blazeStripe = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.75,
+            0.08,
+            3.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xffd000,
+            roughness: 0.35,
+            metalness: 0.05
+        })
+    );
+
+    blazeStripe.position.set(
+        0,
+        1.18,
+        -0.1
+    );
+
+    blazeStripe.castShadow = true;
+
+    kart.add(blazeStripe);
+
+    // Dark rear spoiler
+    const blazeSpoiler = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.1,
+            0.25,
+            0.55
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x171717,
+            roughness: 0.6,
+            metalness: 0.15
+        })
+    );
+
+    blazeSpoiler.position.set(
+        0,
+        1.35,
+        1.75
+    );
+
+    blazeSpoiler.castShadow = true;
+
+    kart.add(blazeSpoiler);
+
+    // Black seat
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.3,
+            1.0,
+            1.3
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x111111,
+            roughness: 0.85
+        })
+    );
+
+    seat.position.set(
+        0,
+        1.25,
+        0.4
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
+} else {
+    
     // OTHER KARTS — TEMPORARY NORMAL LOOK
 
     kartBody = new THREE.Mesh(
