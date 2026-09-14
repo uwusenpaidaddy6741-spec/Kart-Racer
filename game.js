@@ -3690,7 +3690,13 @@ if (forward()) {
 
                 // MINI BOOST
                 player.boostTimer = 0.35;
-                player.currentBoostCap = 49;
+                player.currentBoostCap =
+    (
+        selectedKart === "drifter" ||
+        selectedWheels === "drift"
+    )
+        ? 51
+        : 49;
 
                 player.speed =
                     Math.min(
@@ -3703,7 +3709,13 @@ if (forward()) {
 
                 // MEDIUM BOOST
                 player.boostTimer = 0.65;
-                player.currentBoostCap = 55;
+                player.currentBoostCap =
+    (
+        selectedKart === "drifter" ||
+        selectedWheels === "drift"
+    )
+        ? 57
+        : 55;
 
                 player.speed =
                     Math.min(
@@ -3716,7 +3728,13 @@ if (forward()) {
 
                 // MAX BOOST
                 player.boostTimer = 1.0;
-                player.currentBoostCap = 61;
+                player.currentBoostCap =
+    (
+        selectedKart === "drifter" ||
+        selectedWheels === "drift"
+    )
+        ? 63
+        : 61;
 
                 player.speed =
                     Math.min(
