@@ -793,7 +793,7 @@ const wheelStats = {
         turnSpeed: 0.3,
         driftChargeRate: 1.5
     }
-},
+};
 
 const wheelButtons =
     document.querySelectorAll(
