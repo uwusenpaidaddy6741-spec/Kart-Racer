@@ -243,10 +243,12 @@ body {
 #kartSelect {
     position: absolute;
 
-    top: -250px;
-    left: -335px;
+    top: 115px;
+    left: 50%;
 
-    width: 230px;
+    transform: translateX(-50%);
+
+    width: 500px;
 
     z-index: 200;
 }
