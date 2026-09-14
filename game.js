@@ -2822,6 +2822,12 @@ const player = {
     finishTime:
         0,
 
+        previousFinishDistance:
+        Infinity,
+
+    previousFrameTime:
+        null,
+
     lastDrifting:
         false
 };
@@ -3485,10 +3491,25 @@ function updatePlayer(deltaTime) {
         return;
     }
 
-  // --------------------------------------------------------
-// ACCELERATION
-// --------------------------------------------------------
+    const previousFinishPoint =
+        trackPoints[0];
 
+    player.previousFinishDistance =
+        Math.hypot(
+            player.x -
+                previousFinishPoint.x,
+
+            player.z -
+                previousFinishPoint.z
+        );
+
+    player.previousFrameTime =
+        performance.now();
+
+    // --------------------------------------------------------
+    // ACCELERATION
+    // --------------------------------------------------------
+    
 if (forward()) {
 
     if (player.boostTimer > 0) {
