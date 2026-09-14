@@ -4158,108 +4158,132 @@ function updateRace() {
     }
 
     // --------------------------------------------------------
-    // FINISH LINE
-    // --------------------------------------------------------
-
-    if (
-        player.nextCheckpoint === 4
-    ) {
-
-        const finishPoint =
-            trackPoints[0];
-
-        const finishDistance =
-            Math.hypot(
-                player.x -
-                    finishPoint.x,
-
-                player.z -
-                    finishPoint.z
-            );
-
-        const finishWindow =
-            TRACK_WIDTH / 2 + 1.5;
-
-        if (
-            finishDistance <=
-            finishWindow
-        ) {
-
-            player.finished = true;
-
-const currentFinishDistance =
-    finishDistance;
-
-const previousFinishDistance =
-    player.previousFinishDistance;
-
-let finishFraction = 1;
+// FINISH LINE
+// --------------------------------------------------------
 
 if (
-    previousFinishDistance >
-        finishWindow &&
-    currentFinishDistance <=
-        finishWindow
+    player.nextCheckpoint === 4
 ) {
 
-    const distanceChange =
-        previousFinishDistance -
-        currentFinishDistance;
+    const finishPoint =
+        trackPoints[0];
 
-    if (distanceChange > 0) {
+    const finishDistance =
+        Math.hypot(
+            player.x -
+                finishPoint.x,
 
-        finishFraction =
-            (
-                previousFinishDistance -
+            player.z -
+                finishPoint.z
+        );
+
+    const finishWindow =
+        TRACK_WIDTH / 2 + 1.5;
+
+    if (
+        finishDistance <=
+        finishWindow
+    ) {
+
+        // ----------------------------------------------------
+        // LAP COMPLETE
+        // ----------------------------------------------------
+
+        if (
+            player.lap <
+            TOTAL_LAPS
+        ) {
+
+            player.lap++;
+
+            // Start looking for checkpoint 1
+            // for the next lap.
+            player.nextCheckpoint = 1;
+
+            return;
+        }
+
+        // ----------------------------------------------------
+        // FINAL LAP COMPLETE
+        // ----------------------------------------------------
+
+        player.finished = true;
+
+        const currentFinishDistance =
+            finishDistance;
+
+        const previousFinishDistance =
+            player.previousFinishDistance;
+
+        let finishFraction = 1;
+
+        if (
+            previousFinishDistance >
+                finishWindow &&
+            currentFinishDistance <=
                 finishWindow
-            ) /
-            distanceChange;
+        ) {
 
-        finishFraction =
-            Math.max(
-                0,
-                Math.min(
-                    1,
-                    finishFraction
-                )
-            );
-    }
-}
+            const distanceChange =
+                previousFinishDistance -
+                currentFinishDistance;
 
-const finishTimeNow =
-    performance.now();
+            if (
+                distanceChange > 0
+            ) {
 
-const frameTime =
-    player.previousFrameTime !== null
-        ? finishTimeNow -
-          player.previousFrameTime
-        : 0;
+                finishFraction =
+                    (
+                        previousFinishDistance -
+                        finishWindow
+                    ) /
+                    distanceChange;
 
-player.finishTime =
-    (
-        finishTimeNow -
-        frameTime *
-            (1 - finishFraction) -
-        raceStartTime
-    ) / 1000;
-
-if (timeTrial) {
-    const track =
-        selectedTrack;
-
-    saveTimeTrialTime(
-        track,
-        player.finishTime
-    );
-}
-
-boostFlame.visible =
-    false;
-
-                showFinish();
+                finishFraction =
+                    Math.max(
+                        0,
+                        Math.min(
+                            1,
+                            finishFraction
+                        )
+                    );
             }
         }
+
+        const finishTimeNow =
+            performance.now();
+
+        const frameTime =
+            player.previousFrameTime !== null
+                ? finishTimeNow -
+                  player.previousFrameTime
+                : 0;
+
+        player.finishTime =
+            (
+                finishTimeNow -
+                frameTime *
+                    (1 - finishFraction) -
+                raceStartTime
+            ) / 1000;
+
+        if (timeTrial) {
+
+            const track =
+                selectedTrack;
+
+            saveTimeTrialTime(
+                track,
+                player.finishTime
+            );
+        }
+
+        boostFlame.visible =
+            false;
+
+        showFinish();
     }
+}
 
 // ============================================================
 // RACE TIMER
