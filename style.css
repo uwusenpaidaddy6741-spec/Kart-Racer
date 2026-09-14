@@ -241,14 +241,14 @@ body {
    ============================================================ */
 
 #kartSelect {
-    position: absolute;
+    position: fixed;
 
-    top: calc(100% + 20px);
-    left: 50%;
+    top: 340px;
+    left: 48px;
 
-    transform: translateX(-50%);
+    transform: none;
 
-    width: 500px;
+    width: 230px;
 
     z-index: 200;
 }
