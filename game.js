@@ -4889,6 +4889,8 @@ requestAnimationFrame(
     animate
 );
 
+console.log("GAME.JS REACHED BUTTON SETUP");
+
 document.getElementById("track1Button").onclick = () => {
     window.location.href = "?track=1";
 };
