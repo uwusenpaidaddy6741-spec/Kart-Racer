@@ -322,6 +322,8 @@ body {
     flex-direction: column;
 
     gap: 6px;
+
+    width: 48%;
 }
 
 #customizationOptions button:not(#customizationToggle) {
