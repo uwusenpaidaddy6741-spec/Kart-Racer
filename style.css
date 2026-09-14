@@ -283,7 +283,7 @@ body {
 
     grid-template-columns: 1fr 1fr;
 
-    column-gap: 15px;
+    gap: 15px;
 }
 
 #customizationOptions h3 {
