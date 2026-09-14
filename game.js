@@ -3695,7 +3695,7 @@ if (forward()) {
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 51
+        ? 50
         : 49;
 
                 player.speed =
@@ -3714,7 +3714,7 @@ if (forward()) {
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 57
+        ? 56
         : 55;
 
                 player.speed =
@@ -3733,7 +3733,7 @@ if (forward()) {
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 63
+        ? 62
         : 61;
 
                 player.speed =
