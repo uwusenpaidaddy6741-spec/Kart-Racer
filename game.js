@@ -700,13 +700,15 @@ const kartStats = {
         driftChargeRate: 1.5
     },
         
-    blaze: {
-    maxSpeed: 46,
-    acceleration: 22,
-    braking: 20,
-    turnSpeed: 2.5,
-    driftChargeRate: 1.2
-},
+        blaze: {
+        maxSpeed: 46,
+        acceleration: 22,
+        braking: 20,
+        turnSpeed: 2.5,
+        driftChargeRate: 1.2
+    }
+
+};
 
 const kartButtons =
     document.querySelectorAll(
