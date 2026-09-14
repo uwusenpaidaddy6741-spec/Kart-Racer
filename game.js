@@ -4185,22 +4185,63 @@ function updateRace() {
             finishWindow
         ) {
 
-            if (
-                player.lap <
-                TOTAL_LAPS
-            ) {
+            player.finished = true;
 
-                player.lap++;
+const currentFinishDistance =
+    finishDistance;
 
-                player.nextCheckpoint = 1;
+const previousFinishDistance =
+    player.previousFinishDistance;
 
-            } else {
+let finishFraction = 1;
 
-                player.finished = true;
+if (
+    previousFinishDistance >
+        finishWindow &&
+    currentFinishDistance <=
+        finishWindow
+) {
 
-              player.finishTime =
-    (performance.now() -
-        raceStartTime) / 1000;
+    const distanceChange =
+        previousFinishDistance -
+        currentFinishDistance;
+
+    if (distanceChange > 0) {
+
+        finishFraction =
+            (
+                previousFinishDistance -
+                finishWindow
+            ) /
+            distanceChange;
+
+        finishFraction =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    finishFraction
+                )
+            );
+    }
+}
+
+const finishTimeNow =
+    performance.now();
+
+const frameTime =
+    player.previousFrameTime !== null
+        ? finishTimeNow -
+          player.previousFrameTime
+        : 0;
+
+player.finishTime =
+    (
+        finishTimeNow -
+        frameTime *
+            (1 - finishFraction) -
+        raceStartTime
+    ) / 1000;
 
 if (timeTrial) {
     const track =
