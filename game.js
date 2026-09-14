@@ -843,12 +843,12 @@ if (
 
             const isOpen =
                 customizationOptions.style.display ===
-                "block";
+"grid";
 
             customizationOptions.style.display =
-                isOpen
-                    ? "none"
-                    : "block";
+    isOpen
+        ? "none"
+        : "grid";
 
             customizationToggle.textContent =
                 isOpen
