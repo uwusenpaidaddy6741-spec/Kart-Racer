@@ -436,22 +436,96 @@ function oasisPoints() {
 
 function snowTrackPoints() {
 
+    // Control points for the Snow Track layout.
+    // Designed to follow the reference:
+    // long top straight -> right hairpin ->
+    // middle return -> S section -> lower sweep.
+
     const controlPoints = [
-        { x: -45, z: -20 },
-        { x: -25, z: -38 },
-        { x: 5, z: -42 },
-        { x: 35, z: -30 },
-        { x: 48, z: -5 },
-        { x: 38, z: 22 },
-        { x: 10, z: 38 },
-        { x: -20, z: 35 },
-        { x: -45, z: 20 },
-        { x: -55, z: 0 }
+
+        // ----------------------------------------------------
+        // START / TOP STRAIGHT
+        // ----------------------------------------------------
+
+        { x: -45, z: -35 },
+        { x: -20, z: -35 },
+        { x: 10,  z: -35 },
+        { x: 35,  z: -35 },
+
+        // ----------------------------------------------------
+        // LARGE RIGHT HAIRPIN
+        // ----------------------------------------------------
+
+        { x: 47, z: -28 },
+        { x: 47, z: -15 },
+        { x: 42, z: -5 },
+        { x: 30, z: 0 },
+
+        // ----------------------------------------------------
+        // MIDDLE RETURN
+        // ----------------------------------------------------
+
+        { x: 5,  z: 0 },
+        { x: -20, z: 0 },
+        { x: -30, z: 5 },
+
+        // ----------------------------------------------------
+        // FIRST S-TURN
+        // ----------------------------------------------------
+
+        { x: -30, z: 14 },
+        { x: -23, z: 20 },
+        { x: -10, z: 20 },
+        { x: 5,  z: 20 },
+
+        // ----------------------------------------------------
+        // SECOND S-TURN
+        // ----------------------------------------------------
+
+        { x: 17, z: 20 },
+        { x: 25, z: 25 },
+        { x: 25, z: 33 },
+        { x: 17, z: 39 },
+
+        // ----------------------------------------------------
+        // TOP OF LOWER SECTION
+        // ----------------------------------------------------
+
+        { x: 0,  z: 39 },
+        { x: -20, z: 39 },
+        { x: -38, z: 34 },
+
+        // ----------------------------------------------------
+        // LARGE LEFT SWEEP
+        // ----------------------------------------------------
+
+        { x: -48, z: 25 },
+        { x: -48, z: 10 },
+        { x: -48, z: -5 },
+        { x: -48, z: -20 },
+
+        // ----------------------------------------------------
+        // RETURN TO START
+        // ----------------------------------------------------
+
+        { x: -48, z: -30 },
+        { x: -45, z: -35 }
     ];
 
     const points = [];
 
-    for (let i = 0; i < controlPoints.length; i++) {
+    // Smoothly interpolate between the control points.
+    for (
+        let i = 0;
+        i < controlPoints.length;
+        i++
+    ) {
+
+        const previous =
+            controlPoints[
+                (i - 1 + controlPoints.length) %
+                controlPoints.length
+            ];
 
         const current =
             controlPoints[i];
@@ -462,20 +536,63 @@ function snowTrackPoints() {
                 controlPoints.length
             ];
 
-        const steps = 15;
+        const nextNext =
+            controlPoints[
+                (i + 2) %
+                controlPoints.length
+            ];
 
-        for (let j = 0; j < steps; j++) {
+        const steps = 12;
+
+        for (
+            let j = 0;
+            j < steps;
+            j++
+        ) {
 
             const t = j / steps;
 
-            points.push({
-                x:
-                    current.x +
-                    (next.x - current.x) * t,
+            // Catmull-Rom interpolation
+            const t2 = t * t;
+            const t3 = t2 * t;
 
-                z:
-                    current.z +
-                    (next.z - current.z) * t
+            const x =
+                0.5 * (
+                    (2 * current.x) +
+
+                    (-previous.x + next.x) * t +
+
+                    (2 * previous.x -
+                        5 * current.x +
+                        4 * next.x -
+                        nextNext.x) * t2 +
+
+                    (-previous.x +
+                        3 * current.x -
+                        3 * next.x +
+                        nextNext.x) * t3
+                );
+
+            const z =
+                0.5 * (
+                    (2 * current.z) +
+
+                    (-previous.z + next.z) * t +
+
+                    (2 * previous.z -
+                        5 * current.z +
+                        4 * next.z -
+                        nextNext.z) * t2 +
+
+                    (-previous.z +
+                        3 * current.z -
+                        3 * next.z +
+                        nextNext.z) * t3
+                );
+
+            points.push({
+                x: x,
+                z: z
             });
         }
     }
