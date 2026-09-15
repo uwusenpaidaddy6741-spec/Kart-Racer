@@ -2486,10 +2486,134 @@ if (selectedKart === "rocket") {
 
     kart.add(seat);
 
+} else if (selectedKart === "accelerator") {
+
+    // ========================================================
+    // ACCELERATOR KART
+    // ========================================================
+
+    // Main body — sleek electric blue
+    kartBody = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.1,
+            0.72,
+            4.3
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x147df5,
+            roughness: 0.35,
+            metalness: 0.3
+        })
+    );
+
+    kartBody.position.y = 0.78;
+    kartBody.castShadow = true;
+
+    kart.add(kartBody);
+
+
+    // Bright cyan front nose
+    const acceleratorNose = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            2.75,
+            0.48,
+            1.45
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x00e5ff,
+            roughness: 0.3,
+            metalness: 0.25
+        })
+    );
+
+    acceleratorNose.position.set(
+        0,
+        1.02,
+        -1.45
+    );
+
+    acceleratorNose.castShadow = true;
+
+    kart.add(acceleratorNose);
+
+
+    // Yellow center acceleration stripe
+    const acceleratorStripe = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.65,
+            0.08,
+            3.6
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xffd600,
+            roughness: 0.3,
+            metalness: 0.1
+        })
+    );
+
+    acceleratorStripe.position.set(
+        0,
+        1.18,
+        -0.05
+    );
+
+    acceleratorStripe.castShadow = true;
+
+    kart.add(acceleratorStripe);
+
+
+    // Rear spoiler
+    const acceleratorSpoiler = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.0,
+            0.22,
+            0.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x111111,
+            roughness: 0.5,
+            metalness: 0.2
+        })
+    );
+
+    acceleratorSpoiler.position.set(
+        0,
+        1.35,
+        1.75
+    );
+
+    acceleratorSpoiler.castShadow = true;
+
+    kart.add(acceleratorSpoiler);
+
+
+    // Black racing seat
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.3,
+            1.0,
+            1.3
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x111111,
+            roughness: 0.8
+        })
+    );
+
+    seat.position.set(
+        0,
+        1.25,
+        0.4
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
 } else {
     
     // OTHER KARTS — TEMPORARY NORMAL LOOK
-
+    
     kartBody = new THREE.Mesh(
         new THREE.BoxGeometry(
             2.8,
