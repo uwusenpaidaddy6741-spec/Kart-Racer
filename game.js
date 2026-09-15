@@ -1287,11 +1287,17 @@ positions.push(
 
     geometry.computeVertexNormals();
 
-    const material = new THREE.MeshStandardMaterial({
-        color: 0x3b3b3b,
-        roughness: 0.9
-    });
-
+    const roadMaterial = new THREE.MeshStandardMaterial({
+    color:
+        selectedTrack === "4"
+            ? 0xd9e4ea
+            : 0x3b3b3b,
+    roughness:
+        selectedTrack === "4"
+            ? 0.35
+            : 0.9
+});
+    
     const road = new THREE.Mesh(
         geometry,
         material
