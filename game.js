@@ -5256,16 +5256,15 @@ function animate(currentTime) {
     updateHUD();
 }
 
-    // --------------------------------------------------------
-    // RENDER
-    // --------------------------------------------------------
+   // --------------------------------------------------------
+// RENDER
+// --------------------------------------------------------
 
-    renderer.render(
-        scene,
-        camera
-    );
-    } 
-
+renderer.render(
+    scene,
+    camera
+);
+}
 
 requestAnimationFrame(
     animate
@@ -5283,6 +5282,10 @@ document.getElementById("track2Button").onclick = () => {
 
 document.getElementById("track3Button").onclick = () => {
     window.location.href = "?track=3";
+};
+
+document.getElementById("track4Button").onclick = () => {
+    window.location.href = "?track=4";
 };
 
 document.getElementById("timeTrialButton").onclick = () => {
