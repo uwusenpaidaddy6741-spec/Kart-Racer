@@ -1296,7 +1296,8 @@ positions.push(
         selectedTrack === "4"
             ? 0.35
             : 0.9
-});
+}
+);
     
     const road = new THREE.Mesh(
         geometry,
