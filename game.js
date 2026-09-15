@@ -5300,3 +5300,7 @@ document.getElementById("timeTrialTrack1Button").onclick = () => {
 document.getElementById("timeTrialTrack2Button").onclick = () => {
     window.location.href = "?track=2&mode=timeTrial";
 };
+
+document.getElementById("timeTrialTrack3Button").onclick = () => {
+    window.location.href = "?track=3&mode=timeTrial";
+};
