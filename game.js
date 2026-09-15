@@ -448,9 +448,11 @@ let timeTrialFinished = false;
 const trackPoints =
     selectedTrack === "1"
         ? roundedRectanglePoints()
-        : selectedTrack === "3"
-            ? oasisPoints()
-            : forestRunPoints();
+        : selectedTrack === "2"
+            ? forestRunPoints()
+            : selectedTrack === "3"
+                ? oasisPoints()
+                : snowTrackPoints();
 
 // ============================================================
 // PLAYER / CONTROL HELPERS
