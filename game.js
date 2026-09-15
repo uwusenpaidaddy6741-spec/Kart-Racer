@@ -4496,7 +4496,7 @@ if (playerNameInput) {
 
 async function loadTimeTrialLeaderboard() {
 
-    const trackIds = ["1", "2", "3"];
+    const trackIds = ["1", "2", "3", "4"];
 
     const boards =
         document.querySelectorAll(
