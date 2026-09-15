@@ -5301,4 +5301,9 @@ document.getElementById("timeTrialTrack2Button").onclick = () => {
 
 document.getElementById("timeTrialTrack3Button").onclick = () => {
     window.location.href = "?track=3&mode=timeTrial";
+
+    document.getElementById("track4Button").onclick = () => {
+    window.location.href = "?track=4";
+};
+    
 };
