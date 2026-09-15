@@ -5278,8 +5278,7 @@ document.getElementById("track1Button").onclick = () => {
 };
 
 document.getElementById("track2Button").onclick = () => {
-    trackSelected = true;
-    document.getElementById("trackSelect").style.display = "none";
+    window.location.href = "?track=2";
 };
 
 document.getElementById("track3Button").onclick = () => {
@@ -5298,7 +5297,3 @@ document.getElementById("timeTrialTrack1Button").onclick = () => {
 document.getElementById("timeTrialTrack2Button").onclick = () => {
     window.location.href = "?track=2&mode=timeTrial";
 };
-
-document.getElementById("track3Button").onclick = () => {
-    window.location.href = "?track=3";
-    };
