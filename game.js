@@ -429,6 +429,59 @@ function oasisPoints() {
 }
 
 // ============================================================
+// TRACK 4 - SNOW TRACK
+// ============================================================
+
+function snowTrackPoints() {
+
+    const controlPoints = [
+        { x: -45, z: -20 },
+        { x: -25, z: -38 },
+        { x: 5, z: -42 },
+        { x: 35, z: -30 },
+        { x: 48, z: -5 },
+        { x: 38, z: 22 },
+        { x: 10, z: 38 },
+        { x: -20, z: 35 },
+        { x: -45, z: 20 },
+        { x: -55, z: 0 }
+    ];
+
+    const points = [];
+
+    for (let i = 0; i < controlPoints.length; i++) {
+
+        const current =
+            controlPoints[i];
+
+        const next =
+            controlPoints[
+                (i + 1) %
+                controlPoints.length
+            ];
+
+        const steps = 15;
+
+        for (let j = 0; j < steps; j++) {
+
+            const t = j / steps;
+
+            points.push({
+                x:
+                    current.x +
+                    (next.x - current.x) * t,
+
+                z:
+                    current.z +
+                    (next.z - current.z) * t
+            });
+        }
+    }
+
+    return points;
+}
+
+// ============================================================
 // TRACK SELECTION
 // ============================================================
 
