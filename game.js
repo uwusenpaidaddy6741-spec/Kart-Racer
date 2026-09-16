@@ -2816,10 +2816,575 @@ if (selectedKart === "rocket") {
 
     kart.add(seat);
 
+} else if (selectedKart === "comet") {
+
+    // ========================================================
+    // COMET KART
+    // Futuristic silver / cyan racing design
+    // ========================================================
+
+    // Main aerodynamic body
+    kartBody = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.0,
+            0.7,
+            4.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xb8c7d9,
+            roughness: 0.3,
+            metalness: 0.65
+        })
+    );
+
+    kartBody.position.y = 0.78;
+    kartBody.castShadow = true;
+
+    kart.add(kartBody);
+
+    // Cyan front nose
+    const cometNose = new THREE.Mesh(
+        new THREE.ConeGeometry(
+            1.35,
+            2.2,
+            4
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x00e5ff,
+            roughness: 0.25,
+            metalness: 0.5
+        })
+    );
+
+    cometNose.rotation.x = -Math.PI / 2;
+
+    cometNose.position.set(
+        0,
+        0.82,
+        -2.65
+    );
+
+    cometNose.scale.x = 0.95;
+    cometNose.castShadow = true;
+
+    kart.add(cometNose);
+
+    // Glowing cyan center stripe
+    const cometStripe = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.45,
+            0.08,
+            3.7
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x00ffff,
+            roughness: 0.2,
+            metalness: 0.4,
+            emissive: 0x00aabb,
+            emissiveIntensity: 1.5
+        })
+    );
+
+    cometStripe.position.set(
+        0,
+        1.17,
+        -0.05
+    );
+
+    kart.add(cometStripe);
+
+    // Dark side pods
+    const cometLeftPod = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.35,
+            0.65,
+            2.8
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x263238,
+            roughness: 0.4,
+            metalness: 0.55
+        })
+    );
+
+    cometLeftPod.position.set(
+        -1.65,
+        0.78,
+        0.2
+    );
+
+    cometLeftPod.rotation.z = -0.08;
+    cometLeftPod.castShadow = true;
+
+    kart.add(cometLeftPod);
+
+    const cometRightPod = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.35,
+            0.65,
+            2.8
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x263238,
+            roughness: 0.4,
+            metalness: 0.55
+        })
+    );
+
+    cometRightPod.position.set(
+        1.65,
+        0.78,
+        0.2
+    );
+
+    cometRightPod.rotation.z = 0.08;
+    cometRightPod.castShadow = true;
+
+    kart.add(cometRightPod);
+
+    // Futuristic rear spoiler
+    const cometSpoiler = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.25,
+            0.2,
+            0.55
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x00bcd4,
+            roughness: 0.3,
+            metalness: 0.5,
+            emissive: 0x004c55,
+            emissiveIntensity: 0.7
+        })
+    );
+
+    cometSpoiler.position.set(
+        0,
+        1.38,
+        1.85
+    );
+
+    cometSpoiler.castShadow = true;
+
+    kart.add(cometSpoiler);
+
+    // Black futuristic seat
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.25,
+            1.0,
+            1.3
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x101820,
+            roughness: 0.65,
+            metalness: 0.15
+        })
+    );
+
+    seat.position.set(
+        0,
+        1.25,
+        0.4
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
+
+} else if (selectedKart === "turbo") {
+
+    // ========================================================
+    // TURBO KART
+    // Red / orange aggressive racing design
+    // ========================================================
+
+    // Main red body
+    kartBody = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.25,
+            0.8,
+            4.4
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xd90429,
+            roughness: 0.4,
+            metalness: 0.25
+        })
+    );
+
+    kartBody.position.y = 0.8;
+    kartBody.castShadow = true;
+
+    kart.add(kartBody);
+
+    // Orange racing nose
+    const turboNose = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            2.75,
+            0.5,
+            1.55
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xff6d00,
+            roughness: 0.35,
+            metalness: 0.15
+        })
+    );
+
+    turboNose.position.set(
+        0,
+        1.02,
+        -1.55
+    );
+
+    turboNose.castShadow = true;
+
+    kart.add(turboNose);
+
+    // White racing stripe
+    const turboStripe = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.55,
+            0.08,
+            3.8
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            roughness: 0.3,
+            metalness: 0.1
+        })
+    );
+
+    turboStripe.position.set(
+        0,
+        1.22,
+        -0.05
+    );
+
+    kart.add(turboStripe);
+
+    // Black side panels
+    const turboLeftPanel = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.4,
+            0.8,
+            3.0
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x151515,
+            roughness: 0.55,
+            metalness: 0.2
+        })
+    );
+
+    turboLeftPanel.position.set(
+        -1.72,
+        0.82,
+        0.2
+    );
+
+    turboLeftPanel.castShadow = true;
+
+    kart.add(turboLeftPanel);
+
+    const turboRightPanel = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.4,
+            0.8,
+            3.0
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x151515,
+            roughness: 0.55,
+            metalness: 0.2
+        })
+    );
+
+    turboRightPanel.position.set(
+        1.72,
+        0.82,
+        0.2
+    );
+
+    turboRightPanel.castShadow = true;
+
+    kart.add(turboRightPanel);
+
+    // Large rear spoiler
+    const turboSpoiler = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.35,
+            0.28,
+            0.65
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x111111,
+            roughness: 0.45,
+            metalness: 0.3
+        })
+    );
+
+    turboSpoiler.position.set(
+        0,
+        1.55,
+        1.85
+    );
+
+    turboSpoiler.castShadow = true;
+
+    kart.add(turboSpoiler);
+
+    // Spoiler supports
+    const turboSupportLeft = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.2,
+            0.65,
+            0.2
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x111111
+        })
+    );
+
+    turboSupportLeft.position.set(
+        -1.1,
+        1.25,
+        1.8
+    );
+
+    kart.add(turboSupportLeft);
+
+    const turboSupportRight = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.2,
+            0.65,
+            0.2
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x111111
+        })
+    );
+
+    turboSupportRight.position.set(
+        1.1,
+        1.25,
+        1.8
+    );
+
+    kart.add(turboSupportRight);
+
+    // Racing seat
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.3,
+            1.05,
+            1.3
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x181818,
+            roughness: 0.8
+        })
+    );
+
+    seat.position.set(
+        0,
+        1.3,
+        0.4
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
+
+} else if (selectedKart === "overdrive") {
+
+    // ========================================================
+    // OVERDRIVE KART
+    // Black / electric purple performance design
+    // ========================================================
+
+    // Main dark metallic body
+    kartBody = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.4,
+            0.85,
+            4.5
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x161616,
+            roughness: 0.28,
+            metalness: 0.8
+        })
+    );
+
+    kartBody.position.y = 0.82;
+    kartBody.castShadow = true;
+
+    kart.add(kartBody);
+
+    // Purple aggressive front nose
+    const overdriveNose = new THREE.Mesh(
+        new THREE.ConeGeometry(
+            1.4,
+            2.0,
+            4
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x7c3aed,
+            roughness: 0.3,
+            metalness: 0.5,
+            emissive: 0x26005c,
+            emissiveIntensity: 0.8
+        })
+    );
+
+    overdriveNose.rotation.x = -Math.PI / 2;
+
+    overdriveNose.position.set(
+        0,
+        0.9,
+        -2.7
+    );
+
+    overdriveNose.castShadow = true;
+
+    kart.add(overdriveNose);
+
+    // Electric purple center stripe
+    const overdriveStripe = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.5,
+            0.09,
+            3.9
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xc026ff,
+            roughness: 0.2,
+            metalness: 0.45,
+            emissive: 0x7200aa,
+            emissiveIntensity: 1.5
+        })
+    );
+
+    overdriveStripe.position.set(
+        0,
+        1.25,
+        -0.05
+    );
+
+    kart.add(overdriveStripe);
+
+    // Purple side blades
+    const overdriveLeftBlade = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.3,
+            0.9,
+            3.1
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x5b21b6,
+            roughness: 0.35,
+            metalness: 0.45,
+            emissive: 0x180035,
+            emissiveIntensity: 0.8
+        })
+    );
+
+    overdriveLeftBlade.position.set(
+        -1.78,
+        0.85,
+        0.15
+    );
+
+    overdriveLeftBlade.rotation.z = -0.12;
+    overdriveLeftBlade.castShadow = true;
+
+    kart.add(overdriveLeftBlade);
+
+    const overdriveRightBlade = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.3,
+            0.9,
+            3.1
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x5b21b6,
+            roughness: 0.35,
+            metalness: 0.45,
+            emissive: 0x180035,
+            emissiveIntensity: 0.8
+        })
+    );
+
+    overdriveRightBlade.position.set(
+        1.78,
+        0.85,
+        0.15
+    );
+
+    overdriveRightBlade.rotation.z = 0.12;
+    overdriveRightBlade.castShadow = true;
+
+    kart.add(overdriveRightBlade);
+
+    // Wide rear performance spoiler
+    const overdriveSpoiler = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            3.5,
+            0.3,
+            0.65
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x6d28d9,
+            roughness: 0.3,
+            metalness: 0.55,
+            emissive: 0x200044,
+            emissiveIntensity: 0.8
+        })
+    );
+
+    overdriveSpoiler.position.set(
+        0,
+        1.5,
+        1.9
+    );
+
+    overdriveSpoiler.castShadow = true;
+
+    kart.add(overdriveSpoiler);
+
+    // Black performance seat
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.4,
+            1.1,
+            1.35
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x080808,
+            roughness: 0.7,
+            metalness: 0.25
+        })
+    );
+
+    seat.position.set(
+        0,
+        1.32,
+        0.4
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
+
 } else {
-    
+
     // OTHER KARTS — TEMPORARY NORMAL LOOK
-    
+
     kartBody = new THREE.Mesh(
         new THREE.BoxGeometry(
             2.8,
