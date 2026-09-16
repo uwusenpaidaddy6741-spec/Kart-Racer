@@ -240,17 +240,39 @@ body {
    KART & WHEEL CUSTOMIZATION
    ============================================================ */
 
-#kartSelect {
+#kartSelectScreen {
     position: fixed;
 
-    top: -150px;
-    left: -420px;
+    top: 0;
+    left: 0;
 
-    width: 520px;
+    width: 100vw;
+    height: 100vh;
 
-    z-index: 200;
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(0, 0, 0, 0.92);
+
+    z-index: 150;
 }
 
+#kartSelectScreen > h2 {
+    margin-bottom: 25px;
+
+    color: white;
+
+    font-size: 32px;
+    letter-spacing: 3px;
+}
+
+#kartSelect {
+    width: 520px;
+    z-index: 200;
+}
 
 /* ============================================================
    MAIN TOGGLE
