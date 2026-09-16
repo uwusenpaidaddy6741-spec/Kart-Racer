@@ -4805,16 +4805,15 @@ if (trackSelected) {
 
 } else if (selectedTrack) {
 
-    // A track has been selected,
-    // but the player has not started yet.
-
     if (trackSelect) {
         trackSelect.style.display = "none";
     }
 
     if (kartSelectScreen) {
-        kartSelectScreen.style.display = "flex";
+        kartSelectScreen.style.display = "none";
     }
+
+    trackSelected = true;
 
 }
 
