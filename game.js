@@ -5440,7 +5440,19 @@ document.getElementById("track4Button").onclick = () => {
 
 document.getElementById("saveSetupButton").onclick = () => {
 
-    window.location.href = window.location.pathname;
+    const kartScreen =
+        document.getElementById("kartSelectScreen");
+
+    if (kartScreen) {
+        kartScreen.style.display = "none";
+    }
+
+    const trackSelect =
+        document.getElementById("trackSelect");
+
+    if (trackSelect) {
+        trackSelect.style.display = "flex";
+    }
 };
 
 document.getElementById("timeTrialButton").onclick = () => {
