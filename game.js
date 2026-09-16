@@ -874,7 +874,7 @@ const kartStats = {
         driftChargeRate: 1.5
     },
         
-        blaze: {
+    blaze: {
         maxSpeed: 46,
         acceleration: 22,
         braking: 20,
@@ -888,6 +888,30 @@ const kartStats = {
         braking: 24,
         turnSpeed: 2.7,
         driftChargeRate: 1.35
+    },
+
+    comet: {
+        maxSpeed: 50,
+        acceleration: 15,
+        braking: 20,
+        turnSpeed: 2.3,
+        driftChargeRate: 1.0
+    },
+
+    turbo: {
+        maxSpeed: 41,
+        acceleration: 29,
+        braking: 25,
+        turnSpeed: 2.6,
+        driftChargeRate: 1.5
+    },
+
+    overdrive: {
+        maxSpeed: 45,
+        acceleration: 30,
+        braking: 18,
+        turnSpeed: 2.4,
+        driftChargeRate: 1.4
     }
 
 };
@@ -995,6 +1019,8 @@ wheelButtons.forEach((button) => {
     "selectedWheels",
     selectedWheels
 );
+            
+            applyKartStats();
 
             wheelButtons.forEach(
                 (wheelButton) => {
