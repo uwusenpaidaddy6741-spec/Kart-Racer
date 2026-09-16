@@ -4774,15 +4774,48 @@ let raceStartTime = null;
 
 let raceStarted = false;
 
+const currentUrlParams =
+    new URLSearchParams(window.location.search);
+
 let trackSelected =
-    new URLSearchParams(window.location.search).has("track");
+    currentUrlParams.get("start") === "1";
+
+const kartSelectScreen =
+    document.getElementById(
+        "kartSelectScreen"
+    );
+
+const trackSelect =
+    document.getElementById(
+        "trackSelect"
+    );
 
 if (trackSelected) {
-    const trackSelect = document.getElementById("trackSelect");
+
+    // Race is actually starting.
+    // Hide both menus.
 
     if (trackSelect) {
         trackSelect.style.display = "none";
     }
+
+    if (kartSelectScreen) {
+        kartSelectScreen.style.display = "none";
+    }
+
+} else if (selectedTrack) {
+
+    // A track has been selected,
+    // but the player has not started yet.
+
+    if (trackSelect) {
+        trackSelect.style.display = "none";
+    }
+
+    if (kartSelectScreen) {
+        kartSelectScreen.style.display = "flex";
+    }
+
 }
 
 let countdownTime = 3;
@@ -5403,6 +5436,12 @@ document.getElementById("track3Button").onclick = () => {
 
 document.getElementById("track4Button").onclick = () => {
     window.location.href = "?track=4";
+};
+
+document.getElementById("startRaceButton").onclick = () => {
+
+    window.location.href =
+        `?track=${selectedTrack}&start=1`;
 };
 
 document.getElementById("timeTrialButton").onclick = () => {
