@@ -281,7 +281,7 @@ body {
    ============================================================ */
 
 #customizationOptions {
-    display: none;
+    display: grid;
 
     margin-top: 10px;
 
