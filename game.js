@@ -3835,10 +3835,10 @@ const player = {
         40,
 
     boostMaxSpeed:
-        63,
+        67,
 
     currentBoostCap:
-        51,
+        55,
 
     lap:
         1,
@@ -4743,8 +4743,8 @@ if (forward()) {
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 53
-        : 51;
+        ? 57
+        : 55;
 
                 player.speed =
                     Math.min(
@@ -4762,8 +4762,8 @@ if (forward()) {
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 59
-        : 57;
+        ? 63
+        : 61;
 
                 player.speed =
                     Math.min(
@@ -4781,8 +4781,8 @@ if (forward()) {
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 65
-        : 63;
+        ? 69
+        : 67;
 
                 player.speed =
                     Math.min(
