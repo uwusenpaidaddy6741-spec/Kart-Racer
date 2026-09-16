@@ -5438,10 +5438,9 @@ document.getElementById("track4Button").onclick = () => {
     window.location.href = "?track=4";
 };
 
-document.getElementById("startRaceButton").onclick = () => {
+document.getElementById("saveSetupButton").onclick = () => {
 
-    window.location.href =
-        `?track=${selectedTrack}&start=1`;
+    window.location.href = window.location.pathname;
 };
 
 document.getElementById("timeTrialButton").onclick = () => {
