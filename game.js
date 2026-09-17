@@ -3466,217 +3466,35 @@ if (selectedKart === "rocket") {
 const wheels = [];
 
 function createWheel(x, z) {
-
-    const wheelGroup =
-        new THREE.Group();
-
-    // --------------------------------------------------------
-    // WHEEL STYLE
-    // --------------------------------------------------------
-
-    let tireColor = 0x111111;
-    let rimColor = 0x777777;
-    let accentColor = 0xffffff;
-
-    // STREET
-    if (selectedWheels === "street") {
-
-        tireColor = 0x111111;
-        rimColor = 0x777777;
-        accentColor = 0xaaaaaa;
-    }
-
-    // GRIP
-    else if (selectedWheels === "grip") {
-
-        tireColor = 0x151515;
-        rimColor = 0x333333;
-        accentColor = 0x00ff55;
-    }
-
-    // SPEED
-    else if (selectedWheels === "speed") {
-
-        tireColor = 0x111111;
-        rimColor = 0xdddddd;
-        accentColor = 0x00aaff;
-    }
-
-    // OFF-ROAD
-    else if (selectedWheels === "offroad") {
-
-        tireColor = 0x222222;
-        rimColor = 0x553300;
-        accentColor = 0xff8800;
-    }
-
-    // DRIFT
-    else if (selectedWheels === "drift") {
-
-        tireColor = 0x111111;
-        rimColor = 0xdddddd;
-        accentColor = 0x00ffff;
-    }
-
-    // CYCLONE
-    else if (selectedWheels === "cyclone") {
-
-        tireColor = 0x111111;
-        rimColor = 0x333333;
-        accentColor = 0x66ccff;
-    }
-
-    // SHADOW
-    else if (selectedWheels === "shadow") {
-
-        tireColor = 0x050505;
-        rimColor = 0x222222;
-        accentColor = 0x9933ff;
-    }
-
-    // --------------------------------------------------------
-    // TIRE
-    // --------------------------------------------------------
-
-    const tireGeometry =
+    const geometry =
         new THREE.CylinderGeometry(
             0.65,
             0.65,
             0.45,
-            20
-        );
-
-    const tireMaterial =
-        new THREE.MeshStandardMaterial({
-            color: tireColor,
-            roughness: 0.85
-        });
-
-    const tire =
-        new THREE.Mesh(
-            tireGeometry,
-            tireMaterial
-        );
-
-    tire.rotation.z =
-        Math.PI / 2;
-
-    wheelGroup.add(tire);
-
-    // --------------------------------------------------------
-    // RIM
-    // --------------------------------------------------------
-
-    const rimGeometry =
-        new THREE.CylinderGeometry(
-            0.38,
-            0.38,
-            0.47,
-            20
-        );
-
-    const rimMaterial =
-        new THREE.MeshStandardMaterial({
-            color: rimColor,
-            metalness: 0.7,
-            roughness: 0.3
-        });
-
-    const rim =
-        new THREE.Mesh(
-            rimGeometry,
-            rimMaterial
-        );
-
-    rim.rotation.z =
-        Math.PI / 2;
-
-    wheelGroup.add(rim);
-
-    // --------------------------------------------------------
-    // CENTER HUB
-    // --------------------------------------------------------
-
-    const hubGeometry =
-        new THREE.CylinderGeometry(
-            0.14,
-            0.14,
-            0.50,
             16
         );
 
-    const hubMaterial =
+    const material =
         new THREE.MeshStandardMaterial({
-            color: accentColor,
-            metalness: 0.8,
-            roughness: 0.2
+            color: 0x111111
         });
 
-    const hub =
+    const wheel =
         new THREE.Mesh(
-            hubGeometry,
-            hubMaterial
+            geometry,
+            material
         );
 
-    hub.rotation.z =
-        Math.PI / 2;
+    wheel.rotation.z = Math.PI / 2;
 
-    wheelGroup.add(hub);
-
-    // --------------------------------------------------------
-    // SPOKES
-    // --------------------------------------------------------
-
-    const spokeMaterial =
-        new THREE.MeshStandardMaterial({
-            color: accentColor,
-            metalness: 0.6,
-            roughness: 0.3
-        });
-
-    for (let i = 0; i < 6; i++) {
-
-        const angle =
-            (Math.PI * 2 * i) / 6;
-
-        const spokeGeometry =
-            new THREE.BoxGeometry(
-                0.08,
-                0.34,
-                0.08
-            );
-
-        const spoke =
-            new THREE.Mesh(
-                spokeGeometry,
-                spokeMaterial
-            );
-
-        spoke.position.x =
-            Math.cos(angle) * 0.20;
-
-        spoke.position.y =
-            Math.sin(angle) * 0.20;
-
-        spoke.rotation.z =
-            angle;
-
-        wheelGroup.add(spoke);
-    }
-
-    // --------------------------------------------------------
-    // POSITION
-    // --------------------------------------------------------
-
-    wheelGroup.position.set(
+    wheel.position.set(
         x,
         0.55,
         z
     );
 
-    kart.add(wheelGroup);
-
-    wheels.push(wheelGroup);
+    kart.add(wheel);
+    wheels.push(wheel);
 }
 
 
