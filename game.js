@@ -998,6 +998,20 @@ const wheelStats = {
         acceleration: 0,
         turnSpeed: 0.3,
         driftChargeRate: 1.5
+    },
+
+    shadow: {
+        maxSpeed: +2,
+        acceleration: +1,
+        turnSpeed: 0.7,
+        driftChargeRate: 1.4
+    },
+
+    cyclone: {
+        maxSpeed: 0,
+        acceleration: 2,
+        turnSpeed: 1.2,
+        driftChargeRate: 1.5
     }
 };
 
