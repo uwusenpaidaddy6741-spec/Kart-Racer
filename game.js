@@ -5179,20 +5179,47 @@ if (forward()) {
     // TRACK COLLISION
     // --------------------------------------------------------
 
-    if (
-        isOnTrack(
-            newX,
-            newZ
-        )
-    ) {
+    // --------------------------------------------------------
+// TRACK COLLISION
+// --------------------------------------------------------
 
-        player.x =
-            newX;
+const leavingOasisSpiral =
+    selectedTrack === "3" &&
+    player.trackIndex >= 40 &&
+    player.trackIndex <= 88 &&
+    getTrackHeight(player.trackIndex) > 3;
 
-        player.z =
-            newZ;
+if (
+    isOnTrack(
+        newX,
+        newZ
+    )
+) {
 
-    } else {
+    player.x =
+        newX;
+
+    player.z =
+        newZ;
+
+} else if (
+    leavingOasisSpiral
+) {
+
+    // Jump off the elevated spiral.
+    player.x =
+        newX;
+
+    player.z =
+        newZ;
+
+    player.airborne =
+        true;
+
+    player.verticalVelocity =
+        0;
+
+} else {
 
         // Try X movement separately.
 
