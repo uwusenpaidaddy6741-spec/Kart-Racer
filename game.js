@@ -1254,12 +1254,16 @@ function getTrackHeight(index) {
         return 0;
     }
 
+    // Oasis uses 120 track samples.
+    // These ranges are aligned with the actual
+    // ramp and spiral sections of oasisPoints().
+
     // --------------------------------------------------------
     // RAMP UP
     // --------------------------------------------------------
 
-    const rampStart = 24;
-    const rampTopStart = 29;
+    const rampStart = 30;
+    const rampTopStart = 36;
 
     if (
         index >= rampStart &&
@@ -1274,7 +1278,7 @@ function getTrackHeight(index) {
     }
 
     // --------------------------------------------------------
-    // ELEVATED STRAIGHT
+    // ELEVATED SECTION
     // --------------------------------------------------------
 
     const elevatedEnd = 48;
@@ -1283,16 +1287,15 @@ function getTrackHeight(index) {
         index >= rampTopStart &&
         index <= elevatedEnd
     ) {
-
         return 6;
     }
 
     // --------------------------------------------------------
-    // SPIRAL DOWNHILL
+    // SPIRAL DOWN
     // --------------------------------------------------------
 
-    const spiralStart = 40;
-const spiralEnd = 88;
+    const spiralStart = 48;
+    const spiralEnd = 78;
 
     if (
         index >= spiralStart &&
