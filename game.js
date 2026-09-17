@@ -5187,7 +5187,7 @@ const leavingOasisSpiral =
     selectedTrack === "3" &&
     player.trackIndex >= 40 &&
     player.trackIndex <= 88 &&
-    getTrackHeight(player.trackIndex) > 3;
+    getTrackHeight(player.trackIndex) > 0.5;
 
 if (
     isOnTrack(
