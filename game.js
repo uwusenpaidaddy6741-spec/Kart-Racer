@@ -3886,27 +3886,12 @@ function applyKartStats() {
     player.turnSpeed =
         kart.turnSpeed + wheels.turnSpeed;
 
-    if (
-    selectedKart === "drifter" &&
-    selectedWheels === "drift"
-) {
-
-    player.driftChargeRate = 1.75;
-
-}
-else if (
-    selectedKart === "drifter" ||
-    selectedWheels === "drift"
-) {
-
-    player.driftChargeRate = 1.5;
-
-}
-else {
-
-    player.driftChargeRate = 1;
-
-}
+    player.driftChargeRate =
+    Math.min(
+        kart.driftChargeRate *
+        wheels.driftChargeRate,
+        2.00
+    );
 
 }
 
