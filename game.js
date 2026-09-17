@@ -1207,44 +1207,125 @@ function stablePlayerTrackPoint(x, z) {
 function isOnTrack(x, z) {
 
     let closestDistance = Infinity;
+    let closestIndex = 0;
 
-    for (let i = 0; i < trackPoints.length; i++) {
+    for (
+        let i = 0;
+        i < trackPoints.length;
+        i++
+    ) {
 
-        const point =
+        const current =
             trackPoints[i];
 
+        const next =
+            trackPoints[
+                (i + 1) %
+                trackPoints.length
+            ];
+
         const dx =
-            x - point.x;
+            next.x -
+            current.x;
 
         const dz =
-            z - point.z;
+            next.z -
+            current.z;
+
+        const lengthSquared =
+            dx * dx +
+            dz * dz;
+
+        let t = 0;
+
+        if (lengthSquared > 0) {
+
+            t =
+                (
+                    (x - current.x) * dx +
+                    (z - current.z) * dz
+                ) /
+                lengthSquared;
+
+            t =
+                Math.max(
+                    0,
+                    Math.min(1, t)
+                );
+        }
+
+        const closestX =
+            current.x +
+            dx * t;
+
+        const closestZ =
+            current.z +
+            dz * t;
 
         const distance =
-            Math.sqrt(
-                dx * dx +
-                dz * dz
+            Math.hypot(
+                x - closestX,
+                z - closestZ
             );
 
-        if (distance < closestDistance) {
-            closestDistance = distance;
+        if (
+            distance <
+            closestDistance
+        ) {
+
+            closestDistance =
+                distance;
+
+            closestIndex =
+                i;
         }
     }
 
-    // Oasis has an elevated ramp.
-    // Give the road a little extra width so
-    // the player isn't incorrectly considered
-    // off-track while climbing or descending.
+    // Normal horizontal track check
+    if (
+        closestDistance >
+        TRACK_WIDTH / 2
+    ) {
 
-    const trackWidthBuffer =
-    selectedTrack === "3"
-        ? 2.5
-        : 0;
+        return false;
+    }
 
-return (
-    closestDistance <=
-    TRACK_WIDTH / 2 +
-    trackWidthBuffer
-);
+    // --------------------------------------------------------
+    // OASIS HEIGHT CHECK
+    // Prevents lower track from counting as drivable
+    // when the kart is on the elevated section.
+    // --------------------------------------------------------
+
+    if (
+        selectedTrack === "3"
+    ) {
+
+        const kartHeight =
+            getTrackHeight(
+                player.trackIndex
+            );
+
+        const nearbyTrackHeight =
+            getTrackHeight(
+                closestIndex
+            );
+
+        const heightDifference =
+            Math.abs(
+                kartHeight -
+                nearbyTrackHeight
+            );
+
+        if (
+            heightDifference >
+            2.5
+        ) {
+
+            return false;
+        }
+    }
+
+    return true;
 }
 
 // ============================================================
