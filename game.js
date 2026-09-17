@@ -1336,11 +1336,8 @@ function isOnTrack(x, z) {
 // ============================================================
 
 function getTrackHeight(index) {
-
-    // Only Oasis gets elevation
-    if (selectedTrack !== "3") {
-        return 0;
-    }
+    return 0;
+}
 
     // Oasis uses 120 track samples.
     // These ranges are aligned with the actual
