@@ -5214,10 +5214,10 @@ if (
         newZ;
 
     player.airborne =
-        true;
+    true;
 
-    player.verticalVelocity =
-        0;
+player.verticalVelocity =
+    12;
 
 } else {
 
