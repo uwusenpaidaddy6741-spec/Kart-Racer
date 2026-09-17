@@ -4147,6 +4147,11 @@ function applyKartStats() {
         2.00
     );
 
+player.driftBoostBonus =
+    player.driftChargeRate >= 2.00
+        ? 2
+        : 0;
+
 }
 
 applyKartStats();
