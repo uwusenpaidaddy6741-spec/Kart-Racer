@@ -3466,35 +3466,84 @@ if (selectedKart === "rocket") {
 const wheels = [];
 
 function createWheel(x, z) {
-    const geometry =
-        new THREE.CylinderGeometry(
-            0.65,
-            0.65,
-            0.45,
-            16
-        );
 
-    const material =
-        new THREE.MeshStandardMaterial({
-            color: 0x111111
-        });
+    const wheelGroup =
+        new THREE.Group();
 
-    const wheel =
+    // --------------------------------------------------------
+    // TIRE
+    // --------------------------------------------------------
+
+    const tire =
         new THREE.Mesh(
-            geometry,
-            material
+            new THREE.CylinderGeometry(
+                0.65,
+                0.65,
+                0.45,
+                16
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0x111111
+            })
         );
 
-    wheel.rotation.z = Math.PI / 2;
+    tire.rotation.z =
+        Math.PI / 2;
 
-    wheel.position.set(
+    wheelGroup.add(tire);
+
+    // --------------------------------------------------------
+    // RIM
+    // --------------------------------------------------------
+
+    const rim =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                0.38,
+                0.38,
+                0.47,
+                16
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0x777777
+            })
+        );
+
+    rim.rotation.z =
+        Math.PI / 2;
+
+    wheelGroup.add(rim);
+
+    // --------------------------------------------------------
+    // HUB
+    // --------------------------------------------------------
+
+    const hub =
+        new THREE.Mesh(
+            new THREE.CylinderGeometry(
+                0.16,
+                0.16,
+                0.5,
+                12
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0xcccccc
+            })
+        );
+
+    hub.rotation.z =
+        Math.PI / 2;
+
+    wheelGroup.add(hub);
+
+    wheelGroup.position.set(
         x,
         0.55,
         z
     );
 
-    kart.add(wheel);
-    wheels.push(wheel);
+    kart.add(wheelGroup);
+    wheels.push(wheelGroup);
 }
 
 
