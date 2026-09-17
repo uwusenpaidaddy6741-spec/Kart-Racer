@@ -3467,74 +3467,258 @@ const wheels = [];
 
 function createWheel(x, z) {
 
-    const wheelGroup =
-        new THREE.Group();
+    const wheelGroup = new THREE.Group();
 
     // --------------------------------------------------------
     // TIRE
     // --------------------------------------------------------
 
-    const tire =
-        new THREE.Mesh(
-            new THREE.CylinderGeometry(
-                0.65,
-                0.65,
-                0.45,
-                16
-            ),
-            new THREE.MeshStandardMaterial({
-                color: 0x111111
-            })
-        );
+    let tireRadius = 0.65;
+    let tireWidth = 0.45;
 
-    tire.rotation.z =
-        Math.PI / 2;
+    if (selectedWheels === "offroad") {
+        tireRadius = 0.72;
+        tireWidth = 0.55;
+    }
+
+    const tire = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            tireRadius,
+            tireRadius,
+            tireWidth,
+            16
+        ),
+        new THREE.MeshStandardMaterial({
+            color:
+                selectedWheels === "shadow"
+                    ? 0x050505
+                    : 0x111111,
+            roughness: 0.9
+        })
+    );
+
+    tire.rotation.z = Math.PI / 2;
 
     wheelGroup.add(tire);
+
 
     // --------------------------------------------------------
     // RIM
     // --------------------------------------------------------
 
-    const rim =
-        new THREE.Mesh(
-            new THREE.CylinderGeometry(
-                0.38,
-                0.38,
-                0.47,
-                16
-            ),
-            new THREE.MeshStandardMaterial({
-                color: 0x777777
-            })
-        );
+    let rimColor = 0x777777;
 
-    rim.rotation.z =
-        Math.PI / 2;
+    if (selectedWheels === "grip") {
+        rimColor = 0x444444;
+    }
+
+    if (selectedWheels === "speed") {
+        rimColor = 0xaaaaaa;
+    }
+
+    if (selectedWheels === "offroad") {
+        rimColor = 0x333333;
+    }
+
+    if (selectedWheels === "drift") {
+        rimColor = 0xdddddd;
+    }
+
+    if (selectedWheels === "cyclone") {
+        rimColor = 0x2266ff;
+    }
+
+    if (selectedWheels === "shadow") {
+        rimColor = 0x111111;
+    }
+
+    const rim = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            0.39,
+            0.39,
+            tireWidth + 0.02,
+            16
+        ),
+        new THREE.MeshStandardMaterial({
+            color: rimColor,
+            metalness: 0.7,
+            roughness: 0.3
+        })
+    );
+
+    rim.rotation.z = Math.PI / 2;
 
     wheelGroup.add(rim);
 
+
     // --------------------------------------------------------
-    // HUB
+    // SPOKES
     // --------------------------------------------------------
 
-    const hub =
-        new THREE.Mesh(
-            new THREE.CylinderGeometry(
-                0.16,
-                0.16,
-                0.5,
-                12
+    let spokeCount = 6;
+    let spokeColor = rimColor;
+
+    if (selectedWheels === "street") {
+        spokeCount = 6;
+    }
+
+    if (selectedWheels === "grip") {
+        spokeCount = 8;
+        spokeColor = 0x555555;
+    }
+
+    if (selectedWheels === "speed") {
+        spokeCount = 10;
+        spokeColor = 0xdddddd;
+    }
+
+    if (selectedWheels === "offroad") {
+        spokeCount = 5;
+        spokeColor = 0x222222;
+    }
+
+    if (selectedWheels === "drift") {
+        spokeCount = 7;
+        spokeColor = 0xffffff;
+    }
+
+    if (selectedWheels === "cyclone") {
+        spokeCount = 9;
+        spokeColor = 0x44aaff;
+    }
+
+    if (selectedWheels === "shadow") {
+        spokeCount = 6;
+        spokeColor = 0x333333;
+    }
+
+
+    for (let i = 0; i < spokeCount; i++) {
+
+        const angle =
+            (Math.PI * 2 * i) /
+            spokeCount;
+
+        const spoke = new THREE.Mesh(
+            new THREE.BoxGeometry(
+                0.08,
+                0.34,
+                0.10
             ),
             new THREE.MeshStandardMaterial({
-                color: 0xcccccc
+                color: spokeColor,
+                metalness: 0.6,
+                roughness: 0.35
             })
         );
 
-    hub.rotation.z =
-        Math.PI / 2;
+        spoke.position.set(
+            Math.cos(angle) * 0.19,
+            0,
+            Math.sin(angle) * 0.19
+        );
+
+        spoke.rotation.y =
+            -angle;
+
+        wheelGroup.add(spoke);
+    }
+
+
+    // --------------------------------------------------------
+    // CENTER HUB
+    // --------------------------------------------------------
+
+    let hubColor = 0xcccccc;
+
+    if (selectedWheels === "shadow") {
+        hubColor = 0x111111;
+    }
+
+    if (selectedWheels === "cyclone") {
+        hubColor = 0x66bbff;
+    }
+
+    if (selectedWheels === "drift") {
+        hubColor = 0xffffff;
+    }
+
+    const hub = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            0.13,
+            0.13,
+            tireWidth + 0.08,
+            12
+        ),
+        new THREE.MeshStandardMaterial({
+            color: hubColor,
+            metalness: 0.8,
+            roughness: 0.25
+        })
+    );
+
+    hub.rotation.z = Math.PI / 2;
 
     wheelGroup.add(hub);
+
+
+    // --------------------------------------------------------
+    // SPECIAL CYCLONE RING
+    // --------------------------------------------------------
+
+    if (selectedWheels === "cyclone") {
+
+        const ring = new THREE.Mesh(
+            new THREE.TorusGeometry(
+                0.31,
+                0.045,
+                8,
+                24
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0x3388ff,
+                metalness: 0.8,
+                roughness: 0.2
+            })
+        );
+
+        ring.rotation.y =
+            Math.PI / 2;
+
+        wheelGroup.add(ring);
+    }
+
+
+    // --------------------------------------------------------
+    // SPECIAL SHADOW RING
+    // --------------------------------------------------------
+
+    if (selectedWheels === "shadow") {
+
+        const ring = new THREE.Mesh(
+            new THREE.TorusGeometry(
+                0.31,
+                0.035,
+                8,
+                24
+            ),
+            new THREE.MeshStandardMaterial({
+                color: 0x444444,
+                metalness: 0.5,
+                roughness: 0.4
+            })
+        );
+
+        ring.rotation.y =
+            Math.PI / 2;
+
+        wheelGroup.add(ring);
+    }
+
+
+    // --------------------------------------------------------
+    // POSITION
+    // --------------------------------------------------------
 
     wheelGroup.position.set(
         x,
@@ -3543,9 +3727,9 @@ function createWheel(x, z) {
     );
 
     kart.add(wheelGroup);
+
     wheels.push(wheelGroup);
 }
-
 
 // ------------------------------------------------------------
 // CREATE FOUR WHEELS
