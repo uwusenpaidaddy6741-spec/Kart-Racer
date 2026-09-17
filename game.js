@@ -5271,22 +5271,73 @@ kart.position.z =
 // Follow the height of the Oasis ramp
 // while staying on the player's current section
 // of the track.
-const playerTrackPoint =
-    stablePlayerTrackPoint(
-        player.x,
-        player.z
-    );
+if (player.airborne) {
 
-let targetTrackHeight =
-    getTrackHeight(
-        playerTrackPoint.index
-    );
+    // Gravity
+    player.verticalVelocity -=
+        28 * deltaTime;
 
-kart.position.y = THREE.MathUtils.lerp(
-    kart.position.y,
-    targetTrackHeight,
-    1 - Math.exp(-10 * deltaTime)
-);
+    // Move vertically
+    kart.position.y +=
+        player.verticalVelocity *
+        deltaTime;
+
+    // Find the track underneath the kart
+    const landingPoint =
+        stablePlayerTrackPoint(
+            player.x,
+            player.z
+        );
+
+    const landingHeight =
+        getTrackHeight(
+            landingPoint.index
+        );
+
+    // Land on the lower track
+    if (
+        kart.position.y <=
+        landingHeight
+    ) {
+
+        kart.position.y =
+            landingHeight;
+
+        player.airborne =
+            false;
+
+        player.verticalVelocity =
+            0;
+
+        player.trackIndex =
+            landingPoint.index;
+    }
+
+} else {
+
+    // Normal track height following
+    const playerTrackPoint =
+        stablePlayerTrackPoint(
+            player.x,
+            player.z
+        );
+
+    const targetTrackHeight =
+        getTrackHeight(
+            playerTrackPoint.index
+        );
+
+    kart.position.y =
+        THREE.MathUtils.lerp(
+            kart.position.y,
+            targetTrackHeight,
+            1 -
+            Math.exp(
+                -10 *
+                deltaTime
+            )
+        );
+}
 
 kart.rotation.y =
     player.angle -
