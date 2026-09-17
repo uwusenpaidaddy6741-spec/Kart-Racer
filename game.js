@@ -1208,76 +1208,39 @@ function isOnTrack(x, z) {
 
     let closestDistance = Infinity;
 
-    for (
-        let i = 0;
-        i < trackPoints.length;
-        i++
-    ) {
+    for (let i = 0; i < trackPoints.length; i++) {
 
-        const current =
+        const point =
             trackPoints[i];
 
-        const next =
-            trackPoints[
-                (i + 1) %
-                trackPoints.length
-            ];
-
         const dx =
-            next.x -
-            current.x;
+            x - point.x;
 
         const dz =
-            next.z -
-            current.z;
-
-        const lengthSquared =
-            dx * dx +
-            dz * dz;
-
-        let t = 0;
-
-        if (lengthSquared > 0) {
-
-            t =
-                (
-                    (x - current.x) * dx +
-                    (z - current.z) * dz
-                ) /
-                lengthSquared;
-
-            t =
-                Math.max(
-                    0,
-                    Math.min(1, t)
-                );
-        }
-
-        const closestX =
-            current.x +
-            dx * t;
-
-        const closestZ =
-            current.z +
-            dz * t;
+            z - point.z;
 
         const distance =
-            Math.hypot(
-                x - closestX,
-                z - closestZ
+            Math.sqrt(
+                dx * dx +
+                dz * dz
             );
 
-        closestDistance =
-            Math.min(
-                closestDistance,
-                distance
-            );
+        if (distance < closestDistance) {
+            closestDistance = distance;
+        }
     }
 
-    return (
-        closestDistance <=
-        TRACK_WIDTH / 2
-    );
+    // Oasis has an elevated ramp.
+    // Give the road a little extra width so
+    // the player isn't incorrectly considered
+    // off-track while climbing or descending.
+
+    const allowedDistance =
+        selectedTrack === "3"
+            ? TRACK_WIDTH / 2 + 2.5
+            : TRACK_WIDTH / 2;
+
+    return closestDistance <= allowedDistance;
 }
 
 // ============================================================
