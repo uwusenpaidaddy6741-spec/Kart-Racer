@@ -4106,6 +4106,12 @@ const player = {
     speed:
         0,
 
+    airborne:
+    false,
+
+verticalVelocity:
+    0,
+
     maxSpeed:
         40,
 
