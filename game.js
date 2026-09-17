@@ -1235,12 +1235,16 @@ function isOnTrack(x, z) {
     // the player isn't incorrectly considered
     // off-track while climbing or descending.
 
-    const allowedDistance =
-        selectedTrack === "3"
-            ? TRACK_WIDTH / 2 + 2.5
-            : TRACK_WIDTH / 2;
+    const trackWidthBuffer =
+    selectedTrack === "3"
+        ? 2.5
+        : 0;
 
-    return closestDistance <= allowedDistance;
+return (
+    closestDistance <=
+    TRACK_WIDTH / 2 +
+    trackWidthBuffer
+);
 }
 
 // ============================================================
