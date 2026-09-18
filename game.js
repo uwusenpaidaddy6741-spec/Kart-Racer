@@ -279,10 +279,6 @@ function forestRunPoints() {
     return points;
 }
 
-// ============================================================
-// TRACK 3 - Oasis
-// ============================================================
-
 function oasisPoints() {
 
     const points = [];
