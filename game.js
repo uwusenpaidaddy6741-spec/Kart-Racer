@@ -1654,9 +1654,10 @@ function createFinishLine() {
 
     const group = new THREE.Group();
 
-    const width = TRACK_WIDTH;
-    const length = 3;
+    // Make the finish line fill the entire square corner
+    const size = TRACK_WIDTH;
     const squares = 8;
+    const squareSize = size / squares;
 
     const whiteMaterial =
         new THREE.MeshStandardMaterial({
@@ -1668,26 +1669,34 @@ function createFinishLine() {
             color: 0x111111
         });
 
-    for (let i = 0; i < squares; i++) {
+    // Create a full 8x8 checkerboard square
+    for (let x = 0; x < squares; x++) {
 
-        const square = new THREE.Mesh(
-            new THREE.BoxGeometry(
-                length,
-                0.08,
-                width / squares
-            ),
-            i % 2 === 0
-                ? whiteMaterial
-                : blackMaterial
-        );
+        for (let z = 0; z < squares; z++) {
 
-        square.position.z =
-            -width / 2 +
-            (i + 0.5) *
-            width /
-            squares;
+            const square = new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    squareSize,
+                    0.08,
+                    squareSize
+                ),
+                (x + z) % 2 === 0
+                    ? whiteMaterial
+                    : blackMaterial
+            );
 
-        group.add(square);
+            square.position.x =
+                -size / 2 +
+                (x + 0.5) *
+                squareSize;
+
+            square.position.z =
+                -size / 2 +
+                (z + 0.5) *
+                squareSize;
+
+            group.add(square);
+        }
     }
 
     const start = trackPoints[0];
