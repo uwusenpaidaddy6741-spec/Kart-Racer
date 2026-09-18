@@ -1432,7 +1432,7 @@ function createTrack() {
         });
     }
 
-    for (let i = 0; i < trackPoints.length; i++) {
+   for (let i = 0; i < outer.length; i++) {
 
         const o = outer[i];
         const inn = inner[i];
