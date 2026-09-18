@@ -678,7 +678,7 @@ const trackPoints =
                 ? oasisPoints()
                 : selectedTrack === "4"
                     ? snowTrackPoints()
-                    : marioCircuitPoints();
+                    : grandCircuitPoints();
 
 // ============================================================
 // PLAYER / CONTROL HELPERS
