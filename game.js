@@ -887,15 +887,15 @@ let selectedKart =
 const kartStats = {
 
     speedster: {
-        maxSpeed: 44,
-        acceleration: 16,
+        maxSpeed: 48,
+        acceleration: 19,
         braking: 30,
         turnSpeed: 2.7,
         driftChargeRate: 1
     },
 
     balanced: {
-        maxSpeed: 40,
+        maxSpeed: 44,
         acceleration: 18,
         braking: 30,
         turnSpeed: 3.0,
@@ -903,7 +903,7 @@ const kartStats = {
     },
 
     rocket: {
-        maxSpeed: 42,
+        maxSpeed: 44,
         acceleration: 24,
         braking: 28,
         turnSpeed: 2.6,
@@ -912,15 +912,15 @@ const kartStats = {
 
     heavy: {
         maxSpeed: 45,
-        acceleration: 12,
+        acceleration: 20,
         braking: 35,
         turnSpeed: 2.4,
         driftChargeRate: 1
     },
 
     drifter: {
-        maxSpeed: 40,
-        acceleration: 21,
+        maxSpeed: 41,
+        acceleration: 22,
         braking: 30,
         turnSpeed: 3.0,
         driftChargeRate: 1.5
@@ -935,7 +935,7 @@ const kartStats = {
     },
 
     accelerator: {
-        maxSpeed: 38,
+        maxSpeed: 42,
         acceleration: 27,
         braking: 24,
         turnSpeed: 2.7,
@@ -944,7 +944,7 @@ const kartStats = {
 
     comet: {
         maxSpeed: 50,
-        acceleration: 15,
+        acceleration: 18,
         braking: 20,
         turnSpeed: 2.3,
         driftChargeRate: 1.0
