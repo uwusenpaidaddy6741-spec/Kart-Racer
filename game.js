@@ -653,6 +653,241 @@ function snowTrackPoints() {
 }
 
 // ============================================================
+// TRACK 5 - GRAND CIRCUIT
+// ============================================================
+
+function grandCircuitPoints() {
+
+    const points = [];
+
+    const addLine = (x1, z1, x2, z2, steps) => {
+        for (let i = 0; i <= steps; i++) {
+            const t = i / steps;
+
+            points.push({
+                x: THREE.MathUtils.lerp(x1, x2, t),
+                z: THREE.MathUtils.lerp(z1, z2, t)
+            });
+        }
+    };
+
+    const addArc = (
+        centerX,
+        centerZ,
+        radiusX,
+        radiusZ,
+        startAngle,
+        endAngle,
+        steps
+    ) => {
+
+        for (let i = 1; i <= steps; i++) {
+
+            const t = i / steps;
+
+            const angle =
+                THREE.MathUtils.lerp(
+                    startAngle,
+                    endAngle,
+                    t
+                );
+
+            points.push({
+                x:
+                    centerX +
+                    Math.cos(angle) *
+                    radiusX,
+
+                z:
+                    centerZ +
+                    Math.sin(angle) *
+                    radiusZ
+            });
+        }
+    };
+
+    // =========================================================
+    // GRAND CIRCUIT
+    // Large Mario-Kart-style circuit
+    // =========================================================
+
+    // Start / finish straight
+    addLine(
+        -140, -20,
+        220, -20,
+        45
+    );
+
+    // Fast sweeping right-hand corner
+    addArc(
+        220,
+        20,
+        40,
+        40,
+        -Math.PI / 2,
+        0,
+        18
+    );
+
+    // Long downhill straight
+    addLine(
+        260, 20,
+        260, 300,
+        35
+    );
+
+    // Large hairpin
+    addArc(
+        210,
+        300,
+        50,
+        55,
+        0,
+        Math.PI,
+        28
+    );
+
+    // Long straight back
+    addLine(
+        160, 300,
+        -180, 300,
+        45
+    );
+
+    // Sweeping left corner
+    addArc(
+        -180,
+        250,
+        50,
+        50,
+        Math.PI / 2,
+        Math.PI,
+        18
+    );
+
+    // Medium straight
+    addLine(
+        -230, 250,
+        -230, 100,
+        25
+    );
+
+    // Tight right hairpin
+    addArc(
+        -180,
+        100,
+        50,
+        50,
+        Math.PI,
+        Math.PI * 1.5,
+        18
+    );
+
+    // Short straight
+    addLine(
+        -180, 50,
+        -60, 50,
+        18
+    );
+
+    // S-Curve 1
+    addArc(
+        -60,
+        10,
+        40,
+        40,
+        Math.PI / 2,
+        0,
+        15
+    );
+
+    // S-Curve 2
+    addArc(
+        -20,
+        10,
+        40,
+        40,
+        Math.PI,
+        Math.PI / 2,
+        15
+    );
+
+    // Long central straight
+    addLine(
+        20, 50,
+        150, 50,
+        22
+    );
+
+    // Chicane left
+    addArc(
+        150,
+        90,
+        40,
+        40,
+        -Math.PI / 2,
+        -Math.PI,
+        14
+    );
+
+    // Chicane right
+    addArc(
+        110,
+        130,
+        40,
+        40,
+        0,
+        Math.PI / 2,
+        14
+    );
+
+    // Technical straight
+    addLine(
+        110, 170,
+        -20, 170,
+        20
+    );
+
+    // Tight left hairpin
+    addArc(
+        -20,
+        220,
+        50,
+        50,
+        -Math.PI / 2,
+        -Math.PI,
+        22
+    );
+
+    // Long return straight
+    addLine(
+        -70, 220,
+        -70, -20,
+        35
+    );
+
+    // Final sweeping corner
+    addArc(
+        -20,
+        -20,
+        50,
+        50,
+        Math.PI,
+        Math.PI * 1.5,
+        22
+    );
+
+    // Return to start
+    addLine(
+        -20, -70,
+        -140, -20,
+        18
+    );
+
+    return points;
+}
+
+// ============================================================
 // TRACK SELECTION
 // ============================================================
 
