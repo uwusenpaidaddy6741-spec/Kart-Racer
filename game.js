@@ -676,7 +676,9 @@ const trackPoints =
             ? forestRunPoints()
             : selectedTrack === "3"
                 ? oasisPoints()
-                : snowTrackPoints();
+                : selectedTrack === "4"
+                    ? snowTrackPoints()
+                    : marioCircuitPoints();
 
 // ============================================================
 // PLAYER / CONTROL HELPERS
