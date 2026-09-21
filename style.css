@@ -327,6 +327,7 @@ body {
    ============================================================ */
 
 #kartColumn h3,
+#bikeColumn h3,
 #wheelColumn h3 {
     margin-bottom: 15px;
 
@@ -386,6 +387,7 @@ body {
    ============================================================ */
 
 #kartOptions button:hover,
+#bikeOptions button:hover,
 #wheelOptions button:hover {
     background: rgba(255, 255, 255, 0.12);
 }
@@ -403,6 +405,13 @@ body {
     font-weight: bold;
 }
 
+#bikeOptions button.selected {
+    background: #22c55e;
+
+    color: white;
+
+    font-weight: bold;
+}
 
 /* ============================================================
    SELECTED WHEELS
