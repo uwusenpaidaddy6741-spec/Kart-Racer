@@ -1145,6 +1145,37 @@ const kartStats = {
 
 };
 
+// ============================================================
+// BIKES
+// ============================================================
+
+let selectedBike =
+    localStorage.getItem("selectedBike") || "none";
+
+const bikeStats = {
+
+    apexRider: {
+        name: "Apex Rider",
+
+        maxSpeed: 47,
+        acceleration: 20,
+        braking: 25,
+        turnSpeed: 3.1,
+        driftChargeRate: 1.3
+    },
+
+    bobsBike: {
+        name: "Bob's Bike",
+
+        maxSpeed: 42,
+        acceleration: 25,
+        braking: 27,
+        turnSpeed: 3.4,
+        driftChargeRate: 1.5
+    }
+
+};
+
 const kartButtons =
     document.querySelectorAll(
         "#kartOptions button"
@@ -1187,6 +1218,60 @@ const defaultKartButton =
 if (defaultKartButton) {
     defaultKartButton.classList.add("selected");
 }
+
+// ============================================================
+// BIKE SELECTION
+// ============================================================
+
+const bikeButtons =
+    document.querySelectorAll(
+        "#bikeOptions button"
+    );
+
+bikeButtons.forEach((button) => {
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            selectedBike =
+                button.dataset.bike;
+
+            localStorage.setItem(
+                "selectedBike",
+                selectedBike
+            );
+
+            // Selecting a bike disables the kart choice
+            kartButtons.forEach(
+                (kartButton) => {
+
+                    kartButton.classList.remove(
+                        "selected"
+                    );
+
+                }
+            );
+
+            bikeButtons.forEach(
+                (bikeButton) => {
+
+                    bikeButton.classList.remove(
+                        "selected"
+                    );
+
+                }
+            );
+
+            button.classList.add(
+                "selected"
+            );
+
+            applyKartStats();
+        }
+    );
+});
+
 
 let selectedWheels =
     localStorage.getItem("selectedWheels") ||
@@ -4352,13 +4437,61 @@ verticalVelocity:
 
 function applyKartStats() {
 
-    const kart =
-        kartStats[selectedKart];
-
     const wheels =
         wheelStats[selectedWheels];
 
-    if (!kart || !wheels) {
+    if (!wheels) {
+        return;
+    }
+
+    // =========================
+    // BIKE STATS
+    // =========================
+
+    if (selectedBike !== "none") {
+
+        const bike =
+            bikeStats[selectedBike];
+
+        if (!bike) {
+            return;
+        }
+
+        player.maxSpeed =
+            bike.maxSpeed + wheels.maxSpeed;
+
+        player.acceleration =
+            bike.acceleration + wheels.acceleration;
+
+        player.braking =
+            bike.braking;
+
+        player.turnSpeed =
+            bike.turnSpeed + wheels.turnSpeed;
+
+        player.driftChargeRate =
+            Math.min(
+                bike.driftChargeRate *
+                wheels.driftChargeRate,
+                2.00
+            );
+
+        player.driftBoostBonus =
+            player.driftChargeRate >= 2.00
+                ? 2
+                : 0;
+
+        return;
+    }
+
+    // =========================
+    // KART STATS
+    // =========================
+
+    const kart =
+        kartStats[selectedKart];
+
+    if (!kart) {
         return;
     }
 
@@ -4375,17 +4508,16 @@ function applyKartStats() {
         kart.turnSpeed + wheels.turnSpeed;
 
     player.driftChargeRate =
-    Math.min(
-        kart.driftChargeRate *
-        wheels.driftChargeRate,
-        2.00
-    );
+        Math.min(
+            kart.driftChargeRate *
+            wheels.driftChargeRate,
+            2.00
+        );
 
-player.driftBoostBonus =
-    player.driftChargeRate >= 2.00
-        ? 2
-        : 0;
-
+    player.driftBoostBonus =
+        player.driftChargeRate >= 2.00
+            ? 2
+            : 0;
 }
 
 applyKartStats();
