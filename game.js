@@ -947,6 +947,10 @@ function space() {
     return keys["Space"];
 }
 
+function wheelie() {
+    return keys["KeyF"];
+}
+
 const mobileControls = {
     accelerate:
         document.getElementById("accelerateButton"),
@@ -4915,6 +4919,9 @@ verticalVelocity:
     driftCharge:
         0,
 
+    wheelie: false,
+wheelieSpeedBonus: 8
+
     boostTimer:
         0,
 
@@ -5703,17 +5710,21 @@ if (forward()) {
     } else {
 
         // Normal driving
-        if (player.speed < player.maxSpeed) {
+        const wheelieCap =
+    player.maxSpeed +
+    (player.wheelie ? player.wheelieSpeedBonus : 0);
+
+if (player.speed < wheelieCap) {
 
             player.speed +=
                 player.acceleration *
                 deltaTime;
 
             player.speed =
-                Math.min(
-                    player.speed,
-                    player.maxSpeed
-                );
+    Math.min(
+        player.speed,
+        wheelieCap
+    );
         }
 
         // If we are above normal speed after a boost,
@@ -5792,6 +5803,23 @@ if (forward()) {
 
     player.drifting =
         wantsDrift;
+
+    // --------------------------------------------------------
+// BIKE WHEELIE
+// --------------------------------------------------------
+
+if (
+    selectedBike !== "none" &&
+    wheelie() &&
+    player.speed > 8
+) {
+
+    player.wheelie = true;
+
+} else {
+
+    player.wheelie = false;
+}
 
     // --------------------------------------------------------
     // STEERING
@@ -6240,6 +6268,34 @@ if (player.drifting) {
 kart.rotation.y =
     visualAngle -
     Math.PI / 2;
+
+    // --------------------------------------------------------
+// BIKE WHEELIE VISUAL
+// --------------------------------------------------------
+
+if (selectedBike !== "none") {
+
+    const targetWheelieAngle =
+        player.wheelie
+            ? -0.28
+            : 0;
+
+    kart.rotation.z =
+        THREE.MathUtils.lerp(
+            kart.rotation.z,
+            targetWheelieAngle,
+            1 - Math.exp(-12 * deltaTime)
+        );
+
+} else {
+
+    kart.rotation.z =
+        THREE.MathUtils.lerp(
+            kart.rotation.z,
+            0,
+            1 - Math.exp(-12 * deltaTime)
+        );
+}
 
     // --------------------------------------------------------
     // WHEEL ROTATION
