@@ -344,12 +344,15 @@ body {
 
 #kartSelect {
     width: 900px;
-
     max-width: 90vw;
-
     z-index: 200;
 }
 
+#kartColumn,
+#bikeColumn,
+#wheelColumn {
+    min-width: 0;
+}
 
 /* ============================================================
    MAIN CUSTOMIZATION PANEL
