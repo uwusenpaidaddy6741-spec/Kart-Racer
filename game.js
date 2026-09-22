@@ -1067,7 +1067,7 @@ const kartStats = {
         maxSpeed: 48,
         acceleration: 19,
         braking: 30,
-        turnSpeed: 2.7,
+        turnSpeed: 3.1,
         driftChargeRate: 1
     },
 
@@ -1075,7 +1075,7 @@ const kartStats = {
         maxSpeed: 44,
         acceleration: 18,
         braking: 30,
-        turnSpeed: 3.0,
+        turnSpeed: 3.4,
         driftChargeRate: 1.2
     },
 
@@ -1091,7 +1091,7 @@ const kartStats = {
         maxSpeed: 45,
         acceleration: 20,
         braking: 35,
-        turnSpeed: 2.4,
+        turnSpeed: 2.8,
         driftChargeRate: 1
     },
 
@@ -1099,7 +1099,7 @@ const kartStats = {
         maxSpeed: 41,
         acceleration: 22,
         braking: 30,
-        turnSpeed: 3.0,
+        turnSpeed: 3.4,
         driftChargeRate: 1.5
     },
         
@@ -1107,7 +1107,7 @@ const kartStats = {
         maxSpeed: 46,
         acceleration: 22,
         braking: 20,
-        turnSpeed: 2.5,
+        turnSpeed: 2.9,
         driftChargeRate: 1.2
     },
 
@@ -1115,7 +1115,7 @@ const kartStats = {
         maxSpeed: 42,
         acceleration: 27,
         braking: 24,
-        turnSpeed: 2.7,
+        turnSpeed: 3.1,
         driftChargeRate: 1.35
     },
 
@@ -1123,7 +1123,7 @@ const kartStats = {
         maxSpeed: 50,
         acceleration: 18,
         braking: 20,
-        turnSpeed: 2.3,
+        turnSpeed: 2.7,
         driftChargeRate: 1.0
     },
 
@@ -1131,7 +1131,7 @@ const kartStats = {
         maxSpeed: 41,
         acceleration: 29,
         braking: 25,
-        turnSpeed: 2.6,
+        turnSpeed: 3.0,
         driftChargeRate: 1.5
     },
 
@@ -1139,7 +1139,7 @@ const kartStats = {
         maxSpeed: 45,
         acceleration: 30,
         braking: 18,
-        turnSpeed: 2.4,
+        turnSpeed: 2.8,
         driftChargeRate: 1.4
     }
 
@@ -1170,7 +1170,7 @@ const bikeStats = {
         maxSpeed: 42,
         acceleration: 25,
         braking: 27,
-        turnSpeed: 3.4,
+        turnSpeed: 2.9,
         driftChargeRate: 1.5
     }
 
