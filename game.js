@@ -5902,8 +5902,8 @@ if (
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 57
-        : 55;
+        ? 60
+        : 58;
 
                 player.speed =
                     Math.min(
@@ -5921,8 +5921,8 @@ if (
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 63
-        : 61;
+        ? 66
+        : 64;
 
                 player.speed =
                     Math.min(
@@ -5940,8 +5940,8 @@ if (
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 69
-        : 67;
+        ? 72
+        : 70;
 
                 player.speed =
                     Math.min(
