@@ -2137,7 +2137,480 @@ let kartBody;
 let hood;
 let seat;
 
-if (selectedKart === "rocket") {
+if (selectedBike === "apexRider") {
+
+    // ========================================================
+    // APEX RIDER
+    // ========================================================
+
+    const frameMaterial = new THREE.MeshStandardMaterial({
+        color: 0x1976d2,
+        roughness: 0.5,
+        metalness: 0.35
+    });
+
+    const darkMaterial = new THREE.MeshStandardMaterial({
+        color: 0x151515,
+        roughness: 0.7
+    });
+
+    const accentMaterial = new THREE.MeshStandardMaterial({
+        color: 0x00c8ff,
+        roughness: 0.35,
+        metalness: 0.4
+    });
+
+
+    // Main frame
+    const frame = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.38,
+            0.38,
+            2.5
+        ),
+        frameMaterial
+    );
+
+    frame.position.set(
+        0,
+        0.95,
+        0
+    );
+
+    frame.rotation.x = -0.08;
+
+    frame.castShadow = true;
+
+    kart.add(frame);
+
+
+    // Fuel tank
+    const tank = new THREE.Mesh(
+        new THREE.SphereGeometry(
+            0.72,
+            16,
+            10
+        ),
+        frameMaterial
+    );
+
+    tank.scale.set(
+        0.85,
+        0.55,
+        1.0
+    );
+
+    tank.position.set(
+        0,
+        1.25,
+        -0.15
+    );
+
+    tank.castShadow = true;
+
+    kart.add(tank);
+
+
+    // Seat
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.9,
+            0.22,
+            0.9
+        ),
+        darkMaterial
+    );
+
+    seat.position.set(
+        0,
+        1.45,
+        0.75
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
+
+    // Rear body
+    const rearBody = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.75,
+            0.35,
+            1.0
+        ),
+        frameMaterial
+    );
+
+    rearBody.position.set(
+        0,
+        1.2,
+        0.85
+    );
+
+    rearBody.castShadow = true;
+
+    kart.add(rearBody);
+
+
+    // Front fork
+    const frontFork = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.16,
+            1.55,
+            0.18
+        ),
+        accentMaterial
+    );
+
+    frontFork.position.set(
+        0,
+        1.05,
+        -1.15
+    );
+
+    frontFork.rotation.x = -0.18;
+
+    frontFork.castShadow = true;
+
+    kart.add(frontFork);
+
+
+    // Handlebars
+    const handlebars = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.0,
+            0.14,
+            0.14
+        ),
+        darkMaterial
+    );
+
+    handlebars.position.set(
+        0,
+        1.72,
+        -1.55
+    );
+
+    handlebars.castShadow = true;
+
+    kart.add(handlebars);
+
+
+    // Handlebar center
+    const handlebarCenter = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.18,
+            0.3,
+            0.18
+        ),
+        accentMaterial
+    );
+
+    handlebarCenter.position.set(
+        0,
+        1.55,
+        -1.5
+    );
+
+    kart.add(handlebarCenter);
+
+
+    // Headlight
+    const headlight = new THREE.Mesh(
+        new THREE.SphereGeometry(
+            0.25,
+            12,
+            8
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xffffcc,
+            emissive: 0x666600,
+            roughness: 0.2
+        })
+    );
+
+    headlight.position.set(
+        0,
+        1.55,
+        -1.7
+    );
+
+    kart.add(headlight);
+
+
+    // Exhaust
+    const exhaust = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            0.12,
+            0.16,
+            1.5,
+            10
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x777777,
+            metalness: 0.8,
+            roughness: 0.25
+        })
+    );
+
+    exhaust.rotation.x = Math.PI / 2;
+
+    exhaust.position.set(
+        0.48,
+        0.85,
+        0.85
+    );
+
+    kart.add(exhaust);
+
+
+    // Blue side accent
+    const sideAccent = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.9,
+            0.18,
+            1.2
+        ),
+        accentMaterial
+    );
+
+    sideAccent.position.set(
+        0,
+        1.05,
+        -0.35
+    );
+
+    kart.add(sideAccent);
+
+
+} else if (selectedBike === "bobsBike") {
+
+    // ========================================================
+    // BOB'S BIKE
+    // ========================================================
+
+    const frameMaterial = new THREE.MeshStandardMaterial({
+        color: 0xd84315,
+        roughness: 0.55,
+        metalness: 0.25
+    });
+
+    const darkMaterial = new THREE.MeshStandardMaterial({
+        color: 0x202020,
+        roughness: 0.75
+    });
+
+    const accentMaterial = new THREE.MeshStandardMaterial({
+        color: 0xffc107,
+        roughness: 0.4,
+        metalness: 0.3
+    });
+
+
+    // Main frame
+    const frame = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.42,
+            0.42,
+            2.6
+        ),
+        frameMaterial
+    );
+
+    frame.position.set(
+        0,
+        0.95,
+        0
+    );
+
+    frame.rotation.x = 0.05;
+
+    frame.castShadow = true;
+
+    kart.add(frame);
+
+
+    // Large fuel tank
+    const tank = new THREE.Mesh(
+        new THREE.SphereGeometry(
+            0.78,
+            16,
+            10
+        ),
+        frameMaterial
+    );
+
+    tank.scale.set(
+        0.95,
+        0.58,
+        1.0
+    );
+
+    tank.position.set(
+        0,
+        1.3,
+        -0.15
+    );
+
+    tank.castShadow = true;
+
+    kart.add(tank);
+
+
+    // Seat
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.0,
+            0.25,
+            1.0
+        ),
+        darkMaterial
+    );
+
+    seat.position.set(
+        0,
+        1.43,
+        0.72
+    );
+
+    seat.castShadow = true;
+
+    kart.add(seat);
+
+
+    // Rear mudguard
+    const rearGuard = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.95,
+            0.18,
+            1.2
+        ),
+        accentMaterial
+    );
+
+    rearGuard.position.set(
+        0,
+        1.15,
+        1.05
+    );
+
+    rearGuard.castShadow = true;
+
+    kart.add(rearGuard);
+
+
+    // Front fork
+    const frontFork = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.18,
+            1.7,
+            0.2
+        ),
+        darkMaterial
+    );
+
+    frontFork.position.set(
+        0,
+        1.05,
+        -1.2
+    );
+
+    frontFork.rotation.x = -0.15;
+
+    frontFork.castShadow = true;
+
+    kart.add(frontFork);
+
+
+    // Handlebars
+    const handlebars = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            1.15,
+            0.16,
+            0.16
+        ),
+        darkMaterial
+    );
+
+    handlebars.position.set(
+        0,
+        1.75,
+        -1.55
+    );
+
+    kart.add(handlebars);
+
+
+    // Headlight
+    const headlight = new THREE.Mesh(
+        new THREE.SphereGeometry(
+            0.28,
+            12,
+            8
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0xfff4c2,
+            emissive: 0x665500,
+            roughness: 0.2
+        })
+    );
+
+    headlight.position.set(
+        0,
+        1.55,
+        -1.72
+    );
+
+    kart.add(headlight);
+
+
+    // Exhaust
+    const exhaust = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            0.13,
+            0.18,
+            1.6,
+            10
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x888888,
+            metalness: 0.85,
+            roughness: 0.25
+        })
+    );
+
+    exhaust.rotation.x = Math.PI / 2;
+
+    exhaust.position.set(
+        -0.5,
+        0.85,
+        0.85
+    );
+
+    kart.add(exhaust);
+
+
+    // Yellow side accent
+    const sideAccent = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            0.95,
+            0.2,
+            1.25
+        ),
+        accentMaterial
+    );
+
+    sideAccent.position.set(
+        0,
+        1.05,
+        -0.35
+    );
+
+    kart.add(sideAccent);
+
+
+} else if (selectedKart === "rocket") {
 
     // --------------------------------------------------------
     // ROCKET KART
