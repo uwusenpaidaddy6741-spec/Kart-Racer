@@ -1187,25 +1187,53 @@ kartButtons.forEach((button) => {
         "click",
         () => {
 
+            // Select the kart
             selectedKart =
                 button.dataset.kart;
 
             localStorage.setItem(
-    "selectedKart",
-    selectedKart
-);
+                "selectedKart",
+                selectedKart
+            );
 
-            applyKartStats();
+            // IMPORTANT:
+            // Selecting a kart disables the bike.
+            selectedBike = "none";
 
+            localStorage.setItem(
+                "selectedBike",
+                "none"
+            );
+
+            // Remove selected state from all karts
             kartButtons.forEach(
                 (kartButton) => {
+
                     kartButton.classList.remove(
                         "selected"
                     );
+
                 }
             );
 
-            button.classList.add("selected");
+            // Remove selected state from all bikes
+            bikeButtons.forEach(
+                (bikeButton) => {
+
+                    bikeButton.classList.remove(
+                        "selected"
+                    );
+
+                }
+            );
+
+            // Highlight the selected kart
+            button.classList.add(
+                "selected"
+            );
+
+            // Update stats
+            applyKartStats();
         }
     );
 });
