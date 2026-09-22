@@ -23,6 +23,11 @@ body {
     display: none;
 }
 
+
+/* ============================================================
+   GAME CANVAS
+   ============================================================ */
+
 #gameCanvasContainer {
     position: fixed;
     top: 0;
@@ -43,6 +48,11 @@ body {
 
     outline: none;
 }
+
+
+/* ============================================================
+   CONTROLS DISPLAY
+   ============================================================ */
 
 #controls {
     position: fixed;
@@ -71,16 +81,29 @@ body {
     margin: 3px;
 }
 
+
+/* ============================================================
+   TRACK SELECT
+   ============================================================ */
+
 #trackSelect {
     position: fixed;
+
     top: 50%;
     left: 50%;
+
     transform: translate(-50%, -50%);
+
     z-index: 100;
+
     background: rgba(0, 0, 0, 0.9);
+
     padding: 40px;
+
     border-radius: 20px;
+
     text-align: center;
+
     color: white;
 }
 
@@ -90,19 +113,25 @@ body {
 
 #trackSelect button {
     display: block;
+
     width: 220px;
+
     margin: 12px auto;
+
     padding: 15px;
+
     font-size: 20px;
+
     cursor: pointer;
 }
-}
+
 
 /* ============================================================
    MOBILE LANDSCAPE SUPPORT
    ============================================================ */
 
 /* PHONE HELD VERTICALLY */
+
 @media (max-width: 700px) and (orientation: portrait) {
 
     body {
@@ -117,23 +146,30 @@ body {
         content: "↻  PLEASE TURN YOUR PHONE SIDEWAYS";
 
         position: fixed;
+
         top: 0;
         left: 0;
+
         width: 100vw;
         height: 100dvh;
 
         display: flex;
+
         align-items: center;
         justify-content: center;
 
         background: #111;
+
         color: white;
 
         font-family: Arial, sans-serif;
+
         font-size: 22px;
+
         font-weight: bold;
 
         text-align: center;
+
         padding: 30px;
 
         z-index: 99999;
@@ -142,23 +178,29 @@ body {
 
 
 /* PHONE HELD HORIZONTALLY */
+
 @media (max-width: 1000px) and (orientation: landscape) {
 
     #game {
         width: 100vw;
         height: 100dvh;
+
         padding: 3px;
     }
 
     h1 {
         font-size: 20px;
+
         margin-bottom: 4px;
+
         letter-spacing: 2px;
     }
 
     #gameCanvasContainer {
         width: 100vw;
+
         height: 82dvh;
+
         border-width: 2px;
     }
 
@@ -169,9 +211,11 @@ body {
 
     #controls {
         font-size: 11px;
+
         margin-top: 3px;
     }
 }
+
 
 /* ============================================================
    MOBILE TOUCH CONTROLS
@@ -185,12 +229,15 @@ body {
 
     #mobileControls {
         position: fixed;
+
         left: 0;
         right: 0;
         bottom: 15px;
 
         display: flex;
+
         justify-content: space-between;
+
         align-items: flex-end;
 
         padding: 0 20px;
@@ -203,7 +250,9 @@ body {
     #steeringControls,
     #drivingControls {
         display: flex;
+
         gap: 12px;
+
         pointer-events: auto;
     }
 
@@ -212,22 +261,28 @@ body {
         height: 70px;
 
         border: 3px solid white;
+
         border-radius: 18px;
 
         background: rgba(0, 0, 0, 0.55);
+
         color: white;
 
         font-size: 30px;
+
         font-weight: bold;
 
         -webkit-user-select: none;
         user-select: none;
+
         -webkit-touch-callout: none;
+
         touch-action: none;
     }
 
     #mobileControls button:active {
         background: rgba(255, 255, 255, 0.35);
+
         transform: scale(0.95);
     }
 
@@ -236,8 +291,9 @@ body {
     }
 }
 
+
 /* ============================================================
-   KART & WHEEL CUSTOMIZATION
+   KART / BIKE / WHEEL CUSTOMIZATION SCREEN
    ============================================================ */
 
 #kartSelectScreen {
@@ -250,15 +306,24 @@ body {
     height: 100vh;
 
     display: flex;
+
     flex-direction: column;
 
     align-items: center;
+
     justify-content: center;
 
     background: rgba(0, 0, 0, 0.92);
 
     z-index: 150;
+
+    overflow-y: auto;
 }
+
+
+/* ============================================================
+   SELECT YOUR VEHICLE TITLE
+   ============================================================ */
 
 #kartSelectScreen > h2 {
     margin-bottom: 25px;
@@ -266,59 +331,59 @@ body {
     color: white;
 
     font-size: 32px;
+
     letter-spacing: 3px;
+
+    text-align: center;
 }
 
+
+/* ============================================================
+   CUSTOMIZATION CONTAINER
+   ============================================================ */
+
 #kartSelect {
-    width: 520px;
+    width: 900px;
+
+    max-width: 90vw;
+
     z-index: 200;
 }
 
-/* ============================================================
-   MAIN TOGGLE
-   ============================================================ */
-
-#customizationToggle {
-    width: 230px;
-
-    padding: 12px 16px;
-
-    border: 2px solid white;
-    border-radius: 8px;
-
-    background: rgba(0, 0, 0, 0.85);
-    color: white;
-
-    font-size: 16px;
-    font-weight: bold;
-
-    cursor: pointer;
-
-    text-align: left;
-}
-
 
 /* ============================================================
-   KART + WHEEL PANEL
+   MAIN CUSTOMIZATION PANEL
    ============================================================ */
 
 #customizationOptions {
     display: grid;
 
-    margin-top: 10px;
-
-    width: 520px;
+    width: 100%;
 
     padding: 25px 35px;
 
     background: rgba(0, 0, 0, 0.92);
 
     border: 2px solid white;
+
     border-radius: 12px;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
 
-    gap: 50px;
+    column-gap: 45px;
+
+    align-items: start;
+}
+
+
+/* ============================================================
+   COLUMNS
+   ============================================================ */
+
+#kartColumn,
+#bikeColumn,
+#wheelColumn {
+    min-width: 0;
 }
 
 
@@ -342,10 +407,11 @@ body {
 
 
 /* ============================================================
-   KART / WHEEL LISTS
+   KART / BIKE / WHEEL LISTS
    ============================================================ */
 
 #kartOptions,
+#bikeOptions,
 #wheelOptions {
     display: flex;
 
@@ -358,16 +424,18 @@ body {
 
 
 /* ============================================================
-   KART / WHEEL BUTTONS
+   KART / BIKE / WHEEL BUTTONS
    ============================================================ */
 
 #kartOptions button,
+#bikeOptions button,
 #wheelOptions button {
     width: 100%;
 
     padding: 8px 12px;
 
     border: none;
+
     border-radius: 5px;
 
     background: transparent;
@@ -405,6 +473,11 @@ body {
     font-weight: bold;
 }
 
+
+/* ============================================================
+   SELECTED BIKE
+   ============================================================ */
+
 #bikeOptions button.selected {
     background: #22c55e;
 
@@ -412,6 +485,7 @@ body {
 
     font-weight: bold;
 }
+
 
 /* ============================================================
    SELECTED WHEELS
@@ -425,80 +499,131 @@ body {
     font-weight: bold;
 }
 
-/* ========================================================
+
+/* ============================================================
+   SAVE SETUP BUTTON
+   ============================================================ */
+
+#saveSetupButton {
+    display: block;
+
+    width: 220px;
+
+    margin: 20px auto 0;
+
+    padding: 14px 20px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background: white;
+
+    color: #111;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+#saveSetupButton:hover {
+    transform: scale(1.04);
+}
+
+
+/* ============================================================
    TIME TRIAL MENU
-   ======================================================== */
+   ============================================================ */
 
 #timeTrialTracks {
     width: min(95vw, 1000px);
+
     margin: 0 auto;
+
     text-align: center;
 }
 
 #timeTrialTracks h2 {
     margin-bottom: 30px;
+
     font-size: 28px;
+
     letter-spacing: 3px;
 }
 
 
-/* ========================================================
+/* ============================================================
    TIME TRIAL GRID
-   ======================================================== */
+   ============================================================ */
 
 #timeTrialLeaderboard {
     display: grid;
+
     grid-template-columns: 1fr 1fr;
+
     grid-template-rows: 1fr 1fr;
+
     gap: 45px 90px;
 
     width: 100%;
+
     max-width: 850px;
+
     margin: 0 auto;
 }
 
 
-/* ========================================================
+/* ============================================================
    INDIVIDUAL TRACK
-   ======================================================== */
+   ============================================================ */
 
 #timeTrialLeaderboard .leaderboardTrack {
     text-align: left;
+
     min-height: 260px;
 }
 
 #timeTrialLeaderboard .leaderboardTrack h3 {
     margin-bottom: 20px;
+
     font-size: 22px;
+
     letter-spacing: 2px;
 }
 
 
-/* ========================================================
+/* ============================================================
    LEADERBOARD TIMES
-   ======================================================== */
+   ============================================================ */
 
 #timeTrialLeaderboard .leaderboardTrack p {
     margin: 8px 0;
+
     font-size: 17px;
 }
 
 
-/* ========================================================
+/* ============================================================
    RACE BUTTON
-   ======================================================== */
+   ============================================================ */
 
 #timeTrialLeaderboard .leaderboardTrack button {
     margin-top: 18px;
+
     padding: 10px 18px;
 
     border: none;
+
     border-radius: 6px;
 
     background: #ffffff;
+
     color: #111111;
 
     font-weight: bold;
+
     cursor: pointer;
 }
 
@@ -507,16 +632,105 @@ body {
 }
 
 
-/* ========================================================
-   MOBILE
-   ======================================================== */
+/* ============================================================
+   MOBILE CUSTOMIZATION
+   ============================================================ */
+
+@media (max-width: 800px) {
+
+    #kartSelectScreen {
+        justify-content: flex-start;
+
+        padding: 20px 10px;
+
+        overflow-y: auto;
+    }
+
+    #kartSelectScreen > h2 {
+        font-size: 24px;
+
+        margin-bottom: 15px;
+    }
+
+    #kartSelect {
+        width: 95vw;
+
+        max-width: 95vw;
+    }
+
+    #customizationOptions {
+        grid-template-columns: 1fr 1fr 1fr;
+
+        column-gap: 10px;
+
+        padding: 15px 10px;
+    }
+
+    #kartColumn h3,
+    #bikeColumn h3,
+    #wheelColumn h3 {
+        font-size: 18px;
+
+        margin-bottom: 10px;
+    }
+
+    #kartOptions button,
+    #bikeOptions button,
+    #wheelOptions button {
+        padding: 7px 5px;
+
+        font-size: 13px;
+    }
+
+    #saveSetupButton {
+        width: 180px;
+
+        padding: 12px;
+
+        font-size: 16px;
+    }
+}
+
+
+/* ============================================================
+   VERY SMALL SCREENS
+   ============================================================ */
+
+@media (max-width: 500px) {
+
+    #customizationOptions {
+        column-gap: 5px;
+
+        padding: 12px 6px;
+    }
+
+    #kartColumn h3,
+    #bikeColumn h3,
+    #wheelColumn h3 {
+        font-size: 16px;
+    }
+
+    #kartOptions button,
+    #bikeOptions button,
+    #wheelOptions button {
+        font-size: 11px;
+
+        padding: 6px 3px;
+    }
+}
+
+
+/* ============================================================
+   MOBILE TIME TRIAL
+   ============================================================ */
 
 @media (max-width: 700px) {
 
     #timeTrialLeaderboard {
         grid-template-columns: 1fr;
+
         grid-template-rows: auto;
+
         gap: 30px;
     }
-
 }
