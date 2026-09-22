@@ -5791,9 +5791,13 @@ if (forward()) {
             speedRatio * 0.65;
 
         const driftMultiplier =
-            player.drifting
-                ? 1.35
-                : 1;
+    player.drifting
+        ? (
+            selectedBike !== "none"
+                ? 1.20
+                : 1.35
+        )
+        : 1;
 
         player.angle +=
             direction *
@@ -5927,24 +5931,68 @@ if (forward()) {
         }
     }
 
-    // --------------------------------------------------------
-    // DRIFT MOVEMENT
-    // --------------------------------------------------------
+  // --------------------------------------------------------
+// DRIFT MOVEMENT
+// --------------------------------------------------------
 
-    let moveAngle =
-        player.angle;
+let moveAngle =
+    player.angle;
 
-    if (player.drifting) {
+if (player.drifting) {
 
-        const driftDirection =
-            right()
-                ? -1
-                : 1;
+    // Which direction are we turning?
+    //
+    // RIGHT = -1
+    // LEFT  = +1
+    //
+    const turnDirection =
+        right()
+            ? -1
+            : 1;
+
+
+    // ----------------------------------------------------
+    // MARIO KART STYLE DRIFTING
+    // ----------------------------------------------------
+    //
+    // KARTS:
+    // Outward drift
+    //
+    // BIKES:
+    // Inward drift
+    //
+    // Our movement angle is separated from the
+    // vehicle's facing angle to create the slide.
+    // ----------------------------------------------------
+
+    const isBike =
+    selectedBike !== "none";
+
+const driftAngle =
+    0.34;
+
+
+    if (isBike) {
+
+        // ================================================
+        // BIKE - INWARD DRIFT
+        // ================================================
 
         moveAngle +=
-            driftDirection *
-            0.28;
+            turnDirection *
+            driftAngle;
+
+    } else {
+
+        // ================================================
+        // KART - OUTWARD DRIFT
+        // ================================================
+
+        moveAngle -=
+            turnDirection *
+            driftAngle;
     }
+}
 
     // --------------------------------------------------------
     // REAL-TIME MOVEMENT
@@ -6134,8 +6182,35 @@ if (player.airborne) {
         );
 }
 
+// --------------------------------------------------------
+// VEHICLE ROTATION
+// --------------------------------------------------------
+
+let visualAngle =
+    player.angle;
+
+if (player.drifting) {
+
+    const turnDirection =
+        right()
+            ? -1
+            : 1;
+
+    const isBike =
+        selectedBike !== "none";
+
+    const visualDriftAngle =
+        isBike
+            ? 0.20
+            : -0.20;
+
+    visualAngle +=
+        turnDirection *
+        visualDriftAngle;
+}
+
 kart.rotation.y =
-    player.angle -
+    visualAngle -
     Math.PI / 2;
 
     // --------------------------------------------------------
