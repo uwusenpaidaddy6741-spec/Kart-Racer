@@ -4518,13 +4518,26 @@ function createWheel(x, z) {
 }
 
 // ------------------------------------------------------------
-// CREATE FOUR WHEELS
+// CREATE WHEELS
 // ------------------------------------------------------------
 
-createWheel(-1.5, -1.35);
-createWheel(1.5, -1.35);
-createWheel(-1.5, 1.35);
-createWheel(1.5, 1.35);
+if (selectedBike !== "none") {
+
+    // Bikes have two wheels centered on the frame
+
+    createWheel(0, -1.45);
+    createWheel(0, 1.45);
+
+} else {
+
+    // Karts have four wheels
+
+    createWheel(-1.5, -1.35);
+    createWheel(1.5, -1.35);
+    createWheel(-1.5, 1.35);
+    createWheel(1.5, 1.35);
+
+}
 
 // ============================================================
 // BOOST FLAME
