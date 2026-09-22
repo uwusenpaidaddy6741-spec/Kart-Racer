@@ -4913,18 +4913,21 @@ verticalVelocity:
     angle:
         playerStartAngle,
 
-    drifting:
-        false,
+   drifting:
+    false,
 
-    driftCharge:
-        0,
+driftCharge:
+    0,
 
-    wheelie: false,
-wheelieSpeedBonus: 8
+wheelie:
+    false,
 
-    boostTimer:
-        0,
+wheelieSpeedBonus:
+    8,
 
+boostTimer:
+    0,
+    
     boostAcceleration:
         40,
 
