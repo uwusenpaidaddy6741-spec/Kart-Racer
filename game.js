@@ -1312,21 +1312,21 @@ const characterStats = {
         name: "Blaze",
         speed: 3,
         acceleration: 0,
-        handling: -2
+        handling: -0.2
     },
 
     bolt: {
         name: "Bolt",
         speed: 0,
         acceleration: 3,
-        handling: 1
+        handling: +0.1
     },
 
     rex: {
         name: "Rex",
         speed: 4,
         acceleration: -2,
-        handling: -2
+        handling: -0.2
     },
 
     nova: {
@@ -1340,28 +1340,28 @@ const characterStats = {
         name: "Misty",
         speed: -1,
         acceleration: 1,
-        handling: 3
+        handling: +0.5
     },
 
     axel: {
         name: "Axel",
         speed: 2,
         acceleration: 1,
-        handling: 2
+        handling: +0.2
     },
 
     vex: {
         name: "Vex",
         speed: 1,
         acceleration: 2,
-        handling: 2
+        handling: +0.2
     },
 
     titan: {
         name: "Titan",
         speed: 5,
         acceleration: -3,
-        handling: -3
+        handling: -0.3
     }
 };
 
