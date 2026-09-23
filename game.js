@@ -1508,7 +1508,7 @@ const bikeStats = {
         name: "Apex Rider",
 
         maxSpeed: 47,
-        acceleration: 20,
+        acceleration: 24,
         braking: 25,
         turnSpeed: 2.8,
         driftChargeRate: 1.3
@@ -1518,7 +1518,7 @@ const bikeStats = {
         name: "Bob's Bike",
 
         maxSpeed: 42,
-        acceleration: 25,
+        acceleration: 27,
         braking: 27,
         turnSpeed: 2.6,
         driftChargeRate: 1.5
@@ -1672,7 +1672,7 @@ const wheelStats = {
     },
 
     speed: {
-        maxSpeed: 4,
+        maxSpeed: 6,
         acceleration: -1,
         turnSpeed: -0.2,
         driftChargeRate: 1
