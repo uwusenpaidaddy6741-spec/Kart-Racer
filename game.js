@@ -1365,6 +1365,52 @@ const characterStats = {
     }
 };
 
+const characterButtons =
+    document.querySelectorAll("#characterOptions button");
+
+characterButtons.forEach((button) => {
+
+    button.addEventListener("click", () => {
+
+        // Get selected character
+        selectedCharacter =
+            button.dataset.character;
+
+        // Save selection
+        localStorage.setItem(
+            "selectedCharacter",
+            selectedCharacter
+        );
+
+        // Remove selection from all characters
+        characterButtons.forEach((characterButton) => {
+            characterButton.classList.remove("selected");
+        });
+
+        // Highlight selected character
+        button.classList.add("selected");
+
+        // Apply the new character's stats
+        if (typeof player !== "undefined") {
+            applyKartStats();
+        }
+
+        console.log(
+            "Selected character:",
+            selectedCharacter
+        );
+    });
+});
+
+const savedCharacterButton =
+    document.querySelector(
+        `#characterOptions button[data-character="${selectedCharacter}"]`
+    );
+
+if (savedCharacterButton) {
+    savedCharacterButton.classList.add("selected");
+}
+
 const kartStats = {
 
     speedster: {
