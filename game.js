@@ -6639,8 +6639,8 @@ if (
     player.drifting
         ? (
             selectedBike !== "none"
-                ? 1.55
-                : 1.85
+                ? 1.20
+                : 1.35
         )
         : 1;
 
@@ -6650,7 +6650,7 @@ player.angle +=
     steeringStrength *
     driftMultiplier *
     deltaTime;
-
+        
     }
 
     // --------------------------------------------------------
