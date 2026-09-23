@@ -1298,6 +1298,73 @@ let selectedKart =
     localStorage.getItem("selectedKart") ||
     "speedster";
 
+// ============================================================
+// CHARACTER SELECTION / STATS
+// ============================================================
+
+let selectedCharacter =
+    localStorage.getItem("selectedCharacter") ||
+    "blaze";
+
+const characterStats = {
+
+    blaze: {
+        name: "Blaze",
+        speed: 3,
+        acceleration: 0,
+        handling: -2
+    },
+
+    bolt: {
+        name: "Bolt",
+        speed: 0,
+        acceleration: 3,
+        handling: 1
+    },
+
+    rex: {
+        name: "Rex",
+        speed: 4,
+        acceleration: -2,
+        handling: -2
+    },
+
+    nova: {
+        name: "Nova",
+        speed: 1,
+        acceleration: 1,
+        handling: 1
+    },
+
+    misty: {
+        name: "Misty",
+        speed: -1,
+        acceleration: 1,
+        handling: 3
+    },
+
+    axel: {
+        name: "Axel",
+        speed: 2,
+        acceleration: 1,
+        handling: 2
+    },
+
+    vex: {
+        name: "Vex",
+        speed: 1,
+        acceleration: 2,
+        handling: 2
+    },
+
+    titan: {
+        name: "Titan",
+        speed: 5,
+        acceleration: -3,
+        handling: -3
+    }
+};
+
 const kartStats = {
 
     speedster: {
@@ -5567,6 +5634,10 @@ boostTimer:
 
 function applyKartStats() {
 
+    // ========================================================
+    // GET SELECTED WHEELS
+    // ========================================================
+
     const wheels =
         wheelStats[selectedWheels];
 
@@ -5574,9 +5645,22 @@ function applyKartStats() {
         return;
     }
 
-    // =========================
-    // BIKE STATS
-    // =========================
+
+    // ========================================================
+    // GET SELECTED CHARACTER
+    // ========================================================
+
+    const character =
+        characterStats[selectedCharacter];
+
+    if (!character) {
+        return;
+    }
+
+
+    // ========================================================
+    // BIKE
+    // ========================================================
 
     if (selectedBike !== "none") {
 
@@ -5587,17 +5671,36 @@ function applyKartStats() {
             return;
         }
 
+
+        // ----------------------------------------------------
+        // BASE BIKE + WHEELS + CHARACTER
+        // ----------------------------------------------------
+
         player.maxSpeed =
-            bike.maxSpeed + wheels.maxSpeed;
+            bike.maxSpeed +
+            wheels.maxSpeed +
+            character.speed;
+
 
         player.acceleration =
-            bike.acceleration + wheels.acceleration;
+            bike.acceleration +
+            wheels.acceleration +
+            character.acceleration;
+
 
         player.braking =
             bike.braking;
 
+
         player.turnSpeed =
-            bike.turnSpeed + wheels.turnSpeed;
+            bike.turnSpeed +
+            wheels.turnSpeed +
+            character.handling;
+
+
+        // ----------------------------------------------------
+        // DRIFT
+        // ----------------------------------------------------
 
         player.driftChargeRate =
             Math.min(
@@ -5606,17 +5709,24 @@ function applyKartStats() {
                 2.00
             );
 
+
+        // ----------------------------------------------------
+        // DRIFT BONUS
+        // ----------------------------------------------------
+
         player.driftBoostBonus =
             player.driftChargeRate >= 2.00
                 ? 2
                 : 0;
 
+
         return;
     }
 
-    // =========================
-    // KART STATS
-    // =========================
+
+    // ========================================================
+    // KART
+    // ========================================================
 
     const kart =
         kartStats[selectedKart];
@@ -5625,17 +5735,36 @@ function applyKartStats() {
         return;
     }
 
+
+    // --------------------------------------------------------
+    // BASE KART + WHEELS + CHARACTER
+    // --------------------------------------------------------
+
     player.maxSpeed =
-        kart.maxSpeed + wheels.maxSpeed;
+        kart.maxSpeed +
+        wheels.maxSpeed +
+        character.speed;
+
 
     player.acceleration =
-        kart.acceleration + wheels.acceleration;
+        kart.acceleration +
+        wheels.acceleration +
+        character.acceleration;
+
 
     player.braking =
         kart.braking;
 
+
     player.turnSpeed =
-        kart.turnSpeed + wheels.turnSpeed;
+        kart.turnSpeed +
+        wheels.turnSpeed +
+        character.handling;
+
+
+    // --------------------------------------------------------
+    // DRIFT
+    // --------------------------------------------------------
 
     player.driftChargeRate =
         Math.min(
@@ -5643,6 +5772,11 @@ function applyKartStats() {
             wheels.driftChargeRate,
             2.00
         );
+
+
+    // --------------------------------------------------------
+    // DRIFT BONUS
+    // --------------------------------------------------------
 
     player.driftBoostBonus =
         player.driftChargeRate >= 2.00
