@@ -1927,29 +1927,155 @@ function createTrack() {
     const outer = [];
     const inner = [];
 
-  for (let i = 0; i < outer.length; i++) {
+    // --------------------------------------------------------
+    // BUILD ROAD EDGES
+    // --------------------------------------------------------
 
-    const next =
-        (i + 1) % outer.length;
+    for (let i = 0; i < trackPoints.length; i++) {
 
-    const a = i * 2;
-    const b = i * 2 + 1;
+        const current =
+            trackPoints[i];
 
-    const c = next * 2;
-    const d = next * 2 + 1;
+        const next =
+            trackPoints[
+                (i + 1) % trackPoints.length
+            ];
 
-    indices.push(
-        a,
-        c,
-        b,
+        const dx =
+            next.x - current.x;
 
-        b,
-        c,
-        d
-    );
-}
-    
-    const geometry = new THREE.BufferGeometry();
+        const dz =
+            next.z - current.z;
+
+        const length =
+            Math.hypot(
+                dx,
+                dz
+            );
+
+        // Skip zero-length segments
+        if (length < 0.0001) {
+            continue;
+        }
+
+        // Perpendicular direction
+        const nx =
+            -dz / length;
+
+        const nz =
+            dx / length;
+
+        // Outer edge
+        outer.push({
+            x:
+                current.x +
+                nx *
+                TRACK_WIDTH / 2,
+
+            z:
+                current.z +
+                nz *
+                TRACK_WIDTH / 2
+        });
+
+        // Inner edge
+        inner.push({
+            x:
+                current.x -
+                nx *
+                TRACK_WIDTH / 2,
+
+            z:
+                current.z -
+                nz *
+                TRACK_WIDTH / 2
+        });
+    }
+
+
+    // --------------------------------------------------------
+    // CREATE ROAD VERTICES
+    // --------------------------------------------------------
+
+    for (
+        let i = 0;
+        i < outer.length;
+        i++
+    ) {
+
+        const outerPoint =
+            outer[i];
+
+        const innerPoint =
+            inner[i];
+
+        const height =
+            getTrackHeight(i);
+
+        positions.push(
+
+            // Outer vertex
+            outerPoint.x,
+            height + 0.05,
+            outerPoint.z,
+
+            // Inner vertex
+            innerPoint.x,
+            height + 0.05,
+            innerPoint.z
+
+        );
+    }
+
+
+    // --------------------------------------------------------
+    // CREATE ROAD TRIANGLES
+    // --------------------------------------------------------
+
+    for (
+        let i = 0;
+        i < outer.length;
+        i++
+    ) {
+
+        const next =
+            (i + 1) %
+            outer.length;
+
+        const outerCurrent =
+            i * 2;
+
+        const innerCurrent =
+            i * 2 + 1;
+
+        const outerNext =
+            next * 2;
+
+        const innerNext =
+            next * 2 + 1;
+
+        // First triangle
+        indices.push(
+            outerCurrent,
+            outerNext,
+            innerCurrent
+        );
+
+        // Second triangle
+        indices.push(
+            innerCurrent,
+            outerNext,
+            innerNext
+        );
+    }
+
+
+    // --------------------------------------------------------
+    // CREATE GEOMETRY
+    // --------------------------------------------------------
+
+    const geometry =
+        new THREE.BufferGeometry();
 
     geometry.setAttribute(
         "position",
@@ -1959,29 +2085,326 @@ function createTrack() {
         )
     );
 
-    geometry.setIndex(indices);
+    geometry.setIndex(
+        indices
+    );
 
     geometry.computeVertexNormals();
 
-    const material = new THREE.MeshStandardMaterial({
-    color:
-        selectedTrack === "4"
-            ? 0xd9e4ea
-            : 0x3b3b3b,
-    roughness:
-        selectedTrack === "4"
-            ? 0.35
-            : 0.9
-});
-    
-    const road = new THREE.Mesh(
-        geometry,
-        material
-    );
+
+    // --------------------------------------------------------
+    // ROAD MATERIAL
+    // --------------------------------------------------------
+
+    const material =
+        new THREE.MeshStandardMaterial({
+            color: 0x333333,
+            roughness: 0.85,
+            metalness: 0.0
+        });
+
+
+    // --------------------------------------------------------
+    // CREATE ROAD MESH
+    // --------------------------------------------------------
+
+    const road =
+        new THREE.Mesh(
+            geometry,
+            material
+        );
 
     road.receiveShadow = true;
 
+    road.castShadow = false;
+
     scene.add(road);
+
+
+    // --------------------------------------------------------
+    // ROAD BORDERS
+    // --------------------------------------------------------
+
+    const borderHeight = 0.12;
+
+    const borderWidth = 0.35;
+
+
+    // --------------------------------------------------------
+    // CREATE CURBS
+    // --------------------------------------------------------
+
+    for (
+        let i = 0;
+        i < outer.length;
+        i++
+    ) {
+
+        const next =
+            (i + 1) %
+            outer.length;
+
+        const p1 =
+            outer[i];
+
+        const p2 =
+            outer[next];
+
+        const dx =
+            p2.x - p1.x;
+
+        const dz =
+            p2.z - p1.z;
+
+        const length =
+            Math.hypot(
+                dx,
+                dz
+            );
+
+        if (
+            length <
+            0.0001
+        ) {
+            continue;
+        }
+
+        const angle =
+            Math.atan2(
+                dz,
+                dx
+            );
+
+        // Only place curbs every few segments
+        if (i % 2 !== 0) {
+            continue;
+        }
+
+        // ----------------------------------------------------
+        // OUTER CURB
+        // ----------------------------------------------------
+
+        const outerX =
+            (p1.x + p2.x) / 2;
+
+        const outerZ =
+            (p1.z + p2.z) / 2;
+
+        const outerCurb =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    length,
+                    borderHeight,
+                    borderWidth
+                ),
+                new THREE.MeshStandardMaterial({
+                    color: 0xff2222
+                })
+            );
+
+        outerCurb.position.set(
+            outerX,
+            0.16,
+            outerZ
+        );
+
+        outerCurb.rotation.y =
+            -angle;
+
+        outerCurb.castShadow = true;
+
+        outerCurb.receiveShadow = true;
+
+        scene.add(
+            outerCurb
+        );
+    }
+
+
+    // --------------------------------------------------------
+    // INNER WHITE BORDER
+    // --------------------------------------------------------
+
+    for (
+        let i = 0;
+        i < inner.length;
+        i++
+    ) {
+
+        const next =
+            (i + 1) %
+            inner.length;
+
+        const p1 =
+            inner[i];
+
+        const p2 =
+            inner[next];
+
+        const dx =
+            p2.x - p1.x;
+
+        const dz =
+            p2.z - p1.z;
+
+        const length =
+            Math.hypot(
+                dx,
+                dz
+            );
+
+        if (
+            length <
+            0.0001
+        ) {
+            continue;
+        }
+
+        const angle =
+            Math.atan2(
+                dz,
+                dx
+            );
+
+        // White border every third segment
+        if (i % 3 !== 0) {
+            continue;
+        }
+
+        const innerX =
+            (p1.x + p2.x) / 2;
+
+        const innerZ =
+            (p1.z + p2.z) / 2;
+
+        const innerBorder =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    length,
+                    borderHeight,
+                    borderWidth
+                ),
+                new THREE.MeshStandardMaterial({
+                    color: 0xffffff
+                })
+            );
+
+        innerBorder.position.set(
+            innerX,
+            0.16,
+            innerZ
+        );
+
+        innerBorder.rotation.y =
+            -angle;
+
+        innerBorder.castShadow = true;
+
+        innerBorder.receiveShadow = true;
+
+        scene.add(
+            innerBorder
+        );
+    }
+
+
+    // --------------------------------------------------------
+    // FINISH LINE
+    // --------------------------------------------------------
+
+    const start =
+        trackPoints[0];
+
+    const next =
+        trackPoints[1];
+
+    const dx =
+        next.x - start.x;
+
+    const dz =
+        next.z - start.z;
+
+    const startAngle =
+        Math.atan2(
+            dz,
+            dx
+        );
+
+
+    const finishGroup =
+        new THREE.Group();
+
+
+    const finishWidth =
+        TRACK_WIDTH;
+
+    const finishLength =
+        3;
+
+
+    // --------------------------------------------------------
+    // CHECKERED FINISH LINE
+    // --------------------------------------------------------
+
+    const checkerCount =
+        8;
+
+    const checkerWidth =
+        finishWidth /
+        checkerCount;
+
+
+    for (
+        let i = 0;
+        i < checkerCount;
+        i++
+    ) {
+
+        const tile =
+            new THREE.Mesh(
+                new THREE.BoxGeometry(
+                    finishLength,
+                    0.04,
+                    checkerWidth
+                ),
+                new THREE.MeshStandardMaterial({
+                    color:
+                        i % 2 === 0
+                            ? 0xffffff
+                            : 0x111111
+                })
+            );
+
+        tile.position.set(
+            (i - checkerCount / 2 + 0.5) *
+                checkerWidth,
+
+            0.09,
+
+            0
+        );
+
+        finishGroup.add(
+            tile
+        );
+    }
+
+
+    // Finish line orientation
+    finishGroup.rotation.y =
+        -startAngle;
+
+
+    finishGroup.position.set(
+        start.x,
+        0.10,
+        start.z
+    );
+
+
+    scene.add(
+        finishGroup
+    );
 }
 
 createTrack();
