@@ -1333,7 +1333,7 @@ const characterStats = {
         name: "Nova",
         speed: 1,
         acceleration: 1,
-        handling: 1
+        handling: 0
     },
 
     misty: {
