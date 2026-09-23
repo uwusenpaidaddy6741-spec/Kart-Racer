@@ -1023,16 +1023,13 @@ addLine(
     // ========================================================
 
     addArc(
-        -300,
-        -120,
-
-        60,
-
-        Math.PI,
-        Math.PI * 1.5,
-
-        24
-    );
+    -220,
+    -80,
+    60,
+    Math.PI,
+    Math.PI * 1.5 - 0.02,
+    18
+);
 
 
     // ========================================================
@@ -1930,77 +1927,27 @@ function createTrack() {
     const outer = [];
     const inner = [];
 
-    for (let i = 0; i < trackPoints.length; i++) {
+    for (let i = 0; i < outer.length; i++) {
 
-        const current = trackPoints[i];
+    const next =
+        (i + 1) % outer.length;
 
-        const next =
-            trackPoints[
-                (i + 1) % trackPoints.length
-            ];
+    const a = i * 2;
+    const b = i * 2 + 1;
 
-        const dx = next.x - current.x;
-        const dz = next.z - current.z;
+    const c = next * 2;
+    const d = next * 2 + 1;
 
-        const length = Math.hypot(dx, dz);
+    indices.push(
+        a,
+        c,
+        b,
 
-        if (length === 0) {
-            continue;
-        }
-
-        const nx = -dz / length;
-        const nz = dx / length;
-
-        outer.push({
-            x: current.x + nx * TRACK_WIDTH / 2,
-            z: current.z + nz * TRACK_WIDTH / 2
-        });
-
-        inner.push({
-            x: current.x - nx * TRACK_WIDTH / 2,
-            z: current.z - nz * TRACK_WIDTH / 2
-        });
-    }
-
-   for (let i = 0; i < outer.length; i++) {
-
-        const o = outer[i];
-        const inn = inner[i];
-
-       const height = getTrackHeight(i);
-
-positions.push(
-    o.x,
-    height + 0.05,
-    o.z,
-
-    inn.x,
-    height + 0.05,
-    inn.z
-);
-    }
-
-    for (let i = 0; i < trackPoints.length; i++) {
-
-        const next =
-            (i + 1) % trackPoints.length;
-
-        const a = i * 2;
-        const b = i * 2 + 1;
-
-        const c = next * 2;
-        const d = next * 2 + 1;
-
-        indices.push(
-    a,
-    c,
-    b,
-
-    b,
-    c,
-    d
-);
-    }
+        b,
+        c,
+        d
+    );
+}
 
     const geometry = new THREE.BufferGeometry();
 
