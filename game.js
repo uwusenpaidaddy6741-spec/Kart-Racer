@@ -1927,10 +1927,10 @@ function createTrack() {
     const outer = [];
     const inner = [];
 
-  for (let i = 0; i < trackPoints.length; i++) {
+  for (let i = 0; i < outer.length; i++) {
 
     const next =
-        (i + 1) % trackPoints.length;
+        (i + 1) % outer.length;
 
     const a = i * 2;
     const b = i * 2 + 1;
@@ -1948,7 +1948,7 @@ function createTrack() {
         d
     );
 }
-
+    
     const geometry = new THREE.BufferGeometry();
 
     geometry.setAttribute(
