@@ -6593,17 +6593,18 @@ if (
     player.drifting
         ? (
             selectedBike !== "none"
-                ? 1.20
-                : 1.35
+                ? 1.55
+                : 1.85
         )
         : 1;
 
-        player.angle +=
-            direction *
-            player.turnSpeed *
-            steeringStrength *
-            driftMultiplier *
-            deltaTime;
+player.angle +=
+    direction *
+    player.turnSpeed *
+    steeringStrength *
+    driftMultiplier *
+    deltaTime;
+
     }
 
     // --------------------------------------------------------
