@@ -1510,7 +1510,7 @@ const bikeStats = {
         maxSpeed: 47,
         acceleration: 20,
         braking: 25,
-        turnSpeed: 3.1,
+        turnSpeed: 2.8,
         driftChargeRate: 1.3
     },
 
@@ -1520,7 +1520,7 @@ const bikeStats = {
         maxSpeed: 42,
         acceleration: 25,
         braking: 27,
-        turnSpeed: 2.9,
+        turnSpeed: 2.6,
         driftChargeRate: 1.5
     }
 
