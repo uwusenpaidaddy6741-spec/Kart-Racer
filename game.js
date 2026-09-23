@@ -1927,10 +1927,10 @@ function createTrack() {
     const outer = [];
     const inner = [];
 
-    for (let i = 0; i < outer.length; i++) {
+  for (let i = 0; i < trackPoints.length; i++) {
 
     const next =
-        (i + 1) % outer.length;
+        (i + 1) % trackPoints.length;
 
     const a = i * 2;
     const b = i * 2 + 1;
