@@ -1,4 +1,5 @@
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.180.0/examples/jsm/loaders/GLTFLoader.js";
 
 // ============================================================
 // KART RACER 3D
@@ -1372,29 +1373,46 @@ characterButtons.forEach((button) => {
 
     button.addEventListener("click", () => {
 
-        // Get selected character
         selectedCharacter =
             button.dataset.character;
 
-        // Save selection
         localStorage.setItem(
             "selectedCharacter",
             selectedCharacter
         );
 
-        // Remove selection from all characters
-        characterButtons.forEach((characterButton) => {
-            characterButton.classList.remove("selected");
-        });
+        characterButtons.forEach(
+            (characterButton) => {
 
-        // Highlight selected character
+                characterButton.classList.remove(
+                    "selected"
+                );
+
+            }
+        );
+
         button.classList.add("selected");
 
-        // Apply the new character's stats
+        // Update vehicle stats
         if (typeof player !== "undefined") {
             applyKartStats();
         }
 
+        // Change the 3D character
+        if (
+            typeof kart !== "undefined" &&
+            typeof loadCharacterModel === "function"
+        ) {
+
+            loadCharacterModel(
+                selectedCharacter
+            );
+
+        }
+
+    });
+
+});
         console.log(
             "Selected character:",
             selectedCharacter
@@ -2875,10 +2893,238 @@ if (new URLSearchParams(window.location.search).get("track") === "3") {
 }
 
 // ============================================================
+// CHARACTER 3D MODEL SYSTEM
+// ============================================================
+
+const characterModelLoader = new GLTFLoader();
+
+const characterModelPaths = {
+    blaze: "models/characters/blaze.glb",
+    bolt: "models/characters/bolt.glb",
+    rex: "models/characters/rex.glb",
+    nova: "models/characters/nova.glb",
+    misty: "models/characters/misty.glb",
+    axel: "models/characters/axel.glb",
+    vex: "models/characters/vex.glb",
+    titan: "models/characters/titan.glb"
+};
+
+// Stores loaded models so we don't download them repeatedly
+const characterModelCache = {};
+
+// Currently displayed character
+let currentCharacterModel = null;
+
+// Character animations
+let characterMixer = null;
+let characterAnimations = [];
+
+// ------------------------------------------------------------
+// LOAD ONE CHARACTER
+// ------------------------------------------------------------
+
+function loadCharacterModel(characterName) {
+
+    const modelPath =
+        characterModelPaths[characterName];
+
+    if (!modelPath) {
+        console.error(
+            "No model path found for character:",
+            characterName
+        );
+
+        return;
+    }
+
+    // If already loaded, use cached version
+    if (characterModelCache[characterName]) {
+
+        createCharacterModel(
+            characterName,
+            characterModelCache[characterName]
+        );
+
+        return;
+    }
+
+    console.log(
+        "Loading character model:",
+        characterName
+    );
+
+    characterModelLoader.load(
+        modelPath,
+
+        (gltf) => {
+
+            console.log(
+                "Loaded character:",
+                characterName
+            );
+
+            characterModelCache[characterName] =
+                gltf;
+
+            createCharacterModel(
+                characterName,
+                gltf
+            );
+        },
+
+        undefined,
+
+        (error) => {
+
+            console.error(
+                "Failed to load character model:",
+                characterName,
+                error
+            );
+        }
+    );
+}
+
+// ------------------------------------------------------------
+// CREATE CHARACTER MODEL
+// ------------------------------------------------------------
+
+function createCharacterModel(
+    characterName,
+    gltf
+) {
+
+    // Remove old character
+    if (currentCharacterModel) {
+
+        if (currentCharacterModel.parent) {
+            currentCharacterModel.parent.remove(
+                currentCharacterModel
+            );
+        }
+
+        currentCharacterModel = null;
+    }
+
+    // Reset animation system
+    characterMixer = null;
+    characterAnimations = [];
+
+    // Clone the loaded scene
+    const model =
+        gltf.scene.clone(true);
+
+    currentCharacterModel = model;
+
+    // --------------------------------------------------------
+    // MODEL SCALE
+    // --------------------------------------------------------
+
+    model.scale.set(
+        1,
+        1,
+        1
+    );
+
+    // --------------------------------------------------------
+    // MODEL POSITION
+    // --------------------------------------------------------
+
+    model.position.set(
+        0,
+        0,
+        0
+    );
+
+    // --------------------------------------------------------
+    // MODEL ROTATION
+    // --------------------------------------------------------
+
+    model.rotation.set(
+        0,
+        0,
+        0
+    );
+
+    // --------------------------------------------------------
+    // ENABLE SHADOWS
+    // --------------------------------------------------------
+
+    model.traverse((object) => {
+
+        if (object.isMesh) {
+
+            object.castShadow = true;
+            object.receiveShadow = true;
+
+        }
+
+    });
+
+    // --------------------------------------------------------
+    // ANIMATIONS
+    // --------------------------------------------------------
+
+    if (
+        gltf.animations &&
+        gltf.animations.length > 0
+    ) {
+
+        characterAnimations =
+            gltf.animations;
+
+        characterMixer =
+            new THREE.AnimationMixer(model);
+
+        console.log(
+            characterName,
+            "animations:",
+            characterAnimations.map(
+                animation => animation.name
+            )
+        );
+
+        // Try to find an idle animation
+        const idleAnimation =
+            characterAnimations.find(
+                animation =>
+                    animation.name
+                        .toLowerCase()
+                        .includes("idle")
+            );
+
+        if (idleAnimation) {
+
+            const action =
+                characterMixer.clipAction(
+                    idleAnimation
+                );
+
+            action.play();
+        }
+    }
+
+    // --------------------------------------------------------
+    // ADD CHARACTER TO KART
+    // --------------------------------------------------------
+
+    kart.add(model);
+
+    console.log(
+        "Character attached to kart:",
+        characterName
+    );
+}
+
+// ============================================================
 // KART
 // ============================================================
 
 const kart = new THREE.Group();
+
+scene.add(kart);
+
+loadCharacterModel(selectedCharacter);
 
 // ------------------------------------------------------------
 // KART BODY
@@ -8119,7 +8365,15 @@ function animate(currentTime) {
     updateHUD();
 }
 
-   // --------------------------------------------------------
+  // --------------------------------------------------------
+// CHARACTER ANIMATIONS
+// --------------------------------------------------------
+
+if (characterMixer) {
+    characterMixer.update(deltaTime);
+}
+
+// --------------------------------------------------------
 // RENDER
 // --------------------------------------------------------
 
