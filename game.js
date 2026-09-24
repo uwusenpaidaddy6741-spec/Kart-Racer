@@ -1417,8 +1417,6 @@ characterButtons.forEach((button) => {
             "Selected character:",
             selectedCharacter
         );
-    });
-});
 
 const savedCharacterButton =
     document.querySelector(
