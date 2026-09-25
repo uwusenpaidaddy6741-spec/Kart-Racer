@@ -7368,29 +7368,50 @@ if (selectedBike !== "none") {
 const TOTAL_LAPS = 3;
 
 // ============================================================
-// TIME TRIAL LEADERBOARD STORAGE
+// SAVE TIME TRIAL TIME
 // ============================================================
 
 async function saveTimeTrialTime(track, time) {
 
     try {
 
+        const playerName =
+            document
+                .getElementById("playerName")
+                ?.value
+                .trim() || "PLAYER";
+
+
         const response =
             await fetch("/api/leaderboard", {
+
                 method: "POST",
+
                 headers: {
                     "Content-Type":
                         "application/json"
                 },
+
                 body: JSON.stringify({
-                    track: track,
-                    name: document.getElementById("playerName").value.trim() || "PLAYER",
-                    time: time
+
+                    track: String(track),
+
+                    name:
+                        playerName,
+
+                    time:
+                        time
                 })
             });
 
+
         const result =
             await response.json();
+
+
+        // ----------------------------------------------------
+        // SERVER ERROR
+        // ----------------------------------------------------
 
         if (!response.ok) {
 
@@ -7399,13 +7420,122 @@ async function saveTimeTrialTime(track, time) {
                 result
             );
 
-            return;
+            return false;
         }
+
+
+        // ----------------------------------------------------
+        // SUCCESS
+        // ----------------------------------------------------
 
         console.log(
             "Global leaderboard time saved:",
             result
         );
+
+
+        // ----------------------------------------------------
+        // UPDATE THE LEADERBOARD IMMEDIATELY
+        // ----------------------------------------------------
+
+        if (
+            Array.isArray(
+                result.leaderboard
+            )
+        ) {
+
+            const trackIds = [
+                "1",
+                "3",
+                "2",
+                "4"
+            ];
+
+
+            const boards =
+                document.querySelectorAll(
+                    ".leaderboardTrack"
+                );
+
+
+            const trackIndex =
+                trackIds.indexOf(
+                    String(track)
+                );
+
+
+            if (
+                trackIndex !== -1 &&
+                boards[trackIndex]
+            ) {
+
+                const board =
+                    boards[trackIndex];
+
+
+                const rows =
+                    board.querySelectorAll(
+                        "p"
+                    );
+
+
+                rows.forEach(
+                    (row, i) => {
+
+                        if (
+                            result.leaderboard[i] !==
+                            undefined
+                        ) {
+
+                            const entry =
+                                result.leaderboard[i];
+
+
+                            row.textContent =
+                                `${i + 1}. ${entry.name} — ${formatLeaderboardTime(entry.time)}`;
+
+                        } else {
+
+                            row.textContent =
+                                `${i + 1}. --:--.--`;
+                        }
+                    }
+                );
+            }
+
+
+            // ------------------------------------------------
+            // UPDATE LOCAL CACHE
+            // ------------------------------------------------
+
+            try {
+
+                localStorage.setItem(
+
+                    `leaderboard_track_${track}`,
+
+                    JSON.stringify({
+
+                        timestamp:
+                            Date.now(),
+
+                        times:
+                            result.leaderboard
+                    })
+                );
+
+            } catch (cacheError) {
+
+                console.warn(
+                    "Could not update leaderboard cache:",
+                    cacheError
+                );
+            }
+        }
+
+
+        return true;
+
 
     } catch (error) {
 
@@ -7413,6 +7543,8 @@ async function saveTimeTrialTime(track, time) {
             "Leaderboard connection error:",
             error
         );
+
+        return false;
     }
 }
 
