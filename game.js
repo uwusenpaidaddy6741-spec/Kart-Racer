@@ -7452,7 +7452,28 @@ if (playerNameInput) {
     );
 }
 
-async function loadTimeTrialLeaderboard() {
+// ============================================================
+// OPTIMIZED TIME TRIAL LEADERBOARD LOADING
+// ============================================================
+
+let leaderboardLoaded = false;
+let leaderboardLoading = false;
+
+const LEADERBOARD_CACHE_TIME = 5 * 60 * 1000; // 5 minutes
+
+async function loadTimeTrialLeaderboard(forceRefresh = false) {
+
+    // Prevent duplicate requests
+    if (leaderboardLoading) {
+        return;
+    }
+
+    // If already loaded this page session, don't request again
+    if (leaderboardLoaded && !forceRefresh) {
+        return;
+    }
+
+    leaderboardLoading = true;
 
     const trackIds = ["1", "3", "2", "4"];
 
@@ -7461,54 +7482,197 @@ async function loadTimeTrialLeaderboard() {
             ".leaderboardTrack"
         );
 
-    boards.forEach(async (board, index) => {
+    try {
 
-        const track =
-            trackIds[index];
+        // ----------------------------------------------------
+        // LOAD EACH TRACK
+        // ----------------------------------------------------
 
-        const rows =
-            board.querySelectorAll("p");
+        for (
+            let index = 0;
+            index < boards.length && index < trackIds.length;
+            index++
+        ) {
 
-        try {
+            const board = boards[index];
 
-            const response =
-                await fetch(
-                    `/api/leaderboard?track=${track}`
-                );
+            const track = trackIds[index];
 
-            const times =
-                await response.json();
+            const rows =
+                board.querySelectorAll("p");
 
-            rows.forEach((row, i) => {
+            const cacheKey =
+                `leaderboard_track_${track}`;
 
-                if (times[i] !== undefined) {
+            let times = null;
 
-                    row.textContent =
-                        `${i + 1}. ${times[i].name} — ${formatLeaderboardTime(times[i].time)}`;
+            // ------------------------------------------------
+            // CHECK BROWSER CACHE
+            // ------------------------------------------------
 
-                } else {
+            if (!forceRefresh) {
 
-                    row.textContent =
-                        `${i + 1}. --:--.--`;
+                try {
+
+                    const cached =
+                        localStorage.getItem(
+                            cacheKey
+                        );
+
+                    if (cached) {
+
+                        const parsed =
+                            JSON.parse(cached);
+
+                        const age =
+                            Date.now() -
+                            parsed.timestamp;
+
+                        if (
+                            age <
+                            LEADERBOARD_CACHE_TIME
+                        ) {
+
+                            times =
+                                parsed.times;
+
+                            console.log(
+                                `Using cached leaderboard for track ${track}`
+                            );
+                        }
+                    }
+
+                } catch (cacheError) {
+
+                    console.warn(
+                        "Leaderboard cache error:",
+                        cacheError
+                    );
                 }
-            });
+            }
 
-        } catch (error) {
+            // ------------------------------------------------
+            // FETCH FROM SERVER IF NOT CACHED
+            // ------------------------------------------------
 
-            console.error(
-                "Failed to load leaderboard:",
-                error
+            if (!times) {
+
+                try {
+
+                    const response =
+                        await fetch(
+                            `/api/leaderboard?track=${track}`,
+                            {
+                                method: "GET",
+                                cache: "no-store"
+                            }
+                        );
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            `Leaderboard HTTP ${response.status}`
+                        );
+                    }
+
+                    const contentType =
+                        response.headers.get(
+                            "content-type"
+                        ) || "";
+
+                    if (
+                        !contentType.includes(
+                            "application/json"
+                        )
+                    ) {
+
+                        const text =
+                            await response.text();
+
+                        throw new Error(
+                            `Leaderboard returned non-JSON response: ${text.slice(0, 200)}`
+                        );
+                    }
+
+                    times =
+                        await response.json();
+
+                    // ----------------------------------------
+                    // SAVE TO BROWSER CACHE
+                    // ----------------------------------------
+
+                    try {
+
+                        localStorage.setItem(
+                            cacheKey,
+                            JSON.stringify({
+                                timestamp:
+                                    Date.now(),
+
+                                times:
+                                    times
+                            })
+                        );
+
+                    } catch (cacheError) {
+
+                        console.warn(
+                            "Could not cache leaderboard:",
+                            cacheError
+                        );
+                    }
+
+                } catch (error) {
+
+                    console.error(
+                        `Failed to load leaderboard for track ${track}:`,
+                        error
+                    );
+
+                    times = [];
+                }
+            }
+
+            // ------------------------------------------------
+            // DISPLAY LEADERBOARD
+            // ------------------------------------------------
+
+            rows.forEach(
+                (row, i) => {
+
+                    if (
+                        times &&
+                        times[i] !== undefined
+                    ) {
+
+                        row.textContent =
+                            `${i + 1}. ${times[i].name} — ${formatLeaderboardTime(times[i].time)}`;
+
+                    } else {
+
+                        row.textContent =
+                            `${i + 1}. --:--.--`;
+                    }
+                }
             );
-
-            rows.forEach((row, i) => {
-
-                row.textContent =
-                    `${i + 1}. --:--.--`;
-            });
         }
-    });
+
+        leaderboardLoaded = true;
+
+    } catch (error) {
+
+        console.error(
+            "Leaderboard loading error:",
+            error
+        );
+
+    } finally {
+
+        leaderboardLoading = false;
+    }
 }
 
+// Load leaderboard once when the game starts
 loadTimeTrialLeaderboard();
 
 function circularDistance(
