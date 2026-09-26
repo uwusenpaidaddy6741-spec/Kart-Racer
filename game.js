@@ -7121,12 +7121,15 @@ if (
         )
         : 1;
 
-player.angle +=
-    direction *
-    player.turnSpeed *
-    steeringStrength *
-    driftMultiplier *
-    deltaTime;
+if (!player.wheelie) {
+
+    player.angle +=
+        direction *
+        player.turnSpeed *
+        steeringStrength *
+        driftMultiplier *
+        deltaTime;
+}
         
     }
 
