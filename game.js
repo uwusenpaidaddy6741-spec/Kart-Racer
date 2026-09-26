@@ -3334,6 +3334,8 @@ function createCharacterModel(
 
 const kart = new THREE.Group();
 
+kart.rotation.order = "YXZ";
+
 scene.add(kart);
 
 loadCharacterModel(selectedCharacter);
@@ -7545,7 +7547,6 @@ if (selectedBike !== "none") {
             ? -0.28
             : 0;
 
-    // Pitch the bike forward/backward instead of leaning sideways
     kart.rotation.x =
         THREE.MathUtils.lerp(
             kart.rotation.x,
