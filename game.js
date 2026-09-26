@@ -6114,10 +6114,10 @@ boostTimer:
         40,
 
     boostMaxSpeed:
-        67,
+        80,
 
     currentBoostCap:
-        55,
+        68,
 
     lap:
         1,
@@ -7164,8 +7164,8 @@ player.angle +=
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 60
-        : 58;
+        ? 69
+        : 68;
 
                 player.speed =
                     Math.min(
@@ -7183,8 +7183,8 @@ player.angle +=
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 66
-        : 64;
+        ? 72
+        : 70;
 
                 player.speed =
                     Math.min(
@@ -7202,8 +7202,8 @@ player.angle +=
         selectedKart === "drifter" ||
         selectedWheels === "drift"
     )
-        ? 72
-        : 70;
+        ? 83
+        : 80;
 
                 player.speed =
                     Math.min(
