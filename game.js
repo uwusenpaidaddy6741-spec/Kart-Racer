@@ -2539,9 +2539,223 @@ function createTrack() {
 createTrack();
 
 // ============================================================
-// CURBS
+// COIN SYSTEM
 // ============================================================
 
+const TOTAL_COINS = 10;
+
+const coins = [];
+
+const coinGeometry =
+    new THREE.TorusGeometry(
+        0.55,
+        0.16,
+        12,
+        24
+    );
+
+const coinMaterial =
+    new THREE.MeshStandardMaterial({
+        color: 0xffd700,
+        metalness: 0.8,
+        roughness: 0.25,
+        emissive: 0x5a4500
+    });
+
+// ------------------------------------------------------------
+// CREATE ONE COIN
+// ------------------------------------------------------------
+
+function createCoin(index) {
+
+    const coin =
+        new THREE.Mesh(
+            coinGeometry,
+            coinMaterial
+        );
+
+    coin.rotation.x =
+        Math.PI / 2;
+
+    coin.castShadow = true;
+
+    coin.receiveShadow = true;
+
+    coin.userData.collected = false;
+
+    coin.userData.index = index;
+
+    // --------------------------------------------------------
+    // PLACE COINS AROUND THE TRACK
+    // --------------------------------------------------------
+
+    const trackPosition =
+        Math.floor(
+            (
+                trackPoints.length /
+                TOTAL_COINS
+            ) * index
+        );
+
+    const point =
+        trackPoints[
+            trackPosition %
+            trackPoints.length
+        ];
+
+    coin.position.set(
+        point.x,
+        1.0,
+        point.z
+    );
+
+    scene.add(coin);
+
+    coins.push(coin);
+}
+
+// ------------------------------------------------------------
+// CREATE ALL COINS
+// ------------------------------------------------------------
+
+for (
+    let i = 0;
+    i < TOTAL_COINS;
+    i++
+) {
+
+    createCoin(i);
+}
+
+// ============================================================
+// COLLECT COINS
+// ============================================================
+
+function updateCoins(deltaTime) {
+
+    for (
+        const coin of coins
+    ) {
+
+        // ----------------------------------------------------
+        // SPIN
+        // ----------------------------------------------------
+
+        if (
+            !coin.userData.collected
+        ) {
+
+            coin.rotation.y +=
+                4 *
+                deltaTime;
+
+            // Small floating animation
+            coin.position.y =
+                1.0 +
+                Math.sin(
+                    performance.now() * 0.004 +
+                    coin.userData.index
+                ) *
+                0.12;
+        }
+
+        // ----------------------------------------------------
+        // COLLECTION
+        // ----------------------------------------------------
+
+        if (
+            coin.userData.collected
+        ) {
+
+            continue;
+        }
+
+        const distance =
+            Math.hypot(
+                player.x -
+                    coin.position.x,
+
+                player.z -
+                    coin.position.z
+            );
+
+        if (
+            distance < 2.0 &&
+            player.coins <
+                player.maxCoins
+        ) {
+
+            player.coins++;
+
+            coin.userData.collected =
+                true;
+
+            coin.visible =
+                false;
+
+            console.log(
+                `Coin collected! ${player.coins}/${player.maxCoins}`
+            );
+
+            // ------------------------------------------------
+            // COIN SPEED BONUS
+            // ------------------------------------------------
+
+            applyCoinSpeedBonus();
+        }
+    }
+}
+
+// ============================================================
+// COIN SPEED BONUS
+// ============================================================
+
+function applyCoinSpeedBonus() {
+
+    // Every coin gives +0.5 maximum speed.
+    // 10 coins = +5 maximum speed.
+
+    const baseSpeed =
+        player.baseMaxSpeed;
+
+    if (
+        typeof baseSpeed !==
+        "number"
+    ) {
+
+        return;
+    }
+
+    player.maxSpeed =
+        baseSpeed +
+        player.coins * 0.5;
+}
+
+// ============================================================
+// RESET COINS
+// ============================================================
+
+function resetCoins() {
+
+    player.coins = 0;
+
+    for (
+        const coin of coins
+    ) {
+
+        coin.userData.collected =
+            false;
+
+        coin.visible =
+            true;
+    }
+
+    applyCoinSpeedBonus();
+}
+
+// ============================================================
+// CURBS
+// ============================================================
 function createCurbs() {
 
     const redMaterial = new THREE.MeshStandardMaterial({
@@ -5840,6 +6054,11 @@ const player = {
     trackIndex:
         0,
 
+    coins:
+        0,
+
+    maxCoins:
+        10,
     x:
         startPoint.x,
 
@@ -5924,6 +6143,9 @@ boostTimer:
 
 function applyKartStats() {
 
+        player.baseMaxSpeed =
+        player.maxSpeed;
+
     // ========================================================
     // GET SELECTED WHEELS
     // ========================================================
@@ -6004,11 +6226,15 @@ function applyKartStats() {
         // DRIFT BONUS
         // ----------------------------------------------------
 
-        player.driftBoostBonus =
+                player.driftBoostBonus =
             player.driftChargeRate >= 2.00
                 ? 2
                 : 0;
 
+        player.baseMaxSpeed =
+            player.maxSpeed;
+
+        applyCoinSpeedBonus();
 
         return;
     }
@@ -6068,10 +6294,15 @@ function applyKartStats() {
     // DRIFT BONUS
     // --------------------------------------------------------
 
-    player.driftBoostBonus =
+        player.driftBoostBonus =
         player.driftChargeRate >= 2.00
             ? 2
             : 0;
+
+    player.baseMaxSpeed =
+        player.maxSpeed;
+
+    applyCoinSpeedBonus();
 }
 
 applyKartStats();
@@ -8282,6 +8513,11 @@ ${AI_COUNT + 1}
 
         <br>
 
+Coins:
+${player.coins}/${player.maxCoins}
+
+        <br>
+
         Speed:
         ${Math.round(
             Math.abs(player.speed)
@@ -8635,14 +8871,18 @@ function animate(currentTime) {
 ) {
 
     updatePlayer(
-        deltaTime
-    );
+    deltaTime
+);
 
-    updateAI(
-        deltaTime
-    );
+updateCoins(
+    deltaTime
+);
 
-    updateKartCollisions();
+updateAI(
+    deltaTime
+);
+
+updateKartCollisions();
 
     // --------------------------------------------------------
     // CAMERA
