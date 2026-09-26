@@ -7544,7 +7544,7 @@ if (selectedBike !== "none") {
 
     const targetWheelieAngle =
         player.wheelie
-            ? -0.28
+            ? 0.28
             : 0;
 
     kart.rotation.x =
