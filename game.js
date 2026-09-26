@@ -7534,7 +7534,7 @@ kart.rotation.y =
     visualAngle -
     Math.PI / 2;
 
-    // --------------------------------------------------------
+// --------------------------------------------------------
 // BIKE WHEELIE VISUAL
 // --------------------------------------------------------
 
@@ -7545,18 +7545,19 @@ if (selectedBike !== "none") {
             ? -0.28
             : 0;
 
-    kart.rotation.z =
+    // Pitch the bike forward/backward instead of leaning sideways
+    kart.rotation.x =
         THREE.MathUtils.lerp(
-            kart.rotation.z,
+            kart.rotation.x,
             targetWheelieAngle,
             1 - Math.exp(-12 * deltaTime)
         );
 
 } else {
 
-    kart.rotation.z =
+    kart.rotation.x =
         THREE.MathUtils.lerp(
-            kart.rotation.z,
+            kart.rotation.x,
             0,
             1 - Math.exp(-12 * deltaTime)
         );
