@@ -1212,9 +1212,21 @@ let mobileLeft = false;
 let mobileRight = false;
 
 function forward() {
+
+    const gamepad =
+        connectedGamepad
+            ? navigator.getGamepads()[connectedGamepad.index]
+            : null;
+
+    const rtPressed =
+        gamepad &&
+        gamepad.buttons[7] &&
+        gamepad.buttons[7].value > 0.15;
+
     return keys["KeyW"] ||
            keys["ArrowUp"] ||
-           mobileForward;
+           mobileForward ||
+           rtPressed;
 }
 
 function backward() {
