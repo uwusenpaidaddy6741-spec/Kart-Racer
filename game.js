@@ -1230,9 +1230,21 @@ function forward() {
 }
 
 function backward() {
+
+    const gamepad =
+        connectedGamepad
+            ? navigator.getGamepads()[connectedGamepad.index]
+            : null;
+
+    const ltPressed =
+        gamepad &&
+        gamepad.buttons[6] &&
+        gamepad.buttons[6].value > 0.15;
+
     return keys["KeyS"] ||
            keys["ArrowDown"] ||
-           mobileBackward;
+           mobileBackward ||
+           ltPressed;
 }
 
 function left() {
