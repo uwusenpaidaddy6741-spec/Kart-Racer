@@ -7154,10 +7154,16 @@ if (
         right()
     ) {
 
-        const direction =
+        const controllerSteering = getGamepadSteering();
+
+const direction =
+    controllerSteering !== 0
+        ? -controllerSteering
+        : (
             right()
                 ? -1
-                : 1;
+                : 1
+        );
 
         const speedRatio =
             Math.min(
