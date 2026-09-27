@@ -1126,6 +1126,34 @@ window.addEventListener("gamepaddisconnected", (event) => {
     );
 });
 
+// ============================================================
+// CONTROLLER STEERING
+// ============================================================
+
+const GAMEPAD_DEADZONE = 0.15;
+
+function getGamepadSteering() {
+
+    if (!connectedGamepad) {
+        return 0;
+    }
+
+    const gamepad = navigator.getGamepads()[connectedGamepad.index];
+
+    if (!gamepad) {
+        return 0;
+    }
+
+    let stickX = gamepad.axes[0] || 0;
+
+    // Ignore tiny accidental stick movement
+    if (Math.abs(stickX) < GAMEPAD_DEADZONE) {
+        return 0;
+    }
+
+    return stickX;
+}
+
 let mobileDriftToggle = false;
 
 const mobileDriftButton =
