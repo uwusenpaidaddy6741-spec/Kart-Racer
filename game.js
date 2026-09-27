@@ -1096,6 +1096,36 @@ const trackPoints =
 // PLAYER / CONTROL HELPERS
 const keys = {};
 
+// ============================================================
+// CONTROLLER DETECTION
+// ============================================================
+
+let connectedGamepad = null;
+
+window.addEventListener("gamepadconnected", (event) => {
+
+    connectedGamepad = event.gamepad;
+
+    console.log(
+        "🎮 Controller connected:",
+        connectedGamepad.id
+    );
+});
+
+window.addEventListener("gamepaddisconnected", (event) => {
+
+    if (
+        connectedGamepad &&
+        connectedGamepad.index === event.gamepad.index
+    ) {
+        connectedGamepad = null;
+    }
+
+    console.log(
+        "🎮 Controller disconnected"
+    );
+});
+
 let mobileDriftToggle = false;
 
 const mobileDriftButton =
