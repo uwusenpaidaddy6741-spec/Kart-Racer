@@ -7150,9 +7150,10 @@ if (
     // --------------------------------------------------------
 
     if (
-        left() ||
-        right()
-    ) {
+    left() ||
+    right() ||
+    getGamepadSteering() !== 0
+) {
 
         const controllerSteering = getGamepadSteering();
 
