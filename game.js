@@ -1260,18 +1260,23 @@ function right() {
 }
 
 function space() {
-
+    // Get the currently connected controller
     const gamepad =
         connectedGamepad
             ? navigator.getGamepads()[connectedGamepad.index]
             : null;
 
+    // A button / Cross button
     const aPressed =
         gamepad &&
         gamepad.buttons[0] &&
-        gamepad.buttons[0].pressed;
+        gamepad.buttons[0].pressed === true;
 
-    return keys["Space"] || aPressed;
+    // Keyboard Space or controller A/Cross
+    return (
+        keys["Space"] === true ||
+        aPressed === true
+    );
 }
 
 function wheelie() {
