@@ -1259,20 +1259,21 @@ function right() {
            mobileRight;
 }
 
-function space() {
+}function space() {
 
     const gamepad =
         connectedGamepad
             ? navigator.getGamepads()[connectedGamepad.index]
             : null;
 
-    const aPressed =
-        gamepad &&
-        gamepad.buttons[0] &&
-        gamepad.buttons[0].pressed;
-
-    return keys["Space"] ||
-           aPressed;
+    return (
+        keys["Space"] ||
+        (
+            gamepad &&
+            gamepad.buttons[0] &&
+            gamepad.buttons[0].pressed
+        )
+    );
 }
 
 function wheelie() {
