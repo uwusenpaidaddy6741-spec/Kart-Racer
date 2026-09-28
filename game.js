@@ -7034,6 +7034,25 @@ function updatePlayer(deltaTime) {
         return;
     }
 
+    if (
+        !Number.isFinite(player.x) ||
+        !Number.isFinite(player.z) ||
+        !Number.isFinite(player.speed) ||
+        !Number.isFinite(player.angle)
+    ) {
+        console.error("DRIFT PHYSICS ERROR:", {
+            x: player.x,
+            z: player.z,
+            speed: player.speed,
+            angle: player.angle,
+            drifting: player.drifting
+        });
+
+        player.speed = 0;
+        player.drifting = false;
+        return;
+    }
+
     const previousFinishPoint =
         trackPoints[0];
 
