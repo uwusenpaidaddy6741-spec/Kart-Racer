@@ -7383,10 +7383,17 @@ if (player.drifting) {
     // RIGHT = -1
     // LEFT  = +1
     //
-    const turnDirection =
-        right()
-            ? -1
-            : 1;
+    const controllerSteering =
+    getGamepadSteering();
+
+const turnDirection =
+    controllerSteering !== 0
+        ? -controllerSteering
+        : (
+            right()
+                ? -1
+                : 1
+        );
 
 
     // ----------------------------------------------------
