@@ -7449,11 +7449,11 @@ const driftAngle =
         turnDirection *
         driftAngle;
 
-    // Keep the bike visually leaning into the turn
-    // instead of looking like it is sliding sideways.
-    player.mesh.rotation.y =
-        player.angle;
-
+    // Keep the bike visually facing into the turn.
+kart.rotation.y =
+    player.angle -
+    Math.PI / 2;
+        
 } else {
         
         // ================================================
