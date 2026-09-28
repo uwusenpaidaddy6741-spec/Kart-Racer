@@ -655,7 +655,7 @@ function snowTrackPoints() {
 
 // ============================================================
 // TRACK 5 - GRAND CIRCUIT
-// LONG TECHNICAL CLOSED CIRCUIT
+// CLEAN CLOSED CIRCUIT
 // ============================================================
 
 function grandCircuitPoints() {
@@ -676,8 +676,7 @@ function grandCircuitPoints() {
 
         for (let i = 0; i <= steps; i++) {
 
-            const t =
-                i / steps;
+            const t = i / steps;
 
             points.push({
 
@@ -700,7 +699,7 @@ function grandCircuitPoints() {
 
 
     // --------------------------------------------------------
-    // ARC
+    // CURVE
     // --------------------------------------------------------
 
     const addArc = (
@@ -712,21 +711,14 @@ function grandCircuitPoints() {
         steps
     ) => {
 
-        for (
-            let i = 1;
-            i <= steps;
-            i++
-        ) {
+        for (let i = 1; i <= steps; i++) {
 
             const t =
                 i / steps;
 
             const angle =
                 startAngle +
-                (
-                    endAngle -
-                    startAngle
-                ) * t;
+                (endAngle - startAngle) * t;
 
             points.push({
 
@@ -752,62 +744,72 @@ function grandCircuitPoints() {
         -300,
         -180,
 
-        -80,
+        40,
         -180,
 
-        30
+        42
     );
 
 
     // ========================================================
-    // TOP CHICANE
+    // TOP RIGHT U-TURN
+    // ========================================================
+
+    addArc(
+        40,
+        -130,
+
+        50,
+
+        -Math.PI / 2,
+        Math.PI / 2,
+
+        24
+    );
+
+
+    // ========================================================
+    // UPPER INNER STRAIGHT
     // ========================================================
 
     addLine(
+        40,
         -80,
-        -180,
 
-        -30,
-        -145,
+        -40,
+        -80,
 
-        8
+        16
     );
 
-    addLine(
-        -30,
-        -145,
 
-        30,
-        -180,
-
-        8
-    );
+    // ========================================================
+    // LEFT INNER DESCENT
+    // ========================================================
 
     addLine(
-        30,
-        -180,
+        -40,
+        -80,
 
-        180,
-        -180,
+        -40,
+        20,
 
         20
     );
 
 
     // ========================================================
-    // TOP-RIGHT U-TURN
+    // LONG MIDDLE STRAIGHT
     // ========================================================
 
-    addArc(
-        180,
-        -80,
+    addLine(
+        -40,
+        20,
 
-        100,
+        220,
+        20,
 
-        -Math.PI / 2,
-        Math.PI / 2,
-
-        30
+        40
     );
 
 
@@ -816,25 +818,25 @@ function grandCircuitPoints() {
     // ========================================================
 
     addLine(
-        180,
+        220,
         20,
 
-        180,
-        150,
+        220,
+        130,
 
-        24
+        22
     );
 
 
     // ========================================================
-    // RIGHT HAIRPIN
+    // LOWER RIGHT HAIRPIN
     // ========================================================
 
     addArc(
-        80,
-        150,
+        160,
+        130,
 
-        100,
+        60,
 
         0,
         Math.PI,
@@ -844,84 +846,79 @@ function grandCircuitPoints() {
 
 
     // ========================================================
-    // LOWER MIDDLE STRAIGHT
+    // LOWER INNER STRAIGHT
     // ========================================================
 
     addLine(
-        -20,
-        150,
+        100,
+        130,
 
-        -20,
-        250,
+        100,
+        230,
 
         20
     );
 
 
     // ========================================================
-    // LOWER CHICANE
+    // LOWER MIDDLE STRAIGHT
     // ========================================================
 
     addLine(
-        -20,
-        250,
+        100,
+        230,
 
         -80,
-        215,
+        230,
 
-        10
+        30
     );
+
+
+    // ========================================================
+    // LOWER DROP
+    // ========================================================
 
     addLine(
         -80,
-        215,
+        230,
 
-        -140,
-        250,
-
-        10
-    );
-
-    addLine(
-        -140,
-        250,
-
-        -250,
-        250,
-
-        18
-    );
-
-
-    // ========================================================
-    // BOTTOM-RIGHT TO BOTTOM-LEFT SWEEP
-    // ========================================================
-
-    addLine(
-        -250,
-        250,
-
-        -320,
-        250,
+        -80,
+        290,
 
         12
     );
 
 
     // ========================================================
-    // BOTTOM-LEFT U-TURN
+    // BOTTOM STRAIGHT
+    // ========================================================
+
+    addLine(
+        -80,
+        290,
+
+        -300,
+        290,
+
+        34
+    );
+
+
+    // ========================================================
+    // BOTTOM LEFT CORNER
     // ========================================================
 
     addArc(
-        -320,
-        150,
+        -300,
+        230,
 
-        100,
+        60,
 
         Math.PI / 2,
-        Math.PI * 1.5,
+        Math.PI,
 
-        30
+        24
     );
 
 
@@ -930,120 +927,64 @@ function grandCircuitPoints() {
     // ========================================================
 
     addLine(
-        -420,
-        150,
+        -360,
+        230,
 
-        -420,
-        -80,
+        -360,
+        -120,
 
-        30
+        50
     );
 
 
     // ========================================================
-    // LEFT HAIRPIN
+    // TOP LEFT CORNER
     // ========================================================
 
     addArc(
-        -320,
-        -80,
+        -300,
+        -120,
 
-        100,
+        60,
 
         Math.PI,
         Math.PI * 1.5,
 
-        30
+        24
     );
 
 
     // ========================================================
-    // FINAL STRAIGHT BACK TO START
+    // CLEAN LOOP CLOSURE
     // ========================================================
 
-    addLine(
-        -320,
-        -180,
+    const firstPoint = points[0];
 
-        -300,
-        -180,
+    const lastPoint =
+        points[points.length - 1];
 
-        5
-    );
-
-
-    // ========================================================
-    // REMOVE DUPLICATE CONSECUTIVE POINTS
-    // ========================================================
-
-    const cleanPoints = [];
-
-    for (
-        let i = 0;
-        i < points.length;
-        i++
-    ) {
-
-        const current =
-            points[i];
-
-        const previous =
-            cleanPoints[
-                cleanPoints.length - 1
-            ];
-
-        if (
-            !previous ||
-            Math.hypot(
-                current.x -
-                    previous.x,
-
-                current.z -
-                    previous.z
-            ) > 0.01
-        ) {
-
-            cleanPoints.push(
-                current
-            );
-        }
-    }
-
-
-    // ========================================================
-    // FORCE THE LOOP TO CLOSE
-    // ========================================================
-
-    const first =
-        cleanPoints[0];
-
-    const last =
-        cleanPoints[
-            cleanPoints.length - 1
-        ];
-
-    if (
+    const distanceToStart =
         Math.hypot(
-            last.x -
-                first.x,
+            lastPoint.x - firstPoint.x,
+            lastPoint.z - firstPoint.z
+        );
 
-            last.z -
-                first.z
-        ) > 0.01
-    ) {
+    // Only add the starting point if the
+    // curve did not already end there.
 
-        cleanPoints.push({
+    if (distanceToStart > 0.01) {
 
-            x:
-                first.x,
+        points.push({
 
-            z:
-                first.z
+            x: firstPoint.x,
+
+            z: firstPoint.z
+
         });
     }
 
 
-    return cleanPoints;
+    return points;
 }
 
 // ============================================================
