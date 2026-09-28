@@ -7419,16 +7419,21 @@ const driftAngle =
 
     if (isBike) {
 
-        // ================================================
-        // BIKE - INWARD DRIFT
-        // ================================================
+    // ================================================
+    // BIKE - INWARD DRIFT
+    // ================================================
 
-        moveAngle +=
-            turnDirection *
-            driftAngle;
+    moveAngle +=
+        turnDirection *
+        driftAngle;
 
-    } else {
+    // Keep the bike visually leaning into the turn
+    // instead of looking like it is sliding sideways.
+    player.mesh.rotation.y =
+        player.angle;
 
+} else {
+        
         // ================================================
         // KART - OUTWARD DRIFT
         // ================================================
