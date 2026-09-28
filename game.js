@@ -7388,13 +7388,16 @@ if (player.drifting) {
 
 const turnDirection =
     controllerSteering !== 0
-        ? -controllerSteering
+        ? (
+            controllerSteering > 0
+                ? -1
+                : 1
+        )
         : (
             right()
                 ? -1
                 : 1
         );
-
 
     // ----------------------------------------------------
     // MARIO KART STYLE DRIFTING
