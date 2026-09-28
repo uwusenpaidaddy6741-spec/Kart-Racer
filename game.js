@@ -7157,16 +7157,23 @@ if (player.speed < wheelieCap) {
     }
 
     // --------------------------------------------------------
-    // DRIFT
-    // --------------------------------------------------------
+// DRIFT
+// --------------------------------------------------------
 
-    const wantsDrift =
+const controllerSteering =
+    getGamepadSteering();
+
+const wantsDrift =
     (space() || mobileDriftToggle) &&
     Math.abs(player.speed) > 5 &&
-    (left() || right());
+    (
+        left() ||
+        right() ||
+        controllerSteering !== 0
+    );
 
-    player.drifting =
-        wantsDrift;
+player.drifting =
+    wantsDrift;
 
     // --------------------------------------------------------
 // BIKE WHEELIE
