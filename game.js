@@ -1259,7 +1259,7 @@ function right() {
            mobileRight;
 }
 
-}function space() {
+function space() {
 
     const gamepad =
         connectedGamepad
