@@ -1266,14 +1266,12 @@ function space() {
             ? navigator.getGamepads()[connectedGamepad.index]
             : null;
 
-    return (
-        keys["Space"] ||
-        (
-            gamepad &&
-            gamepad.buttons[0] &&
-            gamepad.buttons[0].pressed
-        )
-    );
+    const aPressed =
+        gamepad &&
+        gamepad.buttons[0] &&
+        gamepad.buttons[0].pressed;
+
+    return keys["Space"] || aPressed;
 }
 
 function wheelie() {
