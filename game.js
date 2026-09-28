@@ -1260,7 +1260,19 @@ function right() {
 }
 
 function space() {
-    return keys["Space"];
+
+    const gamepad =
+        connectedGamepad
+            ? navigator.getGamepads()[connectedGamepad.index]
+            : null;
+
+    const aPressed =
+        gamepad &&
+        gamepad.buttons[0] &&
+        gamepad.buttons[0].pressed;
+
+    return keys["Space"] ||
+           aPressed;
 }
 
 function wheelie() {
