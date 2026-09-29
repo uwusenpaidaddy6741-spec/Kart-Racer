@@ -5197,8 +5197,13 @@ if (selectedBike === "apexRider") {
     kart.add(rightStripe);
 
 
-} else if (selectedKart === "rocket") {
+} else if (selectedBike === "champion") {
 
+    // Champion Bike uses its GLB model.
+    // Do not create a procedural vehicle body.
+
+} else if (selectedKart === "rocket") {
+    
     // --------------------------------------------------------
     // ROCKET KART
     // --------------------------------------------------------
