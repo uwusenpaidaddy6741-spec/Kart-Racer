@@ -1562,7 +1562,16 @@ const bikeStats = {
         braking: 27,
         turnSpeed: 2.6,
         driftChargeRate: 1.5
-    }
+    },
+
+    rocket: {
+    name: "Rocket Bike",
+    maxSpeed: 53,
+    acceleration: 15,
+    braking: 18,
+    turnSpeed: 1.9,
+    driftChargeRate: 0.9
+}
 
 };
 
