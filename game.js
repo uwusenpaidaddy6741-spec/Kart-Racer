@@ -1206,7 +1206,11 @@ const trackPoints =
                 ? oasisPoints()
                 : selectedTrack === "4"
                     ? snowTrackPoints()
-                    : grandCircuitPoints();
+                    : selectedTrack === "5"
+                        ? grandCircuitPoints()
+                        : selectedTrack === "6"
+                            ? sunsetSpeedwayPoints()
+                            : roundedRectanglePoints();
 
 // ============================================================
 // PLAYER / CONTROL HELPERS
