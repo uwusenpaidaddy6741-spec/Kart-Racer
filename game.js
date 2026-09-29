@@ -1867,6 +1867,23 @@ bikeButtons.forEach((button) => {
         "click",
         () => {
 
+            // ====================================================
+            // CHAMPION BIKE LOCK
+            // ====================================================
+
+            if (
+                button.dataset.bike === "champion" &&
+                !isChampionBikeUnlocked()
+            ) {
+
+                alert(
+                    "🏆 Champion Bike is LOCKED!\n\n" +
+                    "Finish in the Top 5 on a Time Trial leaderboard to unlock it."
+                );
+
+                return;
+            }
+
             selectedBike =
                 button.dataset.bike;
 
