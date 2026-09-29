@@ -4459,61 +4459,127 @@ function loadCharacterModel(characterName) {
 }
 
 // ============================================================
-// CHAMPION BIKE 3D MODEL
+// GLB VEHICLE MODELS
 // ============================================================
 
-const championBikeLoader = new GLTFLoader();
+const vehicleLoader = new GLTFLoader();
 
-const championBikeModelPath =
-    "models/bikes/champion_bike.glb";
+let vehicleGLBModel = null;
 
-let championBikeModel = null;
+// ------------------------------------------------------------
+// SELECT GLB MODEL PATH
+// ------------------------------------------------------------
+
+function getSelectedVehicleGLBPath() {
+
+    // -------------------------
+    // BIKES
+    // -------------------------
+
+    if (selectedBike === "apexRider") {
+        return "models/bikes/apex_rider.glb";
+    }
+
+    if (selectedBike === "bobsBike") {
+        return "models/bikes/bobs_bike.glb";
+    }
+
+    if (selectedBike === "rocket") {
+        return "models/bikes/rocket_bike.glb";
+    }
+
+    if (selectedBike === "champion") {
+        return "models/bikes/champion_bike.glb";
+    }
+
+    // -------------------------
+    // KARTS
+    // -------------------------
+
+    if (selectedKart === "rocket") {
+        return "models/karts/rocket.glb";
+    }
+
+    if (selectedKart === "speedster") {
+        return "models/karts/speedster.glb";
+    }
+
+    if (selectedKart === "balanced") {
+        return "models/karts/balanced.glb";
+    }
+
+    if (selectedKart === "drifter") {
+        return "models/karts/drifter.glb";
+    }
+
+    if (selectedKart === "heavy") {
+        return "models/karts/heavy.glb";
+    }
+
+    if (selectedKart === "blaze") {
+        return "models/karts/blaze.glb";
+    }
+
+    if (selectedKart === "accelerator") {
+        return "models/karts/accelerator.glb";
+    }
+
+    if (selectedKart === "comet") {
+        return "models/karts/comet.glb";
+    }
+
+    if (selectedKart === "turbo") {
+        return "models/karts/turbo.glb";
+    }
+
+    if (selectedKart === "overdrive") {
+        return "models/karts/overdrive.glb";
+    }
+
+    return null;
+}
+
 
 // ============================================================
-// KART
+// LOAD SELECTED GLB VEHICLE
 // ============================================================
 
-const kart = new THREE.Group();
+const selectedVehicleGLBPath =
+    getSelectedVehicleGLBPath();
 
-kart.rotation.order = "YXZ";
+const useGLBVehicle =
+    selectedVehicleGLBPath !== null;
 
-scene.add(kart);
+if (useGLBVehicle) {
 
-loadCharacterModel(selectedCharacter);
+    vehicleLoader.load(
 
-// ============================================================
-// LOAD CHAMPION BIKE MODEL
-// ============================================================
-
-if (selectedBike === "champion") {
-
-    championBikeLoader.load(
-        championBikeModelPath,
+        selectedVehicleGLBPath,
 
         (gltf) => {
 
-            championBikeModel =
+            vehicleGLBModel =
                 gltf.scene;
 
-            championBikeModel.scale.set(
+            vehicleGLBModel.scale.set(
                 1,
                 1,
                 1
             );
 
-            championBikeModel.position.set(
+            vehicleGLBModel.position.set(
                 0,
                 0,
                 0
             );
 
-            championBikeModel.rotation.set(
+            vehicleGLBModel.rotation.set(
                 0,
                 0,
                 0
             );
 
-            championBikeModel.traverse(
+            vehicleGLBModel.traverse(
                 (object) => {
 
                     if (object.isMesh) {
@@ -4527,11 +4593,12 @@ if (selectedBike === "champion") {
             );
 
             kart.add(
-                championBikeModel
+                vehicleGLBModel
             );
 
             console.log(
-                "🏆 Champion Bike GLB loaded!"
+                "🏁 GLB vehicle loaded:",
+                selectedVehicleGLBPath
             );
 
         },
@@ -4541,14 +4608,28 @@ if (selectedBike === "champion") {
         (error) => {
 
             console.error(
-                "❌ Failed to load Champion Bike GLB:",
+                "❌ Failed to load GLB vehicle:",
+                selectedVehicleGLBPath,
                 error
             );
 
         }
+
     );
 
 }
+
+// ============================================================
+// KART
+// ============================================================
+
+const kart = new THREE.Group();
+
+kart.rotation.order = "YXZ";
+
+scene.add(kart);
+
+loadCharacterModel(selectedCharacter);
 
 // ------------------------------------------------------------
 // KART BODY
@@ -4558,8 +4639,10 @@ let kartBody;
 let hood;
 let seat;
 
-if (selectedBike === "apexRider") {
+if (!useGLBVehicle) {
 
+    if (!useGLBVehicle && selectedBike === "apexRider") {
+        
     // ========================================================
     // APEX RIDER
     // ========================================================
@@ -4805,7 +4888,7 @@ if (selectedBike === "apexRider") {
     kart.add(sideAccent);
 
 
-} else if (selectedBike === "bobsBike") {
+} else if (!useGLBVehicle && selectedBike === "bobsBike") {
 
     // ========================================================
     // BOB'S BIKE
@@ -5030,7 +5113,7 @@ if (selectedBike === "apexRider") {
 
     kart.add(sideAccent);
 
-    } else if (selectedBike === "rocket") {
+   } else if (!useGLBVehicle && selectedBike === "rocket") {
 
     // ========================================================
     // ROCKET BIKE
@@ -5202,7 +5285,7 @@ if (selectedBike === "apexRider") {
     // Champion Bike uses its GLB model.
     // Do not create a procedural vehicle body.
 
-} else if (selectedKart === "rocket") {
+} else if (!useGLBVehicle && selectedKart === "rocket") {
     
     // --------------------------------------------------------
     // ROCKET KART
@@ -6834,7 +6917,9 @@ if (selectedBike === "apexRider") {
 
     seat.castShadow = true;
 
-    kart.add(seat);
+            kart.add(seat);
+    }
+
 }
 
 // ------------------------------------------------------------
@@ -6846,6 +6931,10 @@ const wheels = [];
 function createWheel(x, z) {
 
     const wheelGroup = new THREE.Group();
+
+    if (useGLBVehicle) {
+        wheelGroup.visible = false;
+    }
 
     // --------------------------------------------------------
     // TIRE
