@@ -3853,6 +3853,172 @@ if (selectedBike === "apexRider") {
 
     kart.add(sideAccent);
 
+    } else if (selectedBike === "rocket") {
+
+    // ========================================================
+    // ROCKET BIKE
+    // ========================================================
+
+    const frameMaterial = new THREE.MeshStandardMaterial({
+        color: 0x263238,
+        roughness: 0.35,
+        metalness: 0.75
+    });
+
+    const accentMaterial = new THREE.MeshStandardMaterial({
+        color: 0xff3d00,
+        roughness: 0.3,
+        metalness: 0.55,
+        emissive: 0x330800
+    });
+
+    const darkMaterial = new THREE.MeshStandardMaterial({
+        color: 0x111111,
+        roughness: 0.7,
+        metalness: 0.25
+    });
+
+    const engineMaterial = new THREE.MeshStandardMaterial({
+        color: 0x607d8b,
+        roughness: 0.25,
+        metalness: 0.9
+    });
+
+    // Main aerodynamic frame
+    const rocketFrame = new THREE.Mesh(
+        new THREE.BoxGeometry(0.46, 0.42, 3.1),
+        frameMaterial
+    );
+    rocketFrame.position.set(0, 1.0, 0);
+    rocketFrame.rotation.x = -0.04;
+    rocketFrame.castShadow = true;
+    kart.add(rocketFrame);
+
+    // Front nose
+    const nose = new THREE.Mesh(
+        new THREE.ConeGeometry(0.42, 1.25, 16),
+        frameMaterial
+    );
+    nose.rotation.x = -Math.PI / 2;
+    nose.position.set(0, 1.0, -2.0);
+    nose.castShadow = true;
+    kart.add(nose);
+
+    // Upper body
+    const upperBody = new THREE.Mesh(
+        new THREE.SphereGeometry(0.72, 16, 10),
+        frameMaterial
+    );
+    upperBody.scale.set(0.72, 0.48, 1.05);
+    upperBody.position.set(0, 1.25, -0.35);
+    upperBody.castShadow = true;
+    kart.add(upperBody);
+
+    // Low seat
+    seat = new THREE.Mesh(
+        new THREE.BoxGeometry(0.82, 0.22, 0.95),
+        darkMaterial
+    );
+    seat.position.set(0, 1.34, 0.72);
+    seat.castShadow = true;
+    kart.add(seat);
+
+    // Rear engine housing
+    const engineHousing = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.55, 0.65, 0.9, 16),
+        engineMaterial
+    );
+    engineHousing.rotation.x = Math.PI / 2;
+    engineHousing.position.set(0, 1.0, 1.45);
+    engineHousing.castShadow = true;
+    kart.add(engineHousing);
+
+    // Rocket exhaust
+    const exhaust = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.34, 0.48, 0.85, 16),
+        engineMaterial
+    );
+    exhaust.rotation.x = Math.PI / 2;
+    exhaust.position.set(0, 1.0, 2.15);
+    exhaust.castShadow = true;
+    kart.add(exhaust);
+
+    // Exhaust flame
+    const flame = new THREE.Mesh(
+        new THREE.ConeGeometry(0.28, 0.85, 12),
+        new THREE.MeshStandardMaterial({
+            color: 0xff9800,
+            emissive: 0xff3d00,
+            emissiveIntensity: 2.0,
+            roughness: 0.3
+        })
+    );
+    flame.rotation.x = Math.PI / 2;
+    flame.position.set(0, 1.0, 2.75);
+    kart.add(flame);
+
+    // Left side fin
+    const leftFin = new THREE.Mesh(
+        new THREE.BoxGeometry(0.16, 0.8, 1.25),
+        accentMaterial
+    );
+    leftFin.position.set(-0.58, 1.0, 0.75);
+    leftFin.rotation.z = -0.18;
+    leftFin.castShadow = true;
+    kart.add(leftFin);
+
+    // Right side fin
+    const rightFin = leftFin.clone();
+    rightFin.position.x = 0.58;
+    rightFin.rotation.z = 0.18;
+    kart.add(rightFin);
+
+    // Front fork
+    const frontFork = new THREE.Mesh(
+        new THREE.BoxGeometry(0.14, 1.45, 0.16),
+        engineMaterial
+    );
+    frontFork.position.set(0, 1.02, -1.25);
+    frontFork.rotation.x = -0.2;
+    frontFork.castShadow = true;
+    kart.add(frontFork);
+
+    // Handlebars
+    const handlebars = new THREE.Mesh(
+        new THREE.BoxGeometry(0.95, 0.13, 0.13),
+        darkMaterial
+    );
+    handlebars.position.set(0, 1.68, -1.48);
+    handlebars.castShadow = true;
+    kart.add(handlebars);
+
+    // Headlight
+    const headlight = new THREE.Mesh(
+        new THREE.SphereGeometry(0.22, 12, 8),
+        new THREE.MeshStandardMaterial({
+            color: 0xffffff,
+            emissive: 0x00bfff,
+            emissiveIntensity: 1.5,
+            roughness: 0.15
+        })
+    );
+    headlight.position.set(0, 1.35, -1.9);
+    kart.add(headlight);
+
+    // Left rocket stripe
+    const leftStripe = new THREE.Mesh(
+        new THREE.BoxGeometry(0.12, 0.12, 1.7),
+        accentMaterial
+    );
+    leftStripe.position.set(-0.42, 1.22, -0.25);
+    leftStripe.rotation.x = -0.05;
+    kart.add(leftStripe);
+
+    // Right rocket stripe
+    const rightStripe = leftStripe.clone();
+    rightStripe.position.x = 0.42;
+    kart.add(rightStripe);
+
 
 } else if (selectedKart === "rocket") {
 
