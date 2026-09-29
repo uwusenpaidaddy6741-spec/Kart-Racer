@@ -1919,6 +1919,7 @@ bikeButtons.forEach((button) => {
 
             applyKartStats();
         }
+
     );
 });
 
@@ -8950,11 +8951,48 @@ const TOTAL_LAPS = 3;
 // CHAMPION BIKE UNLOCK
 // ============================================================
 
-// Once unlocked, this stays unlocked even if the player
-// later falls off the leaderboard.
+const CHAMPION_BIKE_UNLOCK_KEY =
+    "championBikeUnlocked";
 
-let championBikeUnlocked =
-    localStorage.getItem("championBikeUnlocked") === "true";
+function isChampionBikeUnlocked() {
+
+    return localStorage.getItem(
+        CHAMPION_BIKE_UNLOCK_KEY
+    ) === "true";
+}
+
+function unlockChampionBike() {
+
+    localStorage.setItem(
+        CHAMPION_BIKE_UNLOCK_KEY,
+        "true"
+    );
+}
+
+function updateChampionBikeButton() {
+
+    const button =
+        document.getElementById("championBikeButton");
+
+    if (!button) return;
+
+    if (isChampionBikeUnlocked()) {
+
+        button.textContent =
+            "🏆 Champion Bike — UNLOCKED";
+
+        button.classList.add("unlocked");
+
+    } else {
+
+        button.textContent =
+            "🏆 Champion Bike — LOCKED";
+
+        button.classList.remove("unlocked");
+    }
+}
+
+updateChampionBikeButton();
 
 // ============================================================
 // SAVE TIME TRIAL TIME
