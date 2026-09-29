@@ -1768,6 +1768,15 @@ const bikeStats = {
     braking: 18,
     turnSpeed: 1.9,
     driftChargeRate: 0.9
+},
+
+    champion: {
+    name: "Champion Bike",
+    maxSpeed: 58,
+    acceleration: 20,
+    braking: 22,
+    turnSpeed: 2.4,
+    driftChargeRate: 1.2
 }
 
 };
@@ -8921,6 +8930,16 @@ if (selectedBike !== "none") {
 const TOTAL_LAPS = 3;
 
 // ============================================================
+// CHAMPION BIKE UNLOCK
+// ============================================================
+
+// Once unlocked, this stays unlocked even if the player
+// later falls off the leaderboard.
+
+let championBikeUnlocked =
+    localStorage.getItem("championBikeUnlocked") === "true";
+
+// ============================================================
 // SAVE TIME TRIAL TIME
 // ============================================================
 
@@ -8985,6 +9004,32 @@ async function saveTimeTrialTime(track, time) {
             "Global leaderboard time saved:",
             result
         );
+
+        // ----------------------------------------------------
+// CHAMPION BIKE UNLOCK
+// ----------------------------------------------------
+
+// If the player's new time is in the Top 5,
+// permanently unlock the Champion Bike.
+
+if (
+    Array.isArray(result.leaderboard) &&
+    result.leaderboard.some(
+        entry =>
+            entry.name === playerName &&
+            Number(entry.time) === Number(time)
+    )
+) {
+
+    if (!isChampionBikeUnlocked()) {
+
+        unlockChampionBike();
+
+        console.log(
+            "🏆 CHAMPION BIKE UNLOCKED!"
+        );
+    }
+}
 
 
         // ----------------------------------------------------
