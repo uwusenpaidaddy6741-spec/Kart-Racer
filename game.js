@@ -3139,226 +3139,1099 @@ if (new URLSearchParams(window.location.search).get("track") === "3") {
 
 // ============================================================
 // CHARACTER 3D MODEL SYSTEM
+// PROCEDURAL CHARACTERS
 // ============================================================
 
-const characterModelLoader = new GLTFLoader();
-
-const characterModelPaths = {
-    blaze: "models/characters/blaze.glb",
-    bolt: "models/characters/bolt.glb",
-    rex: "models/characters/rex.glb",
-    nova: "models/characters/nova.glb",
-    misty: "models/characters/misty.glb",
-    axel: "models/characters/axel.glb",
-    vex: "models/characters/vex.glb",
-    titan: "models/characters/titan.glb"
-};
-
-// Stores loaded models so we don't download them repeatedly
-const characterModelCache = {};
-
-// Currently displayed character
 let currentCharacterModel = null;
 
-// Character animations
 let characterMixer = null;
 let characterAnimations = [];
 
 // ------------------------------------------------------------
-// LOAD ONE CHARACTER
+// CHARACTER MATERIAL
 // ------------------------------------------------------------
 
-function loadCharacterModel(characterName) {
+function characterMaterial(color, roughness = 0.65, metalness = 0) {
 
-    const modelPath =
-        characterModelPaths[characterName];
+    return new THREE.MeshStandardMaterial({
+        color: color,
+        roughness: roughness,
+        metalness: metalness
+    });
 
-    if (!modelPath) {
-        console.error(
-            "No model path found for character:",
-            characterName
-        );
-
-        return;
-    }
-
-    // If already loaded, use cached version
-    if (characterModelCache[characterName]) {
-
-        createCharacterModel(
-            characterName,
-            characterModelCache[characterName]
-        );
-
-        return;
-    }
-
-    console.log(
-        "Loading character model:",
-        characterName
-    );
-
-    characterModelLoader.load(
-        modelPath,
-
-        (gltf) => {
-
-            console.log(
-                "Loaded character:",
-                characterName
-            );
-
-            characterModelCache[characterName] =
-                gltf;
-
-            createCharacterModel(
-                characterName,
-                gltf
-            );
-        },
-
-        undefined,
-
-        (error) => {
-
-            console.error(
-                "Failed to load character model:",
-                characterName,
-                error
-            );
-        }
-    );
 }
 
 // ------------------------------------------------------------
-// CREATE CHARACTER MODEL
+// ADD MESH HELPER
 // ------------------------------------------------------------
 
-function createCharacterModel(
-    characterName,
-    gltf
+function addCharacterPart(
+    group,
+    geometry,
+    material,
+    x = 0,
+    y = 0,
+    z = 0,
+    rx = 0,
+    ry = 0,
+    rz = 0
 ) {
 
-    // Remove old character
+    const mesh = new THREE.Mesh(
+        geometry,
+        material
+    );
+
+    mesh.position.set(
+        x,
+        y,
+        z
+    );
+
+    mesh.rotation.set(
+        rx,
+        ry,
+        rz
+    );
+
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+
+    group.add(mesh);
+
+    return mesh;
+}
+
+// ============================================================
+// BASIC HUMANOID PARTS
+// ============================================================
+
+function addHumanoidParts(
+    group,
+    bodyMaterial,
+    skinMaterial,
+    shoeMaterial,
+    options = {}
+) {
+
+    const bodyScale =
+        options.bodyScale || 1;
+
+    const headScale =
+        options.headScale || 1;
+
+    const legLength =
+        options.legLength || 0.8;
+
+    const armLength =
+        options.armLength || 0.9;
+
+    // --------------------------------------------------------
+    // BODY
+    // --------------------------------------------------------
+
+    addCharacterPart(
+        group,
+        new THREE.CapsuleGeometry(
+            0.38 * bodyScale,
+            0.75 * bodyScale,
+            6,
+            10
+        ),
+        bodyMaterial,
+        0,
+        1.15 * bodyScale,
+        0
+    );
+
+    // --------------------------------------------------------
+    // HEAD
+    // --------------------------------------------------------
+
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.42 * headScale,
+            16,
+            12
+        ),
+        skinMaterial,
+        0,
+        1.95 * bodyScale,
+        0
+    );
+
+    // --------------------------------------------------------
+    // LEFT ARM
+    // --------------------------------------------------------
+
+    addCharacterPart(
+        group,
+        new THREE.CapsuleGeometry(
+            0.13 * bodyScale,
+            armLength * bodyScale,
+            5,
+            8
+        ),
+        bodyMaterial,
+        -0.48 * bodyScale,
+        1.15 * bodyScale,
+        0,
+        0,
+        0,
+        -0.12
+    );
+
+    // --------------------------------------------------------
+    // RIGHT ARM
+    // --------------------------------------------------------
+
+    addCharacterPart(
+        group,
+        new THREE.CapsuleGeometry(
+            0.13 * bodyScale,
+            armLength * bodyScale,
+            5,
+            8
+        ),
+        bodyMaterial,
+        0.48 * bodyScale,
+        1.15 * bodyScale,
+        0,
+        0,
+        0,
+        0.12
+    );
+
+    // --------------------------------------------------------
+    // LEFT LEG
+    // --------------------------------------------------------
+
+    addCharacterPart(
+        group,
+        new THREE.CapsuleGeometry(
+            0.15 * bodyScale,
+            legLength * bodyScale,
+            5,
+            8
+        ),
+        bodyMaterial,
+        -0.22 * bodyScale,
+        0.48 * bodyScale,
+        0
+    );
+
+    // --------------------------------------------------------
+    // RIGHT LEG
+    // --------------------------------------------------------
+
+    addCharacterPart(
+        group,
+        new THREE.CapsuleGeometry(
+            0.15 * bodyScale,
+            legLength * bodyScale,
+            5,
+            8
+        ),
+        bodyMaterial,
+        0.22 * bodyScale,
+        0.48 * bodyScale,
+        0
+    );
+
+    // --------------------------------------------------------
+    // LEFT SHOE
+    // --------------------------------------------------------
+
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.34 * bodyScale,
+            0.18 * bodyScale,
+            0.55 * bodyScale
+        ),
+        shoeMaterial,
+        -0.22 * bodyScale,
+        0.05,
+        -0.08
+    );
+
+    // --------------------------------------------------------
+    // RIGHT SHOE
+    // --------------------------------------------------------
+
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.34 * bodyScale,
+            0.18 * bodyScale,
+            0.55 * bodyScale
+        ),
+        shoeMaterial,
+        0.22 * bodyScale,
+        0.05,
+        -0.08
+    );
+
+}
+
+// ============================================================
+// BLAZE
+// ============================================================
+
+function createBlaze() {
+
+    const group = new THREE.Group();
+
+    const red = characterMaterial(0xd92828);
+    const darkRed = characterMaterial(0x8e1111);
+    const orange = characterMaterial(0xff7a00);
+    const skin = characterMaterial(0xffc08a);
+    const black = characterMaterial(0x151515);
+
+    addHumanoidParts(
+        group,
+        red,
+        skin,
+        black
+    );
+
+    // Fire-colored hair
+    addCharacterPart(
+        group,
+        new THREE.ConeGeometry(
+            0.42,
+            0.75,
+            8
+        ),
+        orange,
+        0,
+        2.48,
+        0
+    );
+
+    // Dark red chest armor
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.55,
+            0.35,
+            0.18
+        ),
+        darkRed,
+        0,
+        1.3,
+        -0.34
+    );
+
+    // Flame shoulder pads
+    for (const x of [-0.52, 0.52]) {
+
+        addCharacterPart(
+            group,
+            new THREE.ConeGeometry(
+                0.18,
+                0.4,
+                6
+            ),
+            orange,
+            x,
+            1.55,
+            0,
+            0,
+            0,
+            x < 0 ? -0.4 : 0.4
+        );
+
+    }
+
+    return group;
+}
+
+// ============================================================
+// BOLT
+// ============================================================
+
+function createBolt() {
+
+    const group = new THREE.Group();
+
+    const yellow = characterMaterial(0xffd21f);
+    const darkYellow = characterMaterial(0xb88900);
+    const blue = characterMaterial(0x2166ff);
+    const skin = characterMaterial(0xffc08a);
+    const black = characterMaterial(0x151515);
+
+    addHumanoidParts(
+        group,
+        blue,
+        skin,
+        black
+    );
+
+    // Yellow helmet
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.48,
+            16,
+            10
+        ),
+        yellow,
+        0,
+        2.08,
+        0
+    );
+
+    // Lightning bolt antenna
+    addCharacterPart(
+        group,
+        new THREE.ConeGeometry(
+            0.12,
+            0.7,
+            5
+        ),
+        yellow,
+        0,
+        2.62,
+        0
+    );
+
+    // Yellow chest
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.62,
+            0.35,
+            0.18
+        ),
+        yellow,
+        0,
+        1.3,
+        -0.34
+    );
+
+    // Shoulder electricity
+    for (const x of [-0.58, 0.58]) {
+
+        addCharacterPart(
+            group,
+            new THREE.ConeGeometry(
+                0.12,
+                0.45,
+                5
+            ),
+            darkYellow,
+            x,
+            1.5,
+            0,
+            0,
+            0,
+            x < 0 ? -0.5 : 0.5
+        );
+
+    }
+
+    return group;
+}
+
+// ============================================================
+// REX
+// ============================================================
+
+function createRex() {
+
+    const group = new THREE.Group();
+
+    const green = characterMaterial(0x319447);
+    const darkGreen = characterMaterial(0x17602a);
+    const belly = characterMaterial(0x9acb59);
+    const skin = characterMaterial(0x6dbb55);
+    const claws = characterMaterial(0xe8e0b0);
+
+    addHumanoidParts(
+        group,
+        green,
+        skin,
+        darkGreen,
+        {
+            bodyScale: 1.3,
+            headScale: 1.2,
+            legLength: 1.0,
+            armLength: 1.0
+        }
+    );
+
+    // Dinosaur snout
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.58,
+            0.32,
+            0.65
+        ),
+        green,
+        0,
+        1.95,
+        -0.35
+    );
+
+    // Belly
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.32,
+            12,
+            8
+        ),
+        belly,
+        0,
+        1.2,
+        -0.38
+    );
+
+    // Dinosaur spikes
+    for (let i = 0; i < 5; i++) {
+
+        addCharacterPart(
+            group,
+            new THREE.ConeGeometry(
+                0.13,
+                0.4,
+                5
+            ),
+            darkGreen,
+            0,
+            1.55 + i * 0.2,
+            0.25,
+            Math.PI,
+            0,
+            0
+        );
+
+    }
+
+    // Tail
+    const tail = addCharacterPart(
+        group,
+        new THREE.ConeGeometry(
+            0.25,
+            1.4,
+            8
+        ),
+        green,
+        0,
+        1.0,
+        0.8,
+        Math.PI / 2,
+        0,
+        0
+    );
+
+    // Claws
+    for (const x of [-0.22, 0.22]) {
+
+        addCharacterPart(
+            group,
+            new THREE.ConeGeometry(
+                0.08,
+                0.3,
+                5
+            ),
+            claws,
+            x,
+            0.05,
+            -0.35,
+            Math.PI / 2,
+            0,
+            0
+        );
+
+    }
+
+    return group;
+}
+
+// ============================================================
+// NOVA
+// ============================================================
+
+function createNova() {
+
+    const group = new THREE.Group();
+
+    const purple = characterMaterial(
+        0x7138d4,
+        0.45,
+        0.2
+    );
+
+    const darkPurple = characterMaterial(
+        0x28104f,
+        0.4,
+        0.25
+    );
+
+    const cyan = characterMaterial(
+        0x55e6ff,
+        0.3,
+        0.35
+    );
+
+    const skin = characterMaterial(0xe8b6ff);
+    const black = characterMaterial(0x111111);
+
+    addHumanoidParts(
+        group,
+        purple,
+        skin,
+        black
+    );
+
+    // Space helmet
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.5,
+            20,
+            14
+        ),
+        darkPurple,
+        0,
+        2.05,
+        0
+    );
+
+    // Glowing visor
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.27,
+            16,
+            10
+        ),
+        cyan,
+        0,
+        2.05,
+        -0.4
+    );
+
+    // Cosmic chest core
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.15,
+            12,
+            8
+        ),
+        cyan,
+        0,
+        1.3,
+        -0.4
+    );
+
+    // Shoulder rings
+    for (const x of [-0.52, 0.52]) {
+
+        addCharacterPart(
+            group,
+            new THREE.TorusGeometry(
+                0.16,
+                0.06,
+                8,
+                16
+            ),
+            cyan,
+            x,
+            1.5,
+            0,
+            Math.PI / 2,
+            0,
+            0
+        );
+
+    }
+
+    return group;
+}
+
+// ============================================================
+// MISTY
+// ============================================================
+
+function createMisty() {
+
+    const group = new THREE.Group();
+
+    const blue = characterMaterial(0x279fe8);
+    const lightBlue = characterMaterial(0x79dcff);
+    const darkBlue = characterMaterial(0x14538a);
+    const skin = characterMaterial(0xffd1ba);
+    const white = characterMaterial(0xf2f7ff);
+
+    addHumanoidParts(
+        group,
+        blue,
+        skin,
+        white
+    );
+
+    // Water hair
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.5,
+            16,
+            10
+        ),
+        lightBlue,
+        0,
+        2.15,
+        0
+    );
+
+    // Hair spikes
+    for (let i = 0; i < 5; i++) {
+
+        const angle =
+            (i / 4 - 0.5) * Math.PI;
+
+        addCharacterPart(
+            group,
+            new THREE.ConeGeometry(
+                0.12,
+                0.5,
+                6
+            ),
+            lightBlue,
+            Math.sin(angle) * 0.4,
+            2.05,
+            -Math.abs(Math.cos(angle)) * 0.15,
+            angle,
+            0,
+            0
+        );
+
+    }
+
+    // Water chest plate
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.62,
+            0.35,
+            0.18
+        ),
+        darkBlue,
+        0,
+        1.3,
+        -0.34
+    );
+
+    // Water orb
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.13,
+            12,
+            8
+        ),
+        lightBlue,
+        0,
+        1.3,
+        -0.48
+    );
+
+    return group;
+}
+
+// ============================================================
+// AXEL
+// ============================================================
+
+function createAxel() {
+
+    const group = new THREE.Group();
+
+    const racingRed = characterMaterial(0xe62b2b);
+    const white = characterMaterial(0xf4f4f4);
+    const black = characterMaterial(0x181818);
+    const visor = characterMaterial(
+        0x36c9ff,
+        0.25,
+        0.4
+    );
+    const skin = characterMaterial(0xffc08a);
+
+    addHumanoidParts(
+        group,
+        racingRed,
+        skin,
+        black
+    );
+
+    // Racing helmet
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.5,
+            20,
+            12
+        ),
+        white,
+        0,
+        2.08,
+        0
+    );
+
+    // Blue visor
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.62,
+            0.2,
+            0.16
+        ),
+        visor,
+        0,
+        2.1,
+        -0.43
+    );
+
+    // Racing stripe
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.16,
+            0.4,
+            0.4
+        ),
+        racingRed,
+        0,
+        2.35,
+        -0.05
+    );
+
+    // Racing chest stripe
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.18,
+            0.65,
+            0.2
+        ),
+        white,
+        0,
+        1.2,
+        -0.4
+    );
+
+    // Shoulder guards
+    for (const x of [-0.53, 0.53]) {
+
+        addCharacterPart(
+            group,
+            new THREE.SphereGeometry(
+                0.2,
+                12,
+                8
+            ),
+            white,
+            x,
+            1.55,
+            0
+        );
+
+    }
+
+    return group;
+}
+
+// ============================================================
+// VEX
+// ============================================================
+
+function createVex() {
+
+    const group = new THREE.Group();
+
+    const purple = characterMaterial(0x7d32d6);
+    const dark = characterMaterial(0x21102f);
+    const magenta = characterMaterial(0xe638ff);
+    const skin = characterMaterial(0xcfa1ff);
+    const black = characterMaterial(0x080808);
+
+    addHumanoidParts(
+        group,
+        dark,
+        skin,
+        black
+    );
+
+    // Purple head
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.45,
+            16,
+            12
+        ),
+        purple,
+        0,
+        2.0,
+        0
+    );
+
+    // V-shaped horns
+    for (const x of [-0.25, 0.25]) {
+
+        addCharacterPart(
+            group,
+            new THREE.ConeGeometry(
+                0.13,
+                0.55,
+                6
+            ),
+            magenta,
+            x,
+            2.5,
+            0,
+            0,
+            0,
+            x < 0 ? -0.3 : 0.3
+        );
+
+    }
+
+    // Dark armor
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.68,
+            0.4,
+            0.2
+        ),
+        purple,
+        0,
+        1.3,
+        -0.35
+    );
+
+    // Energy core
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.13,
+            12,
+            8
+        ),
+        magenta,
+        0,
+        1.3,
+        -0.48
+    );
+
+    return group;
+}
+
+// ============================================================
+// TITAN
+// ============================================================
+
+function createTitan() {
+
+    const group = new THREE.Group();
+
+    const armor = characterMaterial(
+        0x5c6673,
+        0.7,
+        0.2
+    );
+
+    const darkArmor = characterMaterial(
+        0x252b33,
+        0.75,
+        0.25
+    );
+
+    const gold = characterMaterial(
+        0xd6a62c,
+        0.45,
+        0.35
+    );
+
+    const skin = characterMaterial(0xb78c6b);
+
+    addHumanoidParts(
+        group,
+        armor,
+        skin,
+        darkArmor,
+        {
+            bodyScale: 1.5,
+            headScale: 1.3,
+            legLength: 1.05,
+            armLength: 1.15
+        }
+    );
+
+    // Huge helmet
+    addCharacterPart(
+        group,
+        new THREE.SphereGeometry(
+            0.55,
+            16,
+            12
+        ),
+        darkArmor,
+        0,
+        2.15,
+        0
+    );
+
+    // Gold helmet crest
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.16,
+            0.5,
+            0.45
+        ),
+        gold,
+        0,
+        2.65,
+        0
+    );
+
+    // Giant chest armor
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.9,
+            0.5,
+            0.3
+        ),
+        armor,
+        0,
+        1.3,
+        -0.35
+    );
+
+    // Gold center plate
+    addCharacterPart(
+        group,
+        new THREE.BoxGeometry(
+            0.25,
+            0.4,
+            0.12
+        ),
+        gold,
+        0,
+        1.3,
+        -0.52
+    );
+
+    // Massive shoulder armor
+    for (const x of [-0.7, 0.7]) {
+
+        addCharacterPart(
+            group,
+            new THREE.SphereGeometry(
+                0.28,
+                12,
+                8
+            ),
+            armor,
+            x,
+            1.58,
+            0
+        );
+
+    }
+
+    return group;
+}
+
+// ============================================================
+// CREATE CHARACTER
+// ============================================================
+
+function createProceduralCharacter(characterName) {
+
+    switch (characterName) {
+
+        case "blaze":
+            return createBlaze();
+
+        case "bolt":
+            return createBolt();
+
+        case "rex":
+            return createRex();
+
+        case "nova":
+            return createNova();
+
+        case "misty":
+            return createMisty();
+
+        case "axel":
+            return createAxel();
+
+        case "vex":
+            return createVex();
+
+        case "titan":
+            return createTitan();
+
+        default:
+            return createBlaze();
+
+    }
+
+}
+
+// ============================================================
+// LOAD CHARACTER MODEL
+// ============================================================
+
+function loadCharacterModel(characterName) {
+
+    // Remove previous character
     if (currentCharacterModel) {
 
         if (currentCharacterModel.parent) {
+
             currentCharacterModel.parent.remove(
                 currentCharacterModel
             );
+
         }
 
         currentCharacterModel = null;
+
     }
 
-    // Reset animation system
+    // Reset animation variables
     characterMixer = null;
     characterAnimations = [];
 
-    // Clone the loaded scene
+    // Create procedural character
     const model =
-        gltf.scene.clone(true);
+        createProceduralCharacter(
+            characterName
+        );
 
     currentCharacterModel = model;
 
-    // --------------------------------------------------------
-    // MODEL SCALE
-    // --------------------------------------------------------
-
-    model.scale.set(
-        1,
-        1,
-        1
-    );
-
-    // --------------------------------------------------------
-    // MODEL POSITION
-    // --------------------------------------------------------
-
-    model.position.set(
-        0,
-        0,
-        0
-    );
-
-    // --------------------------------------------------------
-    // MODEL ROTATION
-    // --------------------------------------------------------
-
-    model.rotation.set(
-        0,
-        0,
-        0
-    );
-
-    // --------------------------------------------------------
-    // ENABLE SHADOWS
-    // --------------------------------------------------------
-
-    model.traverse((object) => {
-
-        if (object.isMesh) {
-
-            object.castShadow = true;
-            object.receiveShadow = true;
-
-        }
-
-    });
-
-    // --------------------------------------------------------
-    // ANIMATIONS
-    // --------------------------------------------------------
-
-    if (
-        gltf.animations &&
-        gltf.animations.length > 0
-    ) {
-
-        characterAnimations =
-            gltf.animations;
-
-        characterMixer =
-            new THREE.AnimationMixer(model);
-
-        console.log(
-            characterName,
-            "animations:",
-            characterAnimations.map(
-                animation => animation.name
-            )
-        );
-
-        // Try to find an idle animation
-        const idleAnimation =
-            characterAnimations.find(
-                animation =>
-                    animation.name
-                        .toLowerCase()
-                        .includes("idle")
-            );
-
-        if (idleAnimation) {
-
-            const action =
-                characterMixer.clipAction(
-                    idleAnimation
-                );
-
-            action.play();
-        }
-    }
-
-    // --------------------------------------------------------
-    // ADD CHARACTER TO KART
-    // --------------------------------------------------------
-
+    // Put character inside the kart
     kart.add(model);
 
     console.log(
-        "Character attached to kart:",
+        "Created procedural character:",
         characterName
     );
+
 }
 
 // ============================================================
