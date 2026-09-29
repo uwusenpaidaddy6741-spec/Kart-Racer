@@ -9080,9 +9080,15 @@ if (
 
         unlockChampionBike();
 
-        console.log(
-            "🏆 CHAMPION BIKE UNLOCKED!"
-        );
+alert(
+    "🏆 CHAMPION BIKE UNLOCKED!\n\n" +
+    "You finished in the Top 5!\n\n" +
+    "The Champion Bike is now permanently unlocked."
+);
+
+console.log(
+    "🏆 CHAMPION BIKE UNLOCKED!"
+);
     }
 }
 
