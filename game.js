@@ -4459,6 +4459,17 @@ function loadCharacterModel(characterName) {
 }
 
 // ============================================================
+// CHAMPION BIKE 3D MODEL
+// ============================================================
+
+const championBikeLoader = new GLTFLoader();
+
+const championBikeModelPath =
+    "models/bikes/champion_bike.glb";
+
+let championBikeModel = null;
+
+// ============================================================
 // KART
 // ============================================================
 
@@ -4469,6 +4480,75 @@ kart.rotation.order = "YXZ";
 scene.add(kart);
 
 loadCharacterModel(selectedCharacter);
+
+// ============================================================
+// LOAD CHAMPION BIKE MODEL
+// ============================================================
+
+if (selectedBike === "champion") {
+
+    championBikeLoader.load(
+        championBikeModelPath,
+
+        (gltf) => {
+
+            championBikeModel =
+                gltf.scene;
+
+            championBikeModel.scale.set(
+                1,
+                1,
+                1
+            );
+
+            championBikeModel.position.set(
+                0,
+                0,
+                0
+            );
+
+            championBikeModel.rotation.set(
+                0,
+                0,
+                0
+            );
+
+            championBikeModel.traverse(
+                (object) => {
+
+                    if (object.isMesh) {
+
+                        object.castShadow = true;
+                        object.receiveShadow = true;
+
+                    }
+
+                }
+            );
+
+            kart.add(
+                championBikeModel
+            );
+
+            console.log(
+                "🏆 Champion Bike GLB loaded!"
+            );
+
+        },
+
+        undefined,
+
+        (error) => {
+
+            console.error(
+                "❌ Failed to load Champion Bike GLB:",
+                error
+            );
+
+        }
+    );
+
+}
 
 // ------------------------------------------------------------
 // KART BODY
