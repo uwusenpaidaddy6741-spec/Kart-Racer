@@ -4498,8 +4498,12 @@ function getSelectedVehicleGLBPath() {
     }
 
     if (selectedBike === "champion") {
-        return "models/bikes/champion_bike.glb";
-    }
+    return "models/bikes/champion_bike.glb";
+}
+
+if (selectedBike === "flash") {
+    return "models/bikes/flash_bike.glb";
+}
 
     // -------------------------
     // KARTS
