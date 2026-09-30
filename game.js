@@ -1182,57 +1182,70 @@ function sunsetSpeedwayPoints() {
 
 // ============================================================
 // TRACK 7 - MOUNTAIN PASS
-// WINDING MOUNTAIN ROAD
+// NON-CROSSING MOUNTAIN LOOP
 // ============================================================
 
 function mountainPassPoints() {
 
     const controlPoints = [
 
+        // ====================================================
         // START / FINISH
-        { x: -120, z: -120 },
-        { x: -70,  z: -120 },
-        { x: -20,  z: -120 },
+        // ====================================================
 
+        { x: 0,   z: -120 },
+
+        // ====================================================
+        // LOWER STRAIGHT
+        // ====================================================
+
+        { x: 45,  z: -115 },
+        { x: 80,  z: -90 },
+
+        // ====================================================
         // FIRST CLIMB
-        { x: 30,  z: -110 },
-        { x: 70,  z: -80 },
-        { x: 85,  z: -35 },
+        // ====================================================
 
-        // HAIRPIN
-        { x: 65,  z: 5 },
-        { x: 20,  z: 25 },
-        { x: -25, z: 10 },
+        { x: 105, z: -50 },
+        { x: 115, z: 0 },
+        { x: 105, z: 45 },
 
-        // MOUNTAIN SECTION
-        { x: -65, z: -10 },
-        { x: -90, z: 25 },
-        { x: -75, z: 65 },
+        // ====================================================
+        // HIGH MOUNTAIN SECTION
+        // ====================================================
 
-        // HIGH MOUNTAIN STRAIGHT
-        { x: -35, z: 95 },
-        { x: 15,  z: 110 },
-        { x: 65,  z: 100 },
+        { x: 80,  z: 80 },
+        { x: 40,  z: 105 },
+        { x: -10, z: 112 },
+        { x: -60, z: 100 },
 
-        // DESCENDING HAIRPIN
-        { x: 100, z: 70 },
-        { x: 110, z: 25 },
-        { x: 90,  z: -10 },
+        // ====================================================
+        // MOUNTAIN HAIRPIN
+        // ====================================================
 
-        // FINAL DESCENT
-        { x: 55,  z: -45 },
-        { x: 20,  z: -75 },
-        { x: -25, z: -90 },
-        { x: -75, z: -90 },
+        { x: -95, z: 75 },
+        { x: -112, z: 35 },
 
-        // RETURN TO START
-        { x: -120, z: -120 }
+        // ====================================================
+        // DESCENT
+        // ====================================================
+
+        { x: -115, z: -10 },
+        { x: -105, z: -50 },
+        { x: -80,  z: -80 },
+
+        // ====================================================
+        // FINAL RUN TO FINISH
+        // ====================================================
+
+        { x: -45, z: -100 },
+        { x: -15, z: -112 },
+
+        // Back to start
+        { x: 0, z: -120 }
     ];
 
     const points = [];
-
-    // Smooth the control points into a
-    // continuous mountain-road circuit.
 
     for (
         let i = 0;
@@ -1267,8 +1280,7 @@ function mountainPassPoints() {
             j++
         ) {
 
-            const t =
-                j / samples;
+            const t = j / samples;
 
             const t2 = t * t;
             const t3 = t2 * t;
@@ -1279,15 +1291,19 @@ function mountainPassPoints() {
 
                     (-previous.x + next.x) * t +
 
-                    (2 * previous.x -
+                    (
+                        2 * previous.x -
                         5 * current.x +
                         4 * next.x -
-                        nextNext.x) * t2 +
+                        nextNext.x
+                    ) * t2 +
 
-                    (-previous.x +
+                    (
+                        -previous.x +
                         3 * current.x -
                         3 * next.x +
-                        nextNext.x) * t3
+                        nextNext.x
+                    ) * t3
                 );
 
             const z =
@@ -1296,15 +1312,19 @@ function mountainPassPoints() {
 
                     (-previous.z + next.z) * t +
 
-                    (2 * previous.z -
+                    (
+                        2 * previous.z -
                         5 * current.z +
                         4 * next.z -
-                        nextNext.z) * t2 +
+                        nextNext.z
+                    ) * t2 +
 
-                    (-previous.z +
+                    (
+                        -previous.z +
                         3 * current.z -
                         3 * next.z +
-                        nextNext.z) * t3
+                        nextNext.z
+                    ) * t3
                 );
 
             points.push({
