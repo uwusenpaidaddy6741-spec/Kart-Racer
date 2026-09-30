@@ -8705,21 +8705,49 @@ if (!player.wheelie) {
             }
             else {
 
-                // MAX BOOST
-                player.boostTimer = 1.0;
-                player.currentBoostCap =
-    (
-        selectedKart === "drifter" ||
-        selectedWheels === "drift"
-    )
-        ? 83
-        : 80;
+                // MAX / ULTRA BOOST
+if (
+    selectedBike === "none" &&
+    player.driftCharge >= 2.2
+) {
 
-                player.speed =
-                    Math.min(
-                        player.speed + 18,
-                        player.currentBoostCap
-                    );
+    // KART ULTRA BOOST
+    player.boostTimer = 1.15;
+
+    player.currentBoostCap =
+        (
+            selectedKart === "drifter" ||
+            selectedWheels === "drift" ||
+            player.driftChargeRate >= 2.00
+        )
+            ? 91
+            : 88;
+
+    player.speed =
+        Math.min(
+            player.speed + 22,
+            player.currentBoostCap
+        );
+
+} else {
+
+    // NORMAL MAX BOOST
+    player.boostTimer = 1.0;
+
+    player.currentBoostCap =
+        (
+            selectedKart === "drifter" ||
+            selectedWheels === "drift"
+        )
+            ? 83
+            : 80;
+
+    player.speed =
+        Math.min(
+            player.speed + 18,
+            player.currentBoostCap
+        );
+}
             }
         }
 
