@@ -1786,6 +1786,15 @@ const bikeStats = {
     braking: 24,
     turnSpeed: 3.0,
     driftChargeRate: 1.6
+},
+
+    specter: {
+    name: "Specter Bike",
+    maxSpeed: 49,
+    acceleration: 24,
+    braking: 22,
+    turnSpeed: 3.7,
+    driftChargeRate: 2.2
 }
 
 };
