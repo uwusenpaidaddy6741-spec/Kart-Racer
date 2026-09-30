@@ -8617,6 +8617,16 @@ const direction =
             0.35 +
             speedRatio * 0.65;
 
+        // KART PRECISION STEERING
+const precisionSteering =
+    selectedBike === "none" &&
+    keys["KeyF"];
+
+const turnMultiplier =
+    precisionSteering
+        ? 0.5
+        : 1;
+
         const driftMultiplier =
     player.drifting
         ? (
@@ -8629,11 +8639,13 @@ const direction =
 if (!player.wheelie) {
 
     player.angle +=
-        direction *
-        player.turnSpeed *
-        steeringStrength *
-        driftMultiplier *
-        deltaTime;
+    direction *
+    player.turnSpeed *
+    steeringStrength *
+    driftMultiplier *
+    turnMultiplier *
+    deltaTime;
+
 }
         
     }
