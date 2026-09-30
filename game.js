@@ -1777,6 +1777,15 @@ const bikeStats = {
     braking: 22,
     turnSpeed: 2.4,
     driftChargeRate: 1.2
+},
+
+    flash: {
+    name: "Flash Bike",
+    maxSpeed: 45,
+    acceleration: 32,
+    braking: 24,
+    turnSpeed: 3.0,
+    driftChargeRate: 1.6
 }
 
 };
