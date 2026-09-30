@@ -1181,6 +1181,143 @@ function sunsetSpeedwayPoints() {
 }
 
 // ============================================================
+// TRACK 7 - MOUNTAIN PASS
+// WINDING MOUNTAIN ROAD
+// ============================================================
+
+function mountainPassPoints() {
+
+    const controlPoints = [
+
+        // START / FINISH
+        { x: -120, z: -120 },
+        { x: -70,  z: -120 },
+        { x: -20,  z: -120 },
+
+        // FIRST CLIMB
+        { x: 30,  z: -110 },
+        { x: 70,  z: -80 },
+        { x: 85,  z: -35 },
+
+        // HAIRPIN
+        { x: 65,  z: 5 },
+        { x: 20,  z: 25 },
+        { x: -25, z: 10 },
+
+        // MOUNTAIN SECTION
+        { x: -65, z: -10 },
+        { x: -90, z: 25 },
+        { x: -75, z: 65 },
+
+        // HIGH MOUNTAIN STRAIGHT
+        { x: -35, z: 95 },
+        { x: 15,  z: 110 },
+        { x: 65,  z: 100 },
+
+        // DESCENDING HAIRPIN
+        { x: 100, z: 70 },
+        { x: 110, z: 25 },
+        { x: 90,  z: -10 },
+
+        // FINAL DESCENT
+        { x: 55,  z: -45 },
+        { x: 20,  z: -75 },
+        { x: -25, z: -90 },
+        { x: -75, z: -90 },
+
+        // RETURN TO START
+        { x: -120, z: -120 }
+    ];
+
+    const points = [];
+
+    // Smooth the control points into a
+    // continuous mountain-road circuit.
+
+    for (
+        let i = 0;
+        i < controlPoints.length - 1;
+        i++
+    ) {
+
+        const previous =
+            controlPoints[
+                Math.max(0, i - 1)
+            ];
+
+        const current =
+            controlPoints[i];
+
+        const next =
+            controlPoints[i + 1];
+
+        const nextNext =
+            controlPoints[
+                Math.min(
+                    controlPoints.length - 1,
+                    i + 2
+                )
+            ];
+
+        const samples = 12;
+
+        for (
+            let j = 0;
+            j < samples;
+            j++
+        ) {
+
+            const t =
+                j / samples;
+
+            const t2 = t * t;
+            const t3 = t2 * t;
+
+            const x =
+                0.5 * (
+                    (2 * current.x) +
+
+                    (-previous.x + next.x) * t +
+
+                    (2 * previous.x -
+                        5 * current.x +
+                        4 * next.x -
+                        nextNext.x) * t2 +
+
+                    (-previous.x +
+                        3 * current.x -
+                        3 * next.x +
+                        nextNext.x) * t3
+                );
+
+            const z =
+                0.5 * (
+                    (2 * current.z) +
+
+                    (-previous.z + next.z) * t +
+
+                    (2 * previous.z -
+                        5 * current.z +
+                        4 * next.z -
+                        nextNext.z) * t2 +
+
+                    (-previous.z +
+                        3 * current.z -
+                        3 * next.z +
+                        nextNext.z) * t3
+                );
+
+            points.push({
+                x: x,
+                z: z
+            });
+        }
+    }
+
+    return points;
+}
+
+// ============================================================
 // TRACK SELECTION
 // ============================================================
 
@@ -1210,7 +1347,9 @@ const trackPoints =
                         ? grandCircuitPoints()
                         : selectedTrack === "6"
                             ? sunsetSpeedwayPoints()
-                            : roundedRectanglePoints();
+                            : selectedTrack === "7"
+                                ? mountainPassPoints()
+                                : roundedRectanglePoints();
 
 // ============================================================
 // PLAYER / CONTROL HELPERS
