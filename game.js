@@ -4561,6 +4561,8 @@ if (useGLBVehicle) {
             vehicleGLBModel =
                 gltf.scene;
 
+            console.log("🏎️ KART/BIKE GLB LOADED:", selectedVehicleGLBPath);
+
             vehicleGLBModel.scale.set(
                 1,
                 1,
