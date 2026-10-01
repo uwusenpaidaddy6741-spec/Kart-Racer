@@ -2220,6 +2220,15 @@ const bikeStats = {
     braking: 22,
     turnSpeed: 3.7,
     driftChargeRate: 2.2
+},
+
+    juggernaut: {
+    name: "Juggernaut Bike",
+    maxSpeed: 46,
+    acceleration: 23,
+    braking: 40,
+    turnSpeed: 2.0,
+    driftChargeRate: 1.4
 }
 
 };
