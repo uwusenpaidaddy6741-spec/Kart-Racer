@@ -4359,10 +4359,10 @@ function createJungleWaterfall() {
     );
 
     rock.position.set(
-        24,
-        6,
-        -27
-    );
+    67,
+    6,
+    -27
+);
 
     rock.castShadow = true;
     rock.receiveShadow = true;
@@ -4390,10 +4390,10 @@ function createJungleWaterfall() {
     water.rotation.x = 0;
 
     water.position.set(
-        24,
-        5.5,
-        -29.1
-    );
+    67,
+    5.5,
+    -29.1
+);
 
     waterfall.add(water);
 
@@ -4409,10 +4409,10 @@ function createJungleWaterfall() {
     );
 
     pool.position.set(
-        24,
-        0.15,
-        -29
-    );
+    67,
+    0.15,
+    -29
+);
 
     waterfall.add(pool);
 
