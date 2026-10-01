@@ -3777,7 +3777,28 @@ function createCastleExitGate() {
             roughness: 1
         });
 
-    // LEFT GATE TOWER
+    // --------------------------------------------------------
+    // GATE GROUP
+    // --------------------------------------------------------
+
+    const gateGroup =
+        new THREE.Group();
+
+    // The exit road is diagonal.
+    // Rotate the entire gate to follow it.
+    gateGroup.rotation.y =
+        Math.PI / 4;
+
+    gateGroup.position.set(
+        43,
+        0,
+        -38
+    );
+
+    // --------------------------------------------------------
+    // LEFT TOWER
+    // --------------------------------------------------------
+
     const leftTower =
         new THREE.Mesh(
             new THREE.BoxGeometry(
@@ -3789,17 +3810,20 @@ function createCastleExitGate() {
         );
 
     leftTower.position.set(
-        30,
+        -13,
         8,
-        -38
+        0
     );
 
     leftTower.castShadow = true;
     leftTower.receiveShadow = true;
 
-    scene.add(leftTower);
+    gateGroup.add(leftTower);
 
-    // RIGHT GATE TOWER
+    // --------------------------------------------------------
+    // RIGHT TOWER
+    // --------------------------------------------------------
+
     const rightTower =
         new THREE.Mesh(
             new THREE.BoxGeometry(
@@ -3811,21 +3835,24 @@ function createCastleExitGate() {
         );
 
     rightTower.position.set(
-        55,
+        13,
         8,
-        -38
+        0
     );
 
     rightTower.castShadow = true;
     rightTower.receiveShadow = true;
 
-    scene.add(rightTower);
+    gateGroup.add(rightTower);
 
+    // --------------------------------------------------------
     // TOP OF GATE
+    // --------------------------------------------------------
+
     const gateTop =
         new THREE.Mesh(
             new THREE.BoxGeometry(
-                35,
+                36,
                 6,
                 12
             ),
@@ -3833,21 +3860,24 @@ function createCastleExitGate() {
         );
 
     gateTop.position.set(
-        42.5,
+        0,
         15,
-        -38
+        0
     );
 
     gateTop.castShadow = true;
     gateTop.receiveShadow = true;
 
-    scene.add(gateTop);
+    gateGroup.add(gateTop);
 
-    // DARK OPENING ABOVE ROAD
+    // --------------------------------------------------------
+    // DARK GATE OPENING
+    // --------------------------------------------------------
+
     const gateOpening =
         new THREE.Mesh(
             new THREE.BoxGeometry(
-                15,
+                16,
                 10,
                 13
             ),
@@ -3855,14 +3885,17 @@ function createCastleExitGate() {
         );
 
     gateOpening.position.set(
-        42.5,
+        0,
         7,
-        -38
+        0
     );
 
-    scene.add(gateOpening);
+    gateGroup.add(gateOpening);
 
-    // TORCHES ON EXIT
+    // --------------------------------------------------------
+    // TORCH MATERIAL
+    // --------------------------------------------------------
+
     const flameMaterial =
         new THREE.MeshStandardMaterial({
             color: 0xff7a00,
@@ -3877,48 +3910,91 @@ function createCastleExitGate() {
             12
         );
 
-    const exitTorchPositions = [
-        { x: 33, z: -31 },
-        { x: 52, z: -31 }
-    ];
+    // --------------------------------------------------------
+    // TORCH 1
+    // --------------------------------------------------------
 
-    for (const position of exitTorchPositions) {
-
-        const flame =
-            new THREE.Mesh(
-                flameGeometry,
-                flameMaterial
-            );
-
-        flame.position.set(
-            position.x,
-            10,
-            position.z
+    const flame1 =
+        new THREE.Mesh(
+            flameGeometry,
+            flameMaterial
         );
 
-        flame.scale.set(
-            0.7,
-            1.2,
-            0.7
+    flame1.position.set(
+        -10,
+        10,
+        -7
+    );
+
+    flame1.scale.set(
+        0.7,
+        1.2,
+        0.7
+    );
+
+    gateGroup.add(flame1);
+
+    const light1 =
+        new THREE.PointLight(
+            0xff6600,
+            2.5,
+            18
         );
 
-        scene.add(flame);
+    light1.position.set(
+        -10,
+        10,
+        -7
+    );
 
-        const light =
-            new THREE.PointLight(
-                0xff6600,
-                2.5,
-                18
-            );
+    gateGroup.add(light1);
 
-        light.position.set(
-            position.x,
-            10,
-            position.z
+    // --------------------------------------------------------
+    // TORCH 2
+    // --------------------------------------------------------
+
+    const flame2 =
+        new THREE.Mesh(
+            flameGeometry,
+            flameMaterial
         );
 
-        scene.add(light);
-    }
+    flame2.position.set(
+        10,
+        10,
+        -7
+    );
+
+    flame2.scale.set(
+        0.7,
+        1.2,
+        0.7
+    );
+
+    gateGroup.add(flame2);
+
+    const light2 =
+        new THREE.PointLight(
+            0xff6600,
+            2.5,
+            18
+        );
+
+    light2.position.set(
+        10,
+        10,
+        -7
+    );
+
+    gateGroup.add(light2);
+
+    // --------------------------------------------------------
+    // ADD GATE TO SCENE
+    // --------------------------------------------------------
+
+    scene.add(
+        gateGroup
+    );
 }
 
 // Create Track 8 castle exit gate
