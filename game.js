@@ -11284,7 +11284,7 @@ async function loadTimeTrialLeaderboard(forceRefresh = false) {
 
     leaderboardLoading = true;
 
-    const trackIds = ["1", "3", "2", "4", "5", "6", "7", "8"];
+    const trackIds = ["1", "3", "2", "4", "5", "6", "7", "8", "9"];
 
     const boards =
         document.querySelectorAll(
