@@ -3176,32 +3176,40 @@ function createTrack() {
         finishGroup
     );
 
-    // ============================================================
+// ============================================================
 // TRACK 8 - CASTLE ENTRANCE
 // ============================================================
 
 if (selectedTrack === "8") {
 
-    // Castle entrance wall
-    const castleWallMaterial = new THREE.MeshStandardMaterial({
-        color: 0x6b6b6b,
-        roughness: 0.9
-    });
+    const castleWallMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x6b6b6b,
+            roughness: 0.9
+        });
 
-    const castleWallGeometry =
-        new THREE.BoxGeometry(8, 14, 6);
 
-    // Left tower
+    // ========================================================
+    // LEFT CASTLE TOWER
+    // ========================================================
+
+    const towerGeometry =
+        new THREE.BoxGeometry(
+            8,
+            14,
+            6
+        );
+
     const leftTower =
         new THREE.Mesh(
-            castleWallGeometry,
+            towerGeometry,
             castleWallMaterial
         );
 
     leftTower.position.set(
-        35,
+        10,
         7,
-        -105
+        -116
     );
 
     leftTower.castShadow = true;
@@ -3210,17 +3218,20 @@ if (selectedTrack === "8") {
     scene.add(leftTower);
 
 
-    // Right tower
+    // ========================================================
+    // RIGHT CASTLE TOWER
+    // ========================================================
+
     const rightTower =
         new THREE.Mesh(
-            castleWallGeometry,
+            towerGeometry,
             castleWallMaterial
         );
 
     rightTower.position.set(
-        65,
+        10,
         7,
-        -105
+        -94
     );
 
     rightTower.castShadow = true;
@@ -3229,12 +3240,15 @@ if (selectedTrack === "8") {
     scene.add(rightTower);
 
 
-    // Castle wall above the entrance
+    // ========================================================
+    // WALL ABOVE THE ROAD
+    // ========================================================
+
     const entranceTopGeometry =
         new THREE.BoxGeometry(
-            38,
             8,
-            6
+            8,
+            34
         );
 
     const entranceTop =
@@ -3244,7 +3258,7 @@ if (selectedTrack === "8") {
         );
 
     entranceTop.position.set(
-        50,
+        10,
         10,
         -105
     );
@@ -3255,12 +3269,15 @@ if (selectedTrack === "8") {
     scene.add(entranceTop);
 
 
-    // Dark doorway
+    // ========================================================
+    // DARK CASTLE OPENING
+    // ========================================================
+
     const doorwayGeometry =
         new THREE.BoxGeometry(
-            22,
+            0.5,
             10,
-            0.5
+            14
         );
 
     const doorwayMaterial =
@@ -3276,15 +3293,18 @@ if (selectedTrack === "8") {
         );
 
     doorway.position.set(
-        50,
+        5.8,
         5,
-        -101.8
+        -105
     );
 
     scene.add(doorway);
 
 
-    // Left open castle door
+    // ========================================================
+    // WOODEN DOORS
+    // ========================================================
+
     const doorMaterial =
         new THREE.MeshStandardMaterial({
             color: 0x4a2b18,
@@ -3293,11 +3313,13 @@ if (selectedTrack === "8") {
 
     const doorGeometry =
         new THREE.BoxGeometry(
-            10,
+            0.8,
             9,
-            0.8
+            7
         );
 
+
+    // Left door
     const leftDoor =
         new THREE.Mesh(
             doorGeometry,
@@ -3305,9 +3327,9 @@ if (selectedTrack === "8") {
         );
 
     leftDoor.position.set(
-        39,
+        5,
         4.5,
-        -101
+        -109
     );
 
     leftDoor.rotation.y =
@@ -3318,7 +3340,7 @@ if (selectedTrack === "8") {
     scene.add(leftDoor);
 
 
-    // Right open castle door
+    // Right door
     const rightDoor =
         new THREE.Mesh(
             doorGeometry,
@@ -3326,7 +3348,7 @@ if (selectedTrack === "8") {
         );
 
     rightDoor.position.set(
-        61,
+        5,
         4.5,
         -101
     );
@@ -3339,7 +3361,10 @@ if (selectedTrack === "8") {
     scene.add(rightDoor);
 
 
-    // Castle flags
+    // ========================================================
+    // CASTLE FLAGS
+    // ========================================================
+
     const flagMaterial =
         new THREE.MeshStandardMaterial({
             color: 0xb00000,
@@ -3352,6 +3377,7 @@ if (selectedTrack === "8") {
             3
         );
 
+
     const leftFlag =
         new THREE.Mesh(
             flagGeometry,
@@ -3359,9 +3385,9 @@ if (selectedTrack === "8") {
         );
 
     leftFlag.position.set(
-        35,
+        10,
         14,
-        -105
+        -116
     );
 
     leftFlag.rotation.y =
@@ -3377,9 +3403,9 @@ if (selectedTrack === "8") {
         );
 
     rightFlag.position.set(
-        65,
+        10,
         14,
-        -105
+        -94
     );
 
     rightFlag.rotation.y =
