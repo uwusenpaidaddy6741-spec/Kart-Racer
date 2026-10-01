@@ -3755,6 +3755,175 @@ function createCastleTorches() {
 // Create Track 8 castle torches
 createCastleTorches();
 
+// ============================================================
+// TRACK 8 - CASTLE EXIT GATE
+// ============================================================
+
+function createCastleExitGate() {
+
+    if (selectedTrack !== "8") {
+        return;
+    }
+
+    const stoneMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x555555,
+            roughness: 0.95
+        });
+
+    const darkStoneMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x333333,
+            roughness: 1
+        });
+
+    // LEFT GATE TOWER
+    const leftTower =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                10,
+                16,
+                12
+            ),
+            stoneMaterial
+        );
+
+    leftTower.position.set(
+        30,
+        8,
+        -38
+    );
+
+    leftTower.castShadow = true;
+    leftTower.receiveShadow = true;
+
+    scene.add(leftTower);
+
+    // RIGHT GATE TOWER
+    const rightTower =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                10,
+                16,
+                12
+            ),
+            stoneMaterial
+        );
+
+    rightTower.position.set(
+        55,
+        8,
+        -38
+    );
+
+    rightTower.castShadow = true;
+    rightTower.receiveShadow = true;
+
+    scene.add(rightTower);
+
+    // TOP OF GATE
+    const gateTop =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                35,
+                6,
+                12
+            ),
+            stoneMaterial
+        );
+
+    gateTop.position.set(
+        42.5,
+        15,
+        -38
+    );
+
+    gateTop.castShadow = true;
+    gateTop.receiveShadow = true;
+
+    scene.add(gateTop);
+
+    // DARK OPENING ABOVE ROAD
+    const gateOpening =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                15,
+                10,
+                13
+            ),
+            darkStoneMaterial
+        );
+
+    gateOpening.position.set(
+        42.5,
+        7,
+        -38
+    );
+
+    scene.add(gateOpening);
+
+    // TORCHES ON EXIT
+    const flameMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0xff7a00,
+            emissive: 0xff3300,
+            emissiveIntensity: 2
+        });
+
+    const flameGeometry =
+        new THREE.SphereGeometry(
+            0.8,
+            12,
+            12
+        );
+
+    const exitTorchPositions = [
+        { x: 33, z: -31 },
+        { x: 52, z: -31 }
+    ];
+
+    for (const position of exitTorchPositions) {
+
+        const flame =
+            new THREE.Mesh(
+                flameGeometry,
+                flameMaterial
+            );
+
+        flame.position.set(
+            position.x,
+            10,
+            position.z
+        );
+
+        flame.scale.set(
+            0.7,
+            1.2,
+            0.7
+        );
+
+        scene.add(flame);
+
+        const light =
+            new THREE.PointLight(
+                0xff6600,
+                2.5,
+                18
+            );
+
+        light.position.set(
+            position.x,
+            10,
+            position.z
+        );
+
+        scene.add(light);
+    }
+}
+
+// Create Track 8 castle exit gate
+createCastleExitGate();
+
 createTrack();
 
 // ============================================================
