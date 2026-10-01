@@ -4331,6 +4331,124 @@ function createJungleTrees() {
 createJungleTrees();
 
 // ============================================================
+// TRACK 9 — WATERFALL
+// ============================================================
+
+function createJungleWaterfall() {
+
+    if (selectedTrack !== "9") {
+        return;
+    }
+
+    const waterfall = new THREE.Group();
+
+    // ROCK WALL
+    const rockMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x4a4a42,
+            roughness: 1
+        });
+
+    const rock = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            10,
+            12,
+            4
+        ),
+        rockMaterial
+    );
+
+    rock.position.set(
+        24,
+        6,
+        -27
+    );
+
+    rock.castShadow = true;
+    rock.receiveShadow = true;
+
+    waterfall.add(rock);
+
+    // WATER
+    const waterMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x42b9e8,
+            transparent: true,
+            opacity: 0.78,
+            roughness: 0.15,
+            metalness: 0.05
+        });
+
+    const water = new THREE.Mesh(
+        new THREE.PlaneGeometry(
+            5,
+            11
+        ),
+        waterMaterial
+    );
+
+    water.rotation.x = 0;
+
+    water.position.set(
+        24,
+        5.5,
+        -29.1
+    );
+
+    waterfall.add(water);
+
+    // WATER POOL
+    const pool = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            4.5,
+            4.5,
+            0.25,
+            32
+        ),
+        waterMaterial
+    );
+
+    pool.position.set(
+        24,
+        0.15,
+        -29
+    );
+
+    waterfall.add(pool);
+
+    // SMALL SIDE ROCKS
+    for (let i = 0; i < 5; i++) {
+
+        const smallRock = new THREE.Mesh(
+            new THREE.DodecahedronGeometry(
+                0.8 + Math.random() * 0.7
+            ),
+            rockMaterial
+        );
+
+        smallRock.position.set(
+            19 + Math.random() * 10,
+            0.7,
+            -28 + Math.random() * 4
+        );
+
+        smallRock.rotation.set(
+            Math.random(),
+            Math.random(),
+            Math.random()
+        );
+
+        smallRock.castShadow = true;
+
+        waterfall.add(smallRock);
+    }
+
+    scene.add(waterfall);
+}
+
+createJungleWaterfall();
+
+// ============================================================
 // COIN SYSTEM
 // ============================================================
 
