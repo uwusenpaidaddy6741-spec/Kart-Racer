@@ -3435,7 +3435,7 @@ function createCastleInteriorWalls() {
 
     // ========================================================
     // LEFT CASTLE WALL
-    // MOVED OUTWARD SO IT DOES NOT HANG OVER THE TRACK
+    // Runs alongside the road
     // ========================================================
 
     const leftWall =
@@ -3443,15 +3443,15 @@ function createCastleInteriorWalls() {
             new THREE.BoxGeometry(
                 5,
                 12,
-                45
+                50
             ),
             stoneMaterial
         );
 
     leftWall.position.set(
-        53,
+        57,
         6,
-        10
+        5
     );
 
     leftWall.castShadow = true;
@@ -3459,8 +3459,10 @@ function createCastleInteriorWalls() {
 
     scene.add(leftWall);
 
+
     // ========================================================
     // RIGHT CASTLE WALL
+    // Runs alongside the road
     // ========================================================
 
     const rightWall =
@@ -3468,15 +3470,15 @@ function createCastleInteriorWalls() {
             new THREE.BoxGeometry(
                 5,
                 12,
-                45
+                50
             ),
             stoneMaterial
         );
 
     rightWall.position.set(
-        97,
+        93,
         6,
-        10
+        5
     );
 
     rightWall.castShadow = true;
@@ -3484,65 +3486,71 @@ function createCastleInteriorWalls() {
 
     scene.add(rightWall);
 
+
     // ========================================================
-    // BACK WALL WITH DRIVE-THROUGH OPENING
+    // REAR CASTLE WALL - LEFT SIDE
     //
-    // Instead of one solid wall, this is split into:
-    //
-    // LEFT SECTION | OPENING | RIGHT SECTION
+    // The center is intentionally left open.
     // ========================================================
 
-    const backWallLeft =
+    const rearLeft =
         new THREE.Mesh(
             new THREE.BoxGeometry(
-                44,
+                22,
                 12,
                 5
             ),
             stoneMaterial
         );
 
-    backWallLeft.position.set(
-        28,
+    rearLeft.position.set(
+        15,
         6,
         38
     );
 
-    backWallLeft.castShadow = true;
-    backWallLeft.receiveShadow = true;
+    rearLeft.castShadow = true;
+    rearLeft.receiveShadow = true;
 
-    scene.add(backWallLeft);
+    scene.add(rearLeft);
 
-    const backWallRight =
+
+    // ========================================================
+    // REAR CASTLE WALL - RIGHT SIDE
+    // ========================================================
+
+    const rearRight =
         new THREE.Mesh(
             new THREE.BoxGeometry(
-                14,
+                30,
                 12,
                 5
             ),
             stoneMaterial
         );
 
-    backWallRight.position.set(
-        90,
+    rearRight.position.set(
+        66,
         6,
         38
     );
 
-    backWallRight.castShadow = true;
-    backWallRight.receiveShadow = true;
+    rearRight.castShadow = true;
+    rearRight.receiveShadow = true;
 
-    scene.add(backWallRight);
+    scene.add(rearRight);
+
 
     // ========================================================
-    // TOP OF THE DOORWAY
-    // LEAVES THE CENTER OPEN FOR THE KART
+    // TOP OF DRIVE-THROUGH DOORWAY
+    //
+    // This leaves a real opening underneath.
     // ========================================================
 
     const doorwayTop =
         new THREE.Mesh(
             new THREE.BoxGeometry(
-                18,
+                29,
                 4,
                 5
             ),
@@ -3550,7 +3558,7 @@ function createCastleInteriorWalls() {
         );
 
     doorwayTop.position.set(
-        72,
+        40.5,
         10,
         38
     );
@@ -3560,8 +3568,10 @@ function createCastleInteriorWalls() {
 
     scene.add(doorwayTop);
 
+
     // ========================================================
     // STONE BLOCK DETAILS
+    // Kept completely outside the racing line
     // ========================================================
 
     const blockMaterial =
@@ -3577,7 +3587,9 @@ function createCastleInteriorWalls() {
             5
         );
 
-    // Left wall blocks
+
+    // LEFT WALL BLOCKS
+
     for (let i = 0; i < 7; i++) {
 
         const block =
@@ -3587,9 +3599,9 @@ function createCastleInteriorWalls() {
             );
 
         block.position.set(
-            50.2,
+            54,
             1.5 + (i % 2) * 2.5,
-            -10 + i * 6
+            -15 + i * 6
         );
 
         block.castShadow = true;
@@ -3597,7 +3609,9 @@ function createCastleInteriorWalls() {
         scene.add(block);
     }
 
-    // Right wall blocks
+
+    // RIGHT WALL BLOCKS
+
     for (let i = 0; i < 7; i++) {
 
         const block =
@@ -3607,9 +3621,9 @@ function createCastleInteriorWalls() {
             );
 
         block.position.set(
-            99.8,
+            96,
             1.5 + (i % 2) * 2.5,
-            -10 + i * 6
+            -15 + i * 6
         );
 
         block.castShadow = true;
