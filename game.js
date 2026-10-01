@@ -4427,7 +4427,7 @@ function createJungleWaterfall() {
         );
 
         smallRock.position.set(
-            19 + Math.random() * 10,
+            62 + Math.random() * 10
             0.7,
             -28 + Math.random() * 4
         );
