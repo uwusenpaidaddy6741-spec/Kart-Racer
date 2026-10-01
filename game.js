@@ -3175,7 +3175,353 @@ function createTrack() {
     scene.add(
         finishGroup
     );
+
+    // ============================================================
+// TRACK 8 - CASTLE ENTRANCE
+// ============================================================
+
+if (selectedTrack === "8") {
+
+    // Castle entrance wall
+    const castleWallMaterial = new THREE.MeshStandardMaterial({
+        color: 0x6b6b6b,
+        roughness: 0.9
+    });
+
+    const castleWallGeometry =
+        new THREE.BoxGeometry(8, 14, 6);
+
+    // Left tower
+    const leftTower =
+        new THREE.Mesh(
+            castleWallGeometry,
+            castleWallMaterial
+        );
+
+    leftTower.position.set(
+        35,
+        7,
+        -105
+    );
+
+    leftTower.castShadow = true;
+    leftTower.receiveShadow = true;
+
+    scene.add(leftTower);
+
+
+    // Right tower
+    const rightTower =
+        new THREE.Mesh(
+            castleWallGeometry,
+            castleWallMaterial
+        );
+
+    rightTower.position.set(
+        65,
+        7,
+        -105
+    );
+
+    rightTower.castShadow = true;
+    rightTower.receiveShadow = true;
+
+    scene.add(rightTower);
+
+
+    // Castle wall above the entrance
+    const entranceTopGeometry =
+        new THREE.BoxGeometry(
+            38,
+            8,
+            6
+        );
+
+    const entranceTop =
+        new THREE.Mesh(
+            entranceTopGeometry,
+            castleWallMaterial
+        );
+
+    entranceTop.position.set(
+        50,
+        10,
+        -105
+    );
+
+    entranceTop.castShadow = true;
+    entranceTop.receiveShadow = true;
+
+    scene.add(entranceTop);
+
+
+    // Dark doorway
+    const doorwayGeometry =
+        new THREE.BoxGeometry(
+            22,
+            10,
+            0.5
+        );
+
+    const doorwayMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x151515,
+            roughness: 1
+        });
+
+    const doorway =
+        new THREE.Mesh(
+            doorwayGeometry,
+            doorwayMaterial
+        );
+
+    doorway.position.set(
+        50,
+        5,
+        -101.8
+    );
+
+    scene.add(doorway);
+
+
+    // Left open castle door
+    const doorMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x4a2b18,
+            roughness: 0.8
+        });
+
+    const doorGeometry =
+        new THREE.BoxGeometry(
+            10,
+            9,
+            0.8
+        );
+
+    const leftDoor =
+        new THREE.Mesh(
+            doorGeometry,
+            doorMaterial
+        );
+
+    leftDoor.position.set(
+        39,
+        4.5,
+        -101
+    );
+
+    leftDoor.rotation.y =
+        THREE.MathUtils.degToRad(-35);
+
+    leftDoor.castShadow = true;
+
+    scene.add(leftDoor);
+
+
+    // Right open castle door
+    const rightDoor =
+        new THREE.Mesh(
+            doorGeometry,
+            doorMaterial
+        );
+
+    rightDoor.position.set(
+        61,
+        4.5,
+        -101
+    );
+
+    rightDoor.rotation.y =
+        THREE.MathUtils.degToRad(35);
+
+    rightDoor.castShadow = true;
+
+    scene.add(rightDoor);
+
+
+    // Castle flags
+    const flagMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0xb00000,
+            side: THREE.DoubleSide
+        });
+
+    const flagGeometry =
+        new THREE.PlaneGeometry(
+            4,
+            3
+        );
+
+    const leftFlag =
+        new THREE.Mesh(
+            flagGeometry,
+            flagMaterial
+        );
+
+    leftFlag.position.set(
+        35,
+        14,
+        -105
+    );
+
+    leftFlag.rotation.y =
+        Math.PI / 2;
+
+    scene.add(leftFlag);
+
+
+    const rightFlag =
+        new THREE.Mesh(
+            flagGeometry,
+            flagMaterial
+        );
+
+    rightFlag.position.set(
+        65,
+        14,
+        -105
+    );
+
+    rightFlag.rotation.y =
+        Math.PI / 2;
+
+    scene.add(rightFlag);
+
 }
+    
+}
+
+// ============================================================
+// TRACK 8 - CASTLE INTERIOR WALLS
+// ============================================================
+
+function createCastleInteriorWalls() {
+
+    if (selectedTrack !== "8") {
+        return;
+    }
+
+    const stoneMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x666666,
+            roughness: 0.95
+        });
+
+    // --------------------------------------------------------
+    // LEFT INTERIOR WALL
+    // --------------------------------------------------------
+
+    const leftWall =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                5,
+                12,
+                65
+            ),
+            stoneMaterial
+        );
+
+    leftWall.position.set(
+        60,
+        6,
+        5
+    );
+
+    leftWall.castShadow = true;
+    leftWall.receiveShadow = true;
+
+    scene.add(leftWall);
+
+
+    // --------------------------------------------------------
+    // RIGHT INTERIOR WALL
+    // --------------------------------------------------------
+
+    const rightWall =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                5,
+                12,
+                65
+            ),
+            stoneMaterial
+        );
+
+    rightWall.position.set(
+        90,
+        6,
+        5
+    );
+
+    rightWall.castShadow = true;
+    rightWall.receiveShadow = true;
+
+    scene.add(rightWall);
+
+
+    // --------------------------------------------------------
+    // STONE BLOCK DETAILS
+    // --------------------------------------------------------
+
+    const blockMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x777777,
+            roughness: 1
+        });
+
+    const blockGeometry =
+        new THREE.BoxGeometry(
+            2.5,
+            1.2,
+            5
+        );
+
+
+    // Left wall blocks
+    for (let i = 0; i < 10; i++) {
+
+        const block =
+            new THREE.Mesh(
+                blockGeometry,
+                blockMaterial
+            );
+
+        block.position.set(
+            57.2,
+            1.5 + (i % 2) * 2.5,
+            -25 + i * 6
+        );
+
+        block.castShadow = true;
+
+        scene.add(block);
+    }
+
+
+    // Right wall blocks
+    for (let i = 0; i < 10; i++) {
+
+        const block =
+            new THREE.Mesh(
+                blockGeometry,
+                blockMaterial
+            );
+
+        block.position.set(
+            92.8,
+            1.5 + (i % 2) * 2.5,
+            -25 + i * 6
+        );
+
+        block.castShadow = true;
+
+        scene.add(block);
+    }
+}
+
+
+// Create Track 8 castle interior
+createCastleInteriorWalls();
 
 createTrack();
 
