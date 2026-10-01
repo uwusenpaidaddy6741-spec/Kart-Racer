@@ -1463,6 +1463,144 @@ function castleRunPoints() {
 }
 
 // ============================================================
+// TRACK 9 — JUNGLE RUN
+// ============================================================
+
+function jungleRunPoints() {
+
+    const points = [];
+
+    const controlPoints = [
+
+        // Start / finish straight
+        { x: 0,   z: 55 },
+        { x: 18,  z: 55 },
+        { x: 38,  z: 48 },
+
+        // First jungle bend
+        { x: 55,  z: 32 },
+        { x: 58,  z: 10 },
+        { x: 48,  z: -8 },
+
+        // Waterfall section
+        { x: 30,  z: -22 },
+        { x: 8,   z: -28 },
+
+        // Cave entrance
+        { x: -18, z: -25 },
+        { x: -38, z: -12 },
+
+        // Cave exit / sharp turn
+        { x: -52, z: 5 },
+        { x: -48, z: 25 },
+
+        // Long jungle straight
+        { x: -32, z: 40 },
+        { x: -12, z: 50 },
+
+        // Back toward start
+        { x: 0,   z: 55 }
+
+    ];
+
+    // Smooth the control points
+    for (
+        let i = 0;
+        i < controlPoints.length - 1;
+        i++
+    ) {
+
+        const previous =
+            controlPoints[
+                (i - 1 + controlPoints.length) %
+                controlPoints.length
+            ];
+
+        const current =
+            controlPoints[i];
+
+        const next =
+            controlPoints[
+                (i + 1) %
+                controlPoints.length
+            ];
+
+        const nextNext =
+            controlPoints[
+                (i + 2) %
+                controlPoints.length
+            ];
+
+        const steps = 12;
+
+        for (
+            let j = 0;
+            j < steps;
+            j++
+        ) {
+
+            const t =
+                j / steps;
+
+            const t2 =
+                t * t;
+
+            const t3 =
+                t2 * t;
+
+            const x =
+                0.5 * (
+                    (2 * current.x) +
+
+                    (-previous.x + next.x) * t +
+
+                    (
+                        2 * previous.x -
+                        5 * current.x +
+                        4 * next.x -
+                        nextNext.x
+                    ) * t2 +
+
+                    (
+                        -previous.x +
+                        3 * current.x -
+                        3 * next.x +
+                        nextNext.x
+                    ) * t3
+                );
+
+            const z =
+                0.5 * (
+                    (2 * current.z) +
+
+                    (-previous.z + next.z) * t +
+
+                    (
+                        2 * previous.z -
+                        5 * current.z +
+                        4 * next.z -
+                        nextNext.z
+                    ) * t2 +
+
+                    (
+                        -previous.z +
+                        3 * current.z -
+                        3 * next.z +
+                        nextNext.z
+                    ) * t3
+                );
+
+            points.push({
+                x: x,
+                z: z
+            });
+        }
+    }
+
+    return points;
+}
+
+// ============================================================
 // TRACK SELECTION
 // ============================================================
 
@@ -1496,8 +1634,9 @@ const trackPoints =
                                 ? mountainPassPoints()
                                 : selectedTrack === "8"
                                     ? castleRunPoints()
-                                    : roundedRectanglePoints();
-
+                                    : selectedTrack === "9"
+                                         ? jungleRunPoints()
+                                          : roundedRectanglePoints();
 // ============================================================
 // PLAYER / CONTROL HELPERS
 // ============================================================
@@ -4004,6 +4143,192 @@ function createCastleExitGate() {
 createCastleExitGate();
 
 createTrack();
+
+// ============================================================
+// TRACK 9 — JUNGLE TREES
+// ============================================================
+
+function createJungleTree(x, z, scale = 1) {
+
+    const tree = new THREE.Group();
+
+    // --------------------------------------------------------
+    // TRUNK
+    // --------------------------------------------------------
+
+    const trunk = new THREE.Mesh(
+        new THREE.CylinderGeometry(
+            0.45,
+            0.7,
+            5,
+            8
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x5b351c,
+            roughness: 1
+        })
+    );
+
+    trunk.position.y = 2.5;
+
+    trunk.castShadow = true;
+    trunk.receiveShadow = true;
+
+    tree.add(trunk);
+
+    // --------------------------------------------------------
+    // MAIN LEAVES
+    // --------------------------------------------------------
+
+    const leafMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x176b2c,
+            roughness: 0.9
+        });
+
+    const leafPositions = [
+        [0, 5.0, 0],
+        [-1.2, 4.6, 0.2],
+        [1.2, 4.7, -0.2],
+        [0, 5.7, 0.4]
+    ];
+
+    for (
+        const position of leafPositions
+    ) {
+
+        const leaves =
+            new THREE.Mesh(
+                new THREE.SphereGeometry(
+                    1.6,
+                    8,
+                    6
+                ),
+                leafMaterial
+            );
+
+        leaves.position.set(
+            position[0],
+            position[1],
+            position[2]
+        );
+
+        leaves.scale.set(
+            1.3,
+            0.8,
+            1.2
+        );
+
+        leaves.castShadow = true;
+
+        tree.add(leaves);
+    }
+
+    // --------------------------------------------------------
+    // VINES
+    // --------------------------------------------------------
+
+    const vineMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x2f8f3b,
+            roughness: 0.9
+        });
+
+    for (
+        let i = 0;
+        i < 3;
+        i++
+    ) {
+
+        const vine =
+            new THREE.Mesh(
+                new THREE.CylinderGeometry(
+                    0.06,
+                    0.06,
+                    2.5,
+                    6
+                ),
+                vineMaterial
+            );
+
+        vine.position.set(
+            (i - 1) * 0.5,
+            4.2,
+            0.6
+        );
+
+        vine.rotation.z =
+            (i - 1) * 0.18;
+
+        tree.add(vine);
+    }
+
+    tree.position.set(
+        x,
+        0,
+        z
+    );
+
+    tree.scale.setScalar(
+        scale
+    );
+
+    scene.add(tree);
+}
+
+
+// ============================================================
+// PLACE JUNGLE TREES
+// ============================================================
+
+function createJungleTrees() {
+
+    if (
+        selectedTrack !== "9"
+    ) {
+        return;
+    }
+
+    const trees = [
+
+        // Left side
+        [-72, 45, 1.3],
+        [-68, 25, 1.0],
+        [-70, 0, 1.5],
+        [-68, -28, 1.1],
+        [-55, -45, 1.4],
+        [-30, -48, 1.0],
+
+        // Right side
+        [72, 45, 1.2],
+        [70, 25, 1.4],
+        [72, 0, 1.0],
+        [68, -28, 1.5],
+        [52, -45, 1.2],
+        [28, -50, 1.4],
+
+        // Back jungle
+        [-45, 65, 1.2],
+        [-20, 70, 1.4],
+        [5, 70, 1.1],
+        [30, 68, 1.5],
+        [55, 60, 1.2]
+
+    ];
+
+    for (
+        const tree of trees
+    ) {
+
+        createJungleTree(
+            tree[0],
+            tree[1],
+            tree[2]
+        );
+    }
+}
+
+createJungleTrees();
 
 // ============================================================
 // COIN SYSTEM
