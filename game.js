@@ -2088,7 +2088,7 @@ const kartStats = {
         acceleration: 18,
         braking: 30,
         turnSpeed: 3.4,
-        driftChargeRate: 1.2
+        driftChargeRate: 1.5
     },
 
     rocket: {
@@ -2096,7 +2096,7 @@ const kartStats = {
         acceleration: 24,
         braking: 28,
         turnSpeed: 2.6,
-        driftChargeRate: 1
+        driftChargeRate: 1.45
     },
 
     heavy: {
@@ -2104,7 +2104,7 @@ const kartStats = {
         acceleration: 20,
         braking: 35,
         turnSpeed: 2.8,
-        driftChargeRate: 1
+        driftChargeRate: 1.15
     },
 
     drifter: {
@@ -2112,7 +2112,7 @@ const kartStats = {
         acceleration: 22,
         braking: 30,
         turnSpeed: 3.4,
-        driftChargeRate: 1.5
+        driftChargeRate: 1.65
     },
         
     blaze: {
@@ -2405,7 +2405,7 @@ const wheelStats = {
         maxSpeed: -1,
         acceleration: 0,
         turnSpeed: 0.3,
-        driftChargeRate: 1.5
+        driftChargeRate: 1.65
     },
 
     shadow: {
@@ -4427,10 +4427,10 @@ function createJungleWaterfall() {
         );
 
         smallRock.position.set(
-            62 + Math.random() * 10
-            0.7,
-            -28 + Math.random() * 4
-        );
+    62 + Math.random() * 10,
+    0.7,
+    -28 + Math.random() * 4
+);
 
         smallRock.rotation.set(
             Math.random(),
