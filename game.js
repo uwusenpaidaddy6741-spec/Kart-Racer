@@ -3617,6 +3617,144 @@ function createCastleInteriorPillars() {
 // Create Track 8 castle pillars
 createCastleInteriorPillars();
 
+// ============================================================
+// TRACK 8 - CASTLE TORCHES
+// ============================================================
+
+function createCastleTorches() {
+
+    if (selectedTrack !== "8") {
+        return;
+    }
+
+    // --------------------------------------------------------
+    // TORCH MATERIALS
+    // --------------------------------------------------------
+
+    const woodMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x4a2b18,
+            roughness: 0.9
+        });
+
+    const flameMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0xff7a00,
+            emissive: 0xff3300,
+            emissiveIntensity: 2
+        });
+
+
+    // --------------------------------------------------------
+    // TORCH GEOMETRY
+    // --------------------------------------------------------
+
+    const torchHandleGeometry =
+        new THREE.CylinderGeometry(
+            0.35,
+            0.45,
+            2.5,
+            8
+        );
+
+    const flameGeometry =
+        new THREE.SphereGeometry(
+            0.8,
+            12,
+            12
+        );
+
+
+    // --------------------------------------------------------
+    // TORCH POSITIONS
+    // --------------------------------------------------------
+
+    const torchPositions = [
+
+        // Left wall
+        { x: 63, z: -10 },
+        { x: 63, z: 5 },
+        { x: 63, z: 20 },
+
+        // Right wall
+        { x: 87, z: -10 },
+        { x: 87, z: 5 },
+        { x: 87, z: 20 }
+
+    ];
+
+
+    // --------------------------------------------------------
+    // CREATE TORCHES
+    // --------------------------------------------------------
+
+    for (const position of torchPositions) {
+
+        // Wooden handle
+        const handle =
+            new THREE.Mesh(
+                torchHandleGeometry,
+                woodMaterial
+            );
+
+        handle.position.set(
+            position.x,
+            5,
+            position.z
+        );
+
+        handle.rotation.z =
+            Math.PI / 2;
+
+        handle.castShadow = true;
+
+        scene.add(handle);
+
+
+        // Flame
+        const flame =
+            new THREE.Mesh(
+                flameGeometry,
+                flameMaterial
+            );
+
+        flame.position.set(
+            position.x,
+            6.4,
+            position.z
+        );
+
+        flame.scale.set(
+            0.7,
+            1.2,
+            0.7
+        );
+
+        scene.add(flame);
+
+
+        // Warm light
+        const torchLight =
+            new THREE.PointLight(
+                0xff6600,
+                2.5,
+                18
+            );
+
+        torchLight.position.set(
+            position.x,
+            6.5,
+            position.z
+        );
+
+        scene.add(torchLight);
+    }
+}
+
+
+// Create Track 8 castle torches
+createCastleTorches();
+
 createTrack();
 
 // ============================================================
