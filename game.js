@@ -3117,9 +3117,18 @@ function createCoin(index) {
             trackPoints.length
         ];
 
+    // Get the mountain elevation
+    const trackHeight =
+        getTrackHeight(trackPosition);
+
+    // Save the base height so the floating
+    // animation stays attached to the mountain.
+    coin.userData.baseHeight =
+        trackHeight + 1.0;
+
     coin.position.set(
         point.x,
-        1.0,
+        coin.userData.baseHeight,
         point.z
     );
 
