@@ -6300,6 +6300,9 @@ if (selectedBike === "flash") {
     if (selectedBike === "specter") {
     return "models/bikes/specter_bike.glb";
 }
+    if (selectedBike === "juggernaut") {
+    return "models/bikes/juggernaut_bike.glb";
+}
 
     // -------------------------
     // KARTS
