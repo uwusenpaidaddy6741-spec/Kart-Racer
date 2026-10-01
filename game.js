@@ -3320,11 +3320,21 @@ function createCurbs() {
                 : whiteMaterial
         );
 
-        curb.position.set(
-            (p.x + next.x) / 2,
-            0.2,
-            (p.z + next.z) / 2
-        );
+        // Get the elevation of both ends of this curb
+const height1 = getTrackHeight(i);
+const height2 = getTrackHeight(
+    (i + 1) % trackPoints.length
+);
+
+// Put the curb halfway between those elevations
+const curbHeight =
+    (height1 + height2) / 2;
+
+curb.position.set(
+    (p.x + next.x) / 2,
+    curbHeight + 0.2,
+    (p.z + next.z) / 2
+);
 
         curb.rotation.y =
             -Math.atan2(dz, dx);
