@@ -3174,12 +3174,12 @@ function updateCoins(deltaTime) {
 
             // Small floating animation
             coin.position.y =
-                1.0 +
-                Math.sin(
-                    performance.now() * 0.004 +
-                    coin.userData.index
-                ) *
-                0.12;
+    coin.userData.baseHeight +
+    Math.sin(
+        performance.now() * 0.004 +
+        coin.userData.index
+    ) *
+    0.12;
         }
 
         // ----------------------------------------------------
