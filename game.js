@@ -3434,8 +3434,7 @@ function createCastleInteriorWalls() {
         });
 
     // ========================================================
-    // LEFT CASTLE WALL
-    // Runs alongside the road
+    // LEFT SIDE WALL
     // ========================================================
 
     const leftWall =
@@ -3443,15 +3442,15 @@ function createCastleInteriorWalls() {
             new THREE.BoxGeometry(
                 5,
                 12,
-                50
+                48
             ),
             stoneMaterial
         );
 
     leftWall.position.set(
-        57,
+        55,
         6,
-        5
+        4
     );
 
     leftWall.castShadow = true;
@@ -3461,8 +3460,7 @@ function createCastleInteriorWalls() {
 
 
     // ========================================================
-    // RIGHT CASTLE WALL
-    // Runs alongside the road
+    // RIGHT SIDE WALL
     // ========================================================
 
     const rightWall =
@@ -3470,15 +3468,15 @@ function createCastleInteriorWalls() {
             new THREE.BoxGeometry(
                 5,
                 12,
-                50
+                48
             ),
             stoneMaterial
         );
 
     rightWall.position.set(
-        93,
+        95,
         6,
-        5
+        4
     );
 
     rightWall.castShadow = true;
@@ -3488,148 +3486,96 @@ function createCastleInteriorWalls() {
 
 
     // ========================================================
-    // REAR CASTLE WALL - LEFT SIDE
+    // EXIT WALL
     //
-    // The center is intentionally left open.
+    // Instead of one huge wall across the road,
+    // create two smaller sections with a wide opening.
     // ========================================================
 
-    const rearLeft =
+    const exitWallLeft =
         new THREE.Mesh(
             new THREE.BoxGeometry(
-                22,
+                18,
                 12,
                 5
             ),
             stoneMaterial
         );
 
-    rearLeft.position.set(
-        15,
+    exitWallLeft.position.set(
+        18,
         6,
-        38
+        48
     );
 
-    rearLeft.castShadow = true;
-    rearLeft.receiveShadow = true;
+    exitWallLeft.rotation.y =
+        -Math.PI / 6;
 
-    scene.add(rearLeft);
+    exitWallLeft.castShadow = true;
+    exitWallLeft.receiveShadow = true;
+
+    scene.add(exitWallLeft);
 
 
     // ========================================================
-    // REAR CASTLE WALL - RIGHT SIDE
+    // EXIT WALL RIGHT
     // ========================================================
 
-    const rearRight =
+    const exitWallRight =
+        new THREE.Mesh(
+            new THREE.BoxGeometry(
+                18,
+                12,
+                5
+            ),
+            stoneMaterial
+        );
+
+    exitWallRight.position.set(
+        70,
+        6,
+        25
+    );
+
+    exitWallRight.rotation.y =
+        -Math.PI / 6;
+
+    exitWallRight.castShadow = true;
+    exitWallRight.receiveShadow = true;
+
+    scene.add(exitWallRight);
+
+
+    // ========================================================
+    // OPENING ARCH
+    //
+    // No solid object underneath this.
+    // The kart can drive straight through.
+    // ========================================================
+
+    const exitArch =
         new THREE.Mesh(
             new THREE.BoxGeometry(
                 30,
-                12,
-                5
-            ),
-            stoneMaterial
-        );
-
-    rearRight.position.set(
-        66,
-        6,
-        38
-    );
-
-    rearRight.castShadow = true;
-    rearRight.receiveShadow = true;
-
-    scene.add(rearRight);
-
-
-    // ========================================================
-    // TOP OF DRIVE-THROUGH DOORWAY
-    //
-    // This leaves a real opening underneath.
-    // ========================================================
-
-    const doorwayTop =
-        new THREE.Mesh(
-            new THREE.BoxGeometry(
-                29,
                 4,
                 5
             ),
             stoneMaterial
         );
 
-    doorwayTop.position.set(
-        40.5,
+    exitArch.position.set(
+        44,
         10,
-        38
+        37
     );
 
-    doorwayTop.castShadow = true;
-    doorwayTop.receiveShadow = true;
+    exitArch.rotation.y =
+        -Math.PI / 6;
 
-    scene.add(doorwayTop);
+    exitArch.castShadow = true;
+    exitArch.receiveShadow = true;
 
-
-    // ========================================================
-    // STONE BLOCK DETAILS
-    // Kept completely outside the racing line
-    // ========================================================
-
-    const blockMaterial =
-        new THREE.MeshStandardMaterial({
-            color: 0x777777,
-            roughness: 1
-        });
-
-    const blockGeometry =
-        new THREE.BoxGeometry(
-            2.5,
-            1.2,
-            5
-        );
-
-
-    // LEFT WALL BLOCKS
-
-    for (let i = 0; i < 7; i++) {
-
-        const block =
-            new THREE.Mesh(
-                blockGeometry,
-                blockMaterial
-            );
-
-        block.position.set(
-            54,
-            1.5 + (i % 2) * 2.5,
-            -15 + i * 6
-        );
-
-        block.castShadow = true;
-
-        scene.add(block);
-    }
-
-
-    // RIGHT WALL BLOCKS
-
-    for (let i = 0; i < 7; i++) {
-
-        const block =
-            new THREE.Mesh(
-                blockGeometry,
-                blockMaterial
-            );
-
-        block.position.set(
-            96,
-            1.5 + (i % 2) * 2.5,
-            -15 + i * 6
-        );
-
-        block.castShadow = true;
-
-        scene.add(block);
-    }
+    scene.add(exitArch);
 }
 
 // Create Track 8 castle interior
