@@ -1338,6 +1338,131 @@ function mountainPassPoints() {
 }
 
 // ============================================================
+// TRACK 8 - CASTLE RUN
+// ============================================================
+
+function castleRunPoints() {
+
+    const controlPoints = [
+
+        // Outdoor approach to castle
+        { x: -100, z: -90 },
+        { x: -55,  z: -105 },
+        { x: -10,  z: -105 },
+
+        // Castle entrance
+        { x: 35,   z: -105 },
+        { x: 65,   z: -90 },
+        { x: 75,   z: -55 },
+
+        // Drive INTO the castle
+        { x: 75,   z: -20 },
+        { x: 75,   z: 20 },
+
+        // Castle interior
+        { x: 55,   z: 45 },
+        { x: 15,   z: 55 },
+        { x: -25,  z: 45 },
+
+        // Castle courtyard
+        { x: -55,  z: 20 },
+        { x: -60,  z: -20 },
+
+        // Turn toward castle exit
+        { x: -35,  z: -50 },
+        { x: 5,    z: -55 },
+
+        // Drive OUT of the castle
+        { x: 40,   z: -45 },
+        { x: 65,   z: -20 },
+
+        // Outdoor section
+        { x: 90,   z: 15 },
+        { x: 105,  z: 55 },
+        { x: 90,   z: 95 },
+        { x: 50,   z: 115 },
+        { x: 0,    z: 120 },
+        { x: -50,  z: 110 },
+        { x: -90,  z: 80 },
+        { x: -110, z: 35 },
+        { x: -115, z: -15 },
+        { x: -105, z: -55 },
+        { x: -100, z: -90 }
+    ];
+
+    const points = [];
+
+    for (
+        let i = 0;
+        i < controlPoints.length - 1;
+        i++
+    ) {
+
+        const previous =
+            controlPoints[Math.max(0, i - 1)];
+
+        const current =
+            controlPoints[i];
+
+        const next =
+            controlPoints[i + 1];
+
+        const nextNext =
+            controlPoints[
+                Math.min(
+                    controlPoints.length - 1,
+                    i + 2
+                )
+            ];
+
+        const samples = 12;
+
+        for (let j = 0; j < samples; j++) {
+
+            const t = j / samples;
+
+            const t2 = t * t;
+            const t3 = t2 * t;
+
+            const x =
+                0.5 * (
+                    (2 * current.x) +
+                    (-previous.x + next.x) * t +
+                    (2 * previous.x -
+                        5 * current.x +
+                        4 * next.x -
+                        nextNext.x) * t2 +
+                    (-previous.x +
+                        3 * current.x -
+                        3 * next.x +
+                        nextNext.x) * t3
+                );
+
+            const z =
+                0.5 * (
+                    (2 * current.z) +
+                    (-previous.z + next.z) * t +
+                    (2 * previous.z -
+                        5 * current.z +
+                        4 * next.z -
+                        nextNext.z) * t2 +
+                    (-previous.z +
+                        3 * current.z -
+                        3 * next.z +
+                        nextNext.z) * t3
+                );
+
+            points.push({
+                x,
+                z
+            });
+        }
+    }
+
+    return points;
+}
+
+// ============================================================
 // TRACK SELECTION
 // ============================================================
 
@@ -1369,7 +1494,9 @@ const trackPoints =
                             ? sunsetSpeedwayPoints()
                             : selectedTrack === "7"
                                 ? mountainPassPoints()
-                                : roundedRectanglePoints();
+                                : selectedTrack === "8"
+                                    ? castleRunPoints()
+                                    : roundedRectanglePoints();
 
 // ============================================================
 // PLAYER / CONTROL HELPERS
@@ -9768,7 +9895,7 @@ async function loadTimeTrialLeaderboard(forceRefresh = false) {
 
     leaderboardLoading = true;
 
-    const trackIds = ["1", "3", "2", "4", "5", "6", "7"];
+    const trackIds = ["1", "3", "2", "4", "5", "6", "7", "8"];
 
     const boards =
         document.querySelectorAll(
