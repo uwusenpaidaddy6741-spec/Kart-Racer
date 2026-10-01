@@ -4331,7 +4331,7 @@ function createJungleTrees() {
 createJungleTrees();
 
 // ============================================================
-// TRACK 9 — WATERFALL
+// TRACK 9 — CENTER JUNGLE WATERFALL + POND
 // ============================================================
 
 function createJungleWaterfall() {
@@ -4342,34 +4342,16 @@ function createJungleWaterfall() {
 
     const waterfall = new THREE.Group();
 
-    // ROCK WALL
+    // ========================================================
+    // MATERIALS
+    // ========================================================
+
     const rockMaterial =
         new THREE.MeshStandardMaterial({
             color: 0x4a4a42,
             roughness: 1
         });
 
-    const rock = new THREE.Mesh(
-        new THREE.BoxGeometry(
-            10,
-            12,
-            4
-        ),
-        rockMaterial
-    );
-
-    rock.position.set(
-    67,
-    6,
-    -27
-);
-
-    rock.castShadow = true;
-    rock.receiveShadow = true;
-
-    waterfall.add(rock);
-
-    // WATER
     const waterMaterial =
         new THREE.MeshStandardMaterial({
             color: 0x42b9e8,
@@ -4379,75 +4361,213 @@ function createJungleWaterfall() {
             metalness: 0.05
         });
 
-    const water = new THREE.Mesh(
+    // ========================================================
+    // WATERFALL ROCK WALL
+    // ========================================================
+
+    const rockWall = new THREE.Mesh(
+        new THREE.BoxGeometry(
+            12,
+            11,
+            4
+        ),
+        rockMaterial
+    );
+
+    rockWall.position.set(
+        0,
+        5.5,
+        -16
+    );
+
+    rockWall.castShadow = true;
+    rockWall.receiveShadow = true;
+
+    waterfall.add(rockWall);
+
+    // ========================================================
+    // WATERFALL
+    // ========================================================
+
+    const waterfallWater = new THREE.Mesh(
         new THREE.PlaneGeometry(
-            5,
-            11
+            6,
+            10
         ),
         waterMaterial
     );
 
-    water.rotation.x = 0;
+    waterfallWater.position.set(
+        0,
+        5,
+        -13.9
+    );
 
-    water.position.set(
-    67,
-    5.5,
-    -29.1
-);
+    waterfall.add(waterfallWater);
 
-    waterfall.add(water);
+    // ========================================================
+    // CENTER POND
+    // ========================================================
 
-    // WATER POOL
-    const pool = new THREE.Mesh(
+    const pond = new THREE.Mesh(
         new THREE.CylinderGeometry(
-            4.5,
-            4.5,
-            0.25,
-            32
+            8,
+            8,
+            0.3,
+            40
         ),
         waterMaterial
     );
 
-    pool.position.set(
-    67,
-    0.15,
-    -29
-);
+    pond.position.set(
+        0,
+        0.15,
+        -4
+    );
 
-    waterfall.add(pool);
+    pond.receiveShadow = true;
 
-    // SMALL SIDE ROCKS
-    for (let i = 0; i < 5; i++) {
+    waterfall.add(pond);
 
-        const smallRock = new THREE.Mesh(
+    // ========================================================
+    // POND INNER WATER
+    // ========================================================
+
+    const pondInner = new THREE.Mesh(
+        new THREE.CircleGeometry(
+            6.5,
+            40
+        ),
+        new THREE.MeshStandardMaterial({
+            color: 0x238fc0,
+            transparent: true,
+            opacity: 0.65,
+            roughness: 0.1
+        })
+    );
+
+    pondInner.rotation.x = -Math.PI / 2;
+
+    pondInner.position.set(
+        0,
+        0.32,
+        -4
+    );
+
+    waterfall.add(pondInner);
+
+    // ========================================================
+    // ROCKS AROUND POND
+    // ========================================================
+
+    const pondRocks = [
+        [-8, -4, 1.4],
+        [8, -4, 1.3],
+        [-6, 3, 1.0],
+        [6, 3, 1.2],
+        [-4, -11, 1.1],
+        [4, -11, 1.0],
+        [-9, -9, 0.9],
+        [9, -9, 1.0]
+    ];
+
+    for (const rockData of pondRocks) {
+
+        const rock = new THREE.Mesh(
             new THREE.DodecahedronGeometry(
-                0.8 + Math.random() * 0.7
+                rockData[2]
             ),
             rockMaterial
         );
 
-        smallRock.position.set(
-    62 + Math.random() * 10,
-    0.7,
-    -28 + Math.random() * 4
-);
+        rock.position.set(
+            rockData[0],
+            0.7,
+            rockData[1]
+        );
 
-        smallRock.rotation.set(
+        rock.rotation.set(
             Math.random(),
             Math.random(),
             Math.random()
         );
 
-        smallRock.castShadow = true;
+        rock.castShadow = true;
 
-        waterfall.add(smallRock);
+        waterfall.add(rock);
+    }
+
+    // ========================================================
+    // SMALL ROCKS AT WATERFALL BASE
+    // ========================================================
+
+    for (let i = 0; i < 7; i++) {
+
+        const rock = new THREE.Mesh(
+            new THREE.DodecahedronGeometry(
+                0.5 + Math.random() * 0.6
+            ),
+            rockMaterial
+        );
+
+        rock.position.set(
+            -4 + Math.random() * 8,
+            0.5,
+            -11 + Math.random() * 3
+        );
+
+        rock.rotation.set(
+            Math.random(),
+            Math.random(),
+            Math.random()
+        );
+
+        rock.castShadow = true;
+
+        waterfall.add(rock);
+    }
+
+    // ========================================================
+    // CENTER JUNGLE ROCKS
+    // ========================================================
+
+    const largeRocks = [
+        [-11, -1, 2.0],
+        [11, -1, 1.8],
+        [-10, 8, 1.5],
+        [10, 8, 1.6]
+    ];
+
+    for (const rockData of largeRocks) {
+
+        const rock = new THREE.Mesh(
+            new THREE.DodecahedronGeometry(
+                rockData[2]
+            ),
+            rockMaterial
+        );
+
+        rock.position.set(
+            rockData[0],
+            1,
+            rockData[1]
+        );
+
+        rock.rotation.set(
+            Math.random(),
+            Math.random(),
+            Math.random()
+        );
+
+        rock.castShadow = true;
+
+        waterfall.add(rock);
     }
 
     scene.add(waterfall);
 }
 
 createJungleWaterfall();
-
 // ============================================================
 // COIN SYSTEM
 // ============================================================
