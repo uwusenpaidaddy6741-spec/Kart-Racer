@@ -2188,7 +2188,7 @@ const bikeStats = {
 
     rocket: {
     name: "Rocket Bike",
-    maxSpeed: 53,
+    maxSpeed: 59,
     acceleration: 15,
     braking: 18,
     turnSpeed: 1.9,
@@ -2216,7 +2216,7 @@ const bikeStats = {
     specter: {
     name: "Specter Bike",
     maxSpeed: 49,
-    acceleration: 24,
+    acceleration: 26,
     braking: 22,
     turnSpeed: 3.7,
     driftChargeRate: 2.2
@@ -2225,7 +2225,7 @@ const bikeStats = {
     juggernaut: {
     name: "Juggernaut Bike",
     maxSpeed: 46,
-    acceleration: 23,
+    acceleration: 25,
     braking: 40,
     turnSpeed: 2.0,
     driftChargeRate: 1.4
