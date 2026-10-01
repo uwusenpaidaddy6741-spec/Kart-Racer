@@ -3549,6 +3549,74 @@ function createCastleInteriorWalls() {
 // Create Track 8 castle interior
 createCastleInteriorWalls();
 
+// ============================================================
+// TRACK 8 - CASTLE INTERIOR PILLARS
+// ============================================================
+
+function createCastleInteriorPillars() {
+
+    if (selectedTrack !== "8") {
+        return;
+    }
+
+    const pillarMaterial =
+        new THREE.MeshStandardMaterial({
+            color: 0x777777,
+            roughness: 0.9
+        });
+
+    const pillarGeometry =
+        new THREE.BoxGeometry(
+            3,
+            10,
+            3
+        );
+
+
+    // --------------------------------------------------------
+    // PILLARS ALONG THE CASTLE INTERIOR
+    // --------------------------------------------------------
+
+    const pillarPositions = [
+
+        // Left side
+        { x: 65, z: -15 },
+        { x: 65, z: 0 },
+        { x: 65, z: 15 },
+
+        // Right side
+        { x: 85, z: -15 },
+        { x: 85, z: 0 },
+        { x: 85, z: 15 }
+
+    ];
+
+
+    for (const position of pillarPositions) {
+
+        const pillar =
+            new THREE.Mesh(
+                pillarGeometry,
+                pillarMaterial
+            );
+
+        pillar.position.set(
+            position.x,
+            5,
+            position.z
+        );
+
+        pillar.castShadow = true;
+        pillar.receiveShadow = true;
+
+        scene.add(pillar);
+    }
+}
+
+
+// Create Track 8 castle pillars
+createCastleInteriorPillars();
+
 createTrack();
 
 // ============================================================
