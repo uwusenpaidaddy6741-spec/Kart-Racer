@@ -10553,9 +10553,12 @@ if (player.drifting) {
             // ------------------------------------------------
 
             if (
-                selectedBike === "none" &&
-                player.driftCharge >= 2.2
-            ) {
+    (
+        selectedBike === "none" ||
+        selectedBike === "specter"
+    ) &&
+    player.driftCharge >= 2.2
+) {
 
                 // KART ULTRA BOOST
                 player.boostTimer = 1.15;
