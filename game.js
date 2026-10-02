@@ -10476,124 +10476,133 @@ if (!player.wheelie) {
     }
 
     // --------------------------------------------------------
-    // DRIFT CHARGE
-    // --------------------------------------------------------
+// DRIFT CHARGE
+// --------------------------------------------------------
 
-    if (player.drifting) {
+if (player.drifting) {
 
-        player.driftCharge +=
-    deltaTime *
-    player.driftChargeRate;
+    player.driftCharge +=
+        deltaTime *
+        player.driftChargeRate;
 
-        player.driftCharge =
-            Math.min(
-                player.driftCharge,
-                2.5
-            );
-
-    } else {
-
-        if (
-            player.lastDrifting &&
-            player.driftCharge >= 0.35
-        ) {
-
-            // ------------------------------------------------
-            // RELEASE DRIFT BOOST
-            // ------------------------------------------------
-
-            if (player.driftCharge < 0.8) {
-
-                // MINI BOOST
-                player.boostTimer = 0.35;
-                player.currentBoostCap =
-    (
-        selectedKart === "drifter" ||
-        selectedBike === "specter" ||
-        selectedWheels === "drift" 
-    )
-        ? 69
-        : 68;
-
-                player.speed =
-                    Math.min(
-                        player.speed + 4,
-                        player.currentBoostCap
-                    );
-
-            }
-            else if (player.driftCharge < 1.5) {
-
-                // MEDIUM BOOST
-                player.boostTimer = 0.65;
-                player.currentBoostCap =
-    (
-        selectedKart === "drifter" ||
-        selectedBike === "specter" ||
-        selectedWheels === "drift" 
-    )
-        ? 72
-        : 70;
-
-                player.speed =
-                    Math.min(
-                        player.speed + 10,
-                        player.currentBoostCap
-                    );
-
-            }
-            else {
-
-                // MAX / ULTRA BOOST
-if (
-    selectedBike === "none" &&
-    player.driftCharge >= 2.2
-) {
-
-    // KART ULTRA BOOST
-    player.boostTimer = 1.15;
-
-    player.currentBoostCap =
-        
-          selectedKart === "drifter" ||
-        selectedBike === "specter" ||
-        selectedWheels === "drift" 
-            player.driftChargeRate >= 2.00
-        
-            ? 91
-            : 88;
-
-    player.speed =
+    player.driftCharge =
         Math.min(
-            player.speed + 22,
-            player.currentBoostCap
+            player.driftCharge,
+            2.5
         );
 
 } else {
 
-    // NORMAL MAX BOOST
-    player.boostTimer = 1.0;
+    if (
+        player.lastDrifting &&
+        player.driftCharge >= 0.35
+    ) {
 
-    player.currentBoostCap =
-        (
-            selectedKart === "drifter" ||
-            selectedBike === "specter" ||
-            selectedWheels === "drift" 
-        )
-            ? 83
-            : 80;
+        // ------------------------------------------------
+        // RELEASE DRIFT BOOST
+        // ------------------------------------------------
 
-    player.speed =
-        Math.min(
-            player.speed + 18,
-            player.currentBoostCap
-        );
-}
-            }
+        if (player.driftCharge < 0.8) {
+
+            // MINI BOOST
+            player.boostTimer = 0.35;
+
+            player.currentBoostCap =
+                (
+                    selectedKart === "drifter" ||
+                    selectedBike === "specter" ||
+                    selectedWheels === "drift"
+                )
+                    ? 69
+                    : 68;
+
+            player.speed =
+                Math.min(
+                    player.speed + 4,
+                    player.currentBoostCap
+                );
+
         }
 
-        player.driftCharge = 0;
+        else if (player.driftCharge < 1.5) {
+
+            // MEDIUM BOOST
+            player.boostTimer = 0.65;
+
+            player.currentBoostCap =
+                (
+                    selectedKart === "drifter" ||
+                    selectedBike === "specter" ||
+                    selectedWheels === "drift"
+                )
+                    ? 72
+                    : 70;
+
+            player.speed =
+                Math.min(
+                    player.speed + 10,
+                    player.currentBoostCap
+                );
+
+        }
+
+        else {
+
+            // ------------------------------------------------
+            // MAX / ULTRA BOOST
+            // ------------------------------------------------
+
+            if (
+                selectedBike === "none" &&
+                player.driftCharge >= 2.2
+            ) {
+
+                // KART ULTRA BOOST
+                player.boostTimer = 1.15;
+
+                player.currentBoostCap =
+                    (
+                        selectedKart === "drifter" ||
+                        selectedBike === "specter" ||
+                        selectedWheels === "drift" ||
+                        player.driftChargeRate >= 2.00
+                    )
+                        ? 91
+                        : 88;
+
+                player.speed =
+                    Math.min(
+                        player.speed + 22,
+                        player.currentBoostCap
+                    );
+
+            }
+
+            else {
+
+                // NORMAL MAX BOOST
+                player.boostTimer = 1.0;
+
+                player.currentBoostCap =
+                    (
+                        selectedKart === "drifter" ||
+                        selectedBike === "specter" ||
+                        selectedWheels === "drift"
+                    )
+                        ? 83
+                        : 80;
+
+                player.speed =
+                    Math.min(
+                        player.speed + 18,
+                        player.currentBoostCap
+                    );
+            }
+        }
     }
+
+    player.driftCharge = 0;
+}
 
     // --------------------------------------------------------
     // BOOST
