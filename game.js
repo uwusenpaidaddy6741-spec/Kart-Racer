@@ -10510,7 +10510,7 @@ if (!player.wheelie) {
     (
         selectedKart === "drifter" ||
         selectedBike === "specter" ||
-        selectedWheels === "drift" ||
+        selectedWheels === "drift" 
     )
         ? 69
         : 68;
