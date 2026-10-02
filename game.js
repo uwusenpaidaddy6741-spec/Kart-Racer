@@ -10508,9 +10508,9 @@ if (!player.wheelie) {
                 player.boostTimer = 0.35;
                 player.currentBoostCap =
     (
-        selectedKart === "drifter"||
-        selectedBike === "specter"
-        selectedWheels === "drift"
+        selectedKart === "drifter" ||
+        selectedBike === "specter" ||
+        selectedWheels === "drift" ||
     )
         ? 69
         : 68;
@@ -10529,7 +10529,8 @@ if (!player.wheelie) {
                 player.currentBoostCap =
     (
         selectedKart === "drifter" ||
-        selectedWheels === "drift"
+        selectedBike === "specter" ||
+        selectedWheels === "drift" ||
     )
         ? 72
         : 70;
@@ -10576,7 +10577,8 @@ if (
     player.currentBoostCap =
         (
             selectedKart === "drifter" ||
-            selectedWheels === "drift"
+            selectedBike === "specter" ||
+            selectedWheels === "drift" ||
         )
             ? 83
             : 80;
