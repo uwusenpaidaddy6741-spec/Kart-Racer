@@ -9583,10 +9583,10 @@ function applyKartStats() {
 
     player.driftChargeRate =
         Math.min(
-            kart.driftChargeRate *
-            wheels.driftChargeRate,
-            2.00
-        );
+    kart.driftChargeRate *
+    wheels.driftChargeRate,
+    2.25
+);
 
 
     // --------------------------------------------------------
