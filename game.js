@@ -10530,7 +10530,7 @@ if (!player.wheelie) {
     (
         selectedKart === "drifter" ||
         selectedBike === "specter" ||
-        selectedWheels === "drift" ||
+        selectedWheels === "drift" 
     )
         ? 72
         : 70;
@@ -10557,7 +10557,7 @@ if (
         (
             selectedKart === "drifter" ||
             selectedBike === "specter" ||
-            selectedWheels === "drift" ||
+            selectedWheels === "drift" 
             player.driftChargeRate >= 2.00
         )
             ? 91
@@ -10578,7 +10578,7 @@ if (
         (
             selectedKart === "drifter" ||
             selectedBike === "specter" ||
-            selectedWheels === "drift" ||
+            selectedWheels === "drift" 
         )
             ? 83
             : 80;
