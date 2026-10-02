@@ -2093,7 +2093,7 @@ const kartStats = {
 
     rocket: {
         maxSpeed: 44,
-        acceleration: 24,
+        acceleration: 33,
         braking: 28,
         turnSpeed: 2.6,
         driftChargeRate: 1.45
@@ -2125,7 +2125,7 @@ const kartStats = {
 
     accelerator: {
         maxSpeed: 42,
-        acceleration: 27,
+        acceleration: 35,
         braking: 24,
         turnSpeed: 3.1,
         driftChargeRate: 1.35
