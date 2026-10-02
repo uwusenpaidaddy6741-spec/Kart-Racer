@@ -2084,7 +2084,7 @@ const kartStats = {
     },
 
     balanced: {
-        maxSpeed: 44,
+        maxSpeed: 45,
         acceleration: 18,
         braking: 30,
         turnSpeed: 3.4,
@@ -2092,7 +2092,7 @@ const kartStats = {
     },
 
     rocket: {
-        maxSpeed: 44,
+        maxSpeed: 46,
         acceleration: 33,
         braking: 28,
         turnSpeed: 2.6,
@@ -2108,7 +2108,7 @@ const kartStats = {
     },
 
     drifter: {
-        maxSpeed: 41,
+        maxSpeed: 45,
         acceleration: 22,
         braking: 30,
         turnSpeed: 3.4,
@@ -2124,7 +2124,7 @@ const kartStats = {
     },
 
     accelerator: {
-        maxSpeed: 42,
+        maxSpeed: 45,
         acceleration: 35,
         braking: 24,
         turnSpeed: 3.1,
@@ -2140,7 +2140,7 @@ const kartStats = {
     },
 
     turbo: {
-        maxSpeed: 41,
+        maxSpeed: 45,
         acceleration: 29,
         braking: 25,
         turnSpeed: 3.0,
@@ -2179,7 +2179,7 @@ const bikeStats = {
     bobsBike: {
         name: "Bob's Bike",
 
-        maxSpeed: 42,
+        maxSpeed: 45,
         acceleration: 27,
         braking: 27,
         turnSpeed: 2.6,
@@ -2201,7 +2201,7 @@ const bikeStats = {
     acceleration: 20,
     braking: 22,
     turnSpeed: 2.4,
-    driftChargeRate: 1.2
+    driftChargeRate: 1.35
 },
 
     flash: {
@@ -2224,7 +2224,7 @@ const bikeStats = {
 
     juggernaut: {
     name: "Juggernaut Bike",
-    maxSpeed: 46,
+    maxSpeed: 52,
     acceleration: 25,
     braking: 40,
     turnSpeed: 2.0,
@@ -2394,14 +2394,14 @@ const wheelStats = {
         maxSpeed: 0,
         acceleration: 0,
         turnSpeed: 0,
-        driftChargeRate: 1
+        driftChargeRate: 1.45
     },
 
     grip: {
         maxSpeed: -2,
         acceleration: 0,
         turnSpeed: 0.5,
-        driftChargeRate: 1
+        driftChargeRate: 1.3
     },
 
     speed: {
@@ -2415,7 +2415,7 @@ const wheelStats = {
         maxSpeed: -2,
         acceleration: 2,
         turnSpeed: 0.2,
-        driftChargeRate: 1
+        driftChargeRate: 1.45
     },
 
     drift: {
