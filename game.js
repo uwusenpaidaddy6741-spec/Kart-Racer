@@ -2229,6 +2229,14 @@ const bikeStats = {
     braking: 40,
     turnSpeed: 2.0,
     driftChargeRate: 1.4
+},
+    streak: {
+    name: "Streak Bike",
+    maxSpeed: 47,
+    acceleration: 30,
+    braking: 26,
+    turnSpeed: 3.5,
+    driftChargeRate: 1.5
 }
 
 };
