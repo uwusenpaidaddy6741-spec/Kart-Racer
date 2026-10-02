@@ -10566,8 +10566,8 @@ if (player.drifting) {
                     selectedBike === "specter" ||
                     selectedWheels === "drift"
                 )
-                    ? 69
-                    : 68;
+                    ? 90
+                    : 90;
 
             player.currentBoostCap =
                 Math.max(
@@ -10597,8 +10597,8 @@ if (player.drifting) {
                     selectedBike === "specter" ||
                     selectedWheels === "drift"
                 )
-                    ? 72
-                    : 70;
+                    ? 90
+                    : 90;
 
             player.currentBoostCap =
                 Math.max(
@@ -10638,8 +10638,8 @@ if (player.drifting) {
                         selectedWheels === "drift" ||
                         player.driftChargeRate >= 2.00
                     )
-                        ? 91
-                        : 88;
+                        ? 95
+                        : 90;
 
                 player.currentBoostCap =
                     Math.max(
@@ -10665,8 +10665,8 @@ if (player.drifting) {
                         selectedBike === "specter" ||
                         selectedWheels === "drift"
                     )
-                        ? 83
-                        : 80;
+                        ? 90
+                        : 90;
 
                 player.currentBoostCap =
                     Math.max(
