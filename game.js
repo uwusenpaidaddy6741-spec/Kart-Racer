@@ -10508,7 +10508,8 @@ if (!player.wheelie) {
                 player.boostTimer = 0.35;
                 player.currentBoostCap =
     (
-        selectedKart === "drifter" ||
+        selectedKart === "drifter"||
+        selectedBike === "specter"
         selectedWheels === "drift"
     )
         ? 69
@@ -10554,6 +10555,7 @@ if (
     player.currentBoostCap =
         (
             selectedKart === "drifter" ||
+            selectedBike === "specter" ||
             selectedWheels === "drift" ||
             player.driftChargeRate >= 2.00
         )
