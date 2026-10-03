@@ -10329,7 +10329,7 @@ player.speed =
         player.speed,
         90
     );
-} 
+
     
     // --------------------------------------------------------
     // BRAKING / REVERSE
@@ -11001,6 +11001,7 @@ if (selectedBike !== "none") {
     player.lastDrifting =
         player.drifting;
 
+}
 
 // ============================================================
 // RACE SYSTEM
