@@ -10336,12 +10336,11 @@ if (forward()) {
 
         if (player.speed > player.maxSpeed) {
 
-            player.speed =
-                moveToward(
-                    player.speed,
-                    player.maxSpeed,
-                    3 * deltaTime
-                );
+            player.speed = moveToward(
+    player.speed,
+    player.maxSpeed,
+    1.5 * deltaTime
+);
         }
     }
 }
@@ -10664,12 +10663,11 @@ if (player.boostTimer > 0) {
     // return toward normal speed.
     if (player.speed > player.maxSpeed) {
 
-        player.speed =
-            moveToward(
-                player.speed,
-                player.maxSpeed,
-                3 * deltaTime
-            );
+        player.speed = moveToward(
+    player.speed,
+    player.maxSpeed,
+    1.5 * deltaTime
+);
     }
 }
 
