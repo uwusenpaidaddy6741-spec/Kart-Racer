@@ -6327,7 +6327,7 @@ if (selectedBike === "flash") {
 }
 
     if (selectedBike === "vortex") {
-    return "models/bikes/vortex_moped.glb";
+    return "models/bikes/black_scooter.glb";
 }
 
     // -------------------------
