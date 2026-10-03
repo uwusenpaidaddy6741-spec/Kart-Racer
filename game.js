@@ -10504,7 +10504,7 @@ if (player.drifting) {
     if (
         player.lastDrifting &&
         player.driftCharge >= 0.35
-    ) {
+    ) }
 
 // ------------------------------------------------
 // RELEASE DRIFT BOOST
