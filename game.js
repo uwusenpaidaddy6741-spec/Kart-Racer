@@ -10506,61 +10506,59 @@ if (player.drifting) {
         player.driftCharge >= 0.35
     ) {
 
-        // ------------------------------------------------
-// DRIFT BOOST CALCULATION
 // ------------------------------------------------
-
-// Actual drift multiplier
-const driftMultiplier =
-    player.driftChargeRate;
-
-// Boost per level
-const boostPerLevel =
-    10.75 +
-    (
-        (driftMultiplier - 1) * 2
-    );
-
+// RELEASE DRIFT BOOST
 // ------------------------------------------------
-// DETERMINE BOOST LEVEL
-// ------------------------------------------------
-
-let boostLevel = 1;
 
 if (player.driftCharge < 0.8) {
 
-    boostLevel = 1;
-
-} else if (player.driftCharge < 1.5) {
-
-    boostLevel = 2;
-
-} else {
-
-    boostLevel = 3;
-}
-
-// ------------------------------------------------
-// FINAL BOOST AMOUNT
-// ------------------------------------------------
-
-const boostAmount =
-    boostPerLevel *
-    boostLevel;
-
-// ------------------------------------------------
-// BOOST TIMERS
-// ------------------------------------------------
-
-if (boostLevel === 1) {
-
+    // MINI BOOST
     player.boostTimer = 0.35;
 
-} else if (boostLevel === 2) {
+    player.currentBoostCap =
+        (
+            selectedKart === "drifter" ||
+            selectedBike === "specter" ||
+            selectedWheels === "drift"
+        )
+            ? 69
+            : 68;
 
+    player.speed =
+        Math.min(
+            player.speed + 4,
+            player.currentBoostCap
+        );
+
+}
+
+else if (player.driftCharge < 1.5) {
+
+    // MEDIUM BOOST
     player.boostTimer = 0.65;
 
-} else {
+    player.currentBoostCap =
+        (
+            selectedKart === "drifter" ||
+            selectedBike === "specter" ||
+            selectedWheels === "drift"
+        )
+            ? 72
+            : 70;
+
+    player.speed =
+        Math.min(
+            player.speed + 10,
+            player.currentBoostCap
+        );
+
+}
+
+else {
+
+    // ------------------------------------------------
+    // MAX / ULTRA BOOST
+    // ------------------------------------------------
 
     if (
         (
@@ -10570,29 +10568,48 @@ if (boostLevel === 1) {
         player.driftCharge >= 2.2
     ) {
 
+        // KART ULTRA BOOST
         player.boostTimer = 1.15;
 
-    } else {
+        player.currentBoostCap =
+            (
+                selectedKart === "drifter" ||
+                selectedBike === "specter" ||
+                selectedWheels === "drift" ||
+                player.driftChargeRate >= 2.00
+            )
+                ? 91
+                : 88;
 
+        player.speed =
+            Math.min(
+                player.speed + 22,
+                player.currentBoostCap
+            );
+
+    }
+
+    else {
+
+        // NORMAL MAX BOOST
         player.boostTimer = 1.0;
+
+        player.currentBoostCap =
+            (
+                selectedKart === "drifter" ||
+                selectedBike === "specter" ||
+                selectedWheels === "drift"
+            )
+                ? 83
+                : 80;
+
+        player.speed =
+            Math.min(
+                player.speed + 18,
+                player.currentBoostCap
+            );
     }
 }
-
-// ------------------------------------------------
-// 90 SPEED CAP
-// ------------------------------------------------
-
-// Every boost adds to the CURRENT speed.
-// But speed can never go above 90.
-
-player.currentBoostCap = 90;
-
-player.speed =
-    Math.min(
-        player.speed + boostAmount,
-        90
-    );
-
 
 // --------------------------------------------------------
 // BOOST
@@ -10603,6 +10620,8 @@ if (player.boostTimer > 0) {
     player.boostTimer -=
         deltaTime;
 
+    // Never allow the current boost
+    // to exceed its individual cap.
     player.speed =
         Math.min(
             player.speed,
@@ -10615,6 +10634,8 @@ if (player.boostTimer > 0) {
 
     boostFlame.visible = false;
 
+    // After the boost ends, gradually
+    // return toward normal speed.
     if (player.speed > player.maxSpeed) {
 
         player.speed =
