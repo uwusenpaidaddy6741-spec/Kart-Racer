@@ -2174,6 +2174,7 @@ const bikeStats = {
         braking: 25,
         turnSpeed: 2.8,
         driftChargeRate: 1.3
+        miniTurbo: 8
     },
 
     bobsBike: {
@@ -2184,6 +2185,7 @@ const bikeStats = {
         braking: 27,
         turnSpeed: 2.6,
         driftChargeRate: 1.5
+        miniTurbo: 10
     },
 
     rocket: {
@@ -2193,6 +2195,7 @@ const bikeStats = {
     braking: 18,
     turnSpeed: 1.9,
     driftChargeRate: 0.9
+    miniTurbo: 4
 },
 
     champion: {
@@ -2202,6 +2205,7 @@ const bikeStats = {
     braking: 22,
     turnSpeed: 2.4,
     driftChargeRate: 1.35
+    miniTurbo: 6
 },
 
     flash: {
@@ -2211,6 +2215,7 @@ const bikeStats = {
     braking: 24,
     turnSpeed: 3.0,
     driftChargeRate: 1.6
+        miniTurbo: 13
 },
 
     specter: {
@@ -2220,6 +2225,7 @@ const bikeStats = {
     braking: 22,
     turnSpeed: 3.7,
     driftChargeRate: 2.2
+        miniTurbo: 15
 },
 
     juggernaut: {
@@ -2229,6 +2235,7 @@ const bikeStats = {
     braking: 40,
     turnSpeed: 2.0,
     driftChargeRate: 1.4
+        miniTurbo: 8
 },
     streak: {
     name: "Streak Bike",
@@ -2237,6 +2244,7 @@ const bikeStats = {
     braking: 26,
     turnSpeed: 3.5,
     driftChargeRate: 1.5
+        miniTurbo: 10
 },
 
     vortex: {
@@ -2246,6 +2254,7 @@ const bikeStats = {
     braking: 24,
     turnSpeed: 2.4,
     driftChargeRate: 1.6
+        miniTurbo: 14
 }
 
 };
@@ -9413,6 +9422,8 @@ verticalVelocity:
 driftCharge:
     0,
 
+    miniTurbo: 0,
+
 wheelie:
     false,
 
@@ -9531,6 +9542,8 @@ function applyKartStats() {
                 bike.driftChargeRate *
                 wheels.driftChargeRate,
                 2.00
+player.miniTurbo =
+    bike.miniTurbo;
             );
 
 
@@ -10550,10 +10563,11 @@ if (player.driftCharge < 0.8) {
             : 68;
 
     player.speed =
-        Math.min(
-            player.speed + 4,
-            player.currentBoostCap
-        );
+    Math.min(
+        player.speed +
+        (1 + player.miniTurbo * 0.4),
+        player.currentBoostCap
+    );
 
 }
 
@@ -10572,10 +10586,11 @@ else if (player.driftCharge < 1.5) {
             : 70;
 
     player.speed =
-        Math.min(
-            player.speed + 10,
-            player.currentBoostCap
-        );
+    Math.min(
+        player.speed +
+        (6 + player.miniTurbo * 0.4),
+        player.currentBoostCap
+    );
 
 }
 
@@ -10607,10 +10622,11 @@ else {
                 : 88;
 
         player.speed =
-            Math.min(
-                player.speed + 22,
-                player.currentBoostCap
-            );
+    Math.min(
+        player.speed +
+        (19 + player.miniTurbo * 0.4),
+        player.currentBoostCap
+    );
 
     }
 
@@ -10629,10 +10645,11 @@ else {
                 : 80;
 
         player.speed =
-            Math.min(
-                player.speed + 18,
-                player.currentBoostCap
-            );
+    Math.min(
+        player.speed +
+        (16 + player.miniTurbo * 0.4),
+        player.currentBoostCap
+    );
     }
 }
 
