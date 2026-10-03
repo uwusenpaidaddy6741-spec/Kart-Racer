@@ -9624,6 +9624,15 @@ function applyKartStats() {
         2.00
     );
 
+        player.miniTurbo =
+    Math.round(
+        (
+            character.miniTurbo +
+            bike.miniTurbo +
+            wheels.miniTurbo
+        ) / 3
+    );
+
 player.miniTurbo =
     bike.miniTurbo;
 
@@ -9696,6 +9705,15 @@ return;
     wheels.driftChargeRate,
     2.25
 );
+
+    player.miniTurbo =
+    Math.round(
+        (
+            character.miniTurbo +
+            kart.miniTurbo +
+            wheels.miniTurbo
+        ) / 3
+    );
 
 
     // --------------------------------------------------------
