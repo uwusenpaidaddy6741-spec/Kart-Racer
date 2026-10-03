@@ -11000,7 +11000,7 @@ if (selectedBike !== "none") {
     // for the next frame.
     player.lastDrifting =
         player.drifting;
-}
+
 
 // ============================================================
 // RACE SYSTEM
