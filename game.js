@@ -10642,8 +10642,8 @@ else {
                 selectedBike === "specter" ||
                 selectedWheels === "drift"
             )
-                ? 83
-                : 80;
+                ? 90
+                : 85;
 
         player.speed =
     Math.min(
