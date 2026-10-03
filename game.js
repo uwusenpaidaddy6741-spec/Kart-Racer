@@ -9464,6 +9464,61 @@ boostTimer:
         false
 };
 
+function updateTotalStats() {
+
+    const speedElement =
+        document.getElementById("totalSpeed");
+
+    const accelerationElement =
+        document.getElementById("totalAcceleration");
+
+    const brakingElement =
+        document.getElementById("totalBraking");
+
+    const handlingElement =
+        document.getElementById("totalHandling");
+
+    const driftElement =
+        document.getElementById("totalDriftCharge");
+
+    const miniTurboElement =
+        document.getElementById("totalMiniTurbo");
+
+    if (!player) {
+        return;
+    }
+
+    if (speedElement) {
+        speedElement.textContent =
+            player.maxSpeed.toFixed(1);
+    }
+
+    if (accelerationElement) {
+        accelerationElement.textContent =
+            player.acceleration.toFixed(1);
+    }
+
+    if (brakingElement) {
+        brakingElement.textContent =
+            player.braking.toFixed(1);
+    }
+
+    if (handlingElement) {
+        handlingElement.textContent =
+            player.turnSpeed.toFixed(1);
+    }
+
+    if (driftElement) {
+        driftElement.textContent =
+            player.driftChargeRate.toFixed(2);
+    }
+
+    if (miniTurboElement) {
+        miniTurboElement.textContent =
+            player.miniTurbo || 0;
+    }
+}
+
 function applyKartStats() {
 
         player.baseMaxSpeed =
@@ -9560,9 +9615,11 @@ player.miniTurbo =
         player.baseMaxSpeed =
             player.maxSpeed;
 
-        applyCoinSpeedBonus();
+       applyCoinSpeedBonus();
 
-        return;
+updateTotalStats();
+
+return;
     }
 
 
@@ -9629,6 +9686,9 @@ player.miniTurbo =
         player.maxSpeed;
 
     applyCoinSpeedBonus();
+
+updateTotalStats();
+    
 }
 
 applyKartStats();
