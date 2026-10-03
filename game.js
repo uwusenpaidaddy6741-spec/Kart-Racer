@@ -10718,8 +10718,8 @@ else {
                 selectedWheels === "drift" ||
                 player.driftChargeRate >= 2.00
             )
-                ? 91
-                : 88;
+                ? 93
+                : 90;
 
         player.speed =
     Math.min(
