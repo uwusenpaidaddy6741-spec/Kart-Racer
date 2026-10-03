@@ -2173,7 +2173,7 @@ const bikeStats = {
         acceleration: 24,
         braking: 25,
         turnSpeed: 2.8,
-        driftChargeRate: 1.3
+        driftChargeRate: 1.3,
         miniTurbo: 8
     },
 
@@ -2184,7 +2184,7 @@ const bikeStats = {
         acceleration: 27,
         braking: 27,
         turnSpeed: 2.6,
-        driftChargeRate: 1.5
+        driftChargeRate: 1.5,
         miniTurbo: 10
     },
 
@@ -2194,7 +2194,7 @@ const bikeStats = {
     acceleration: 15,
     braking: 18,
     turnSpeed: 1.9,
-    driftChargeRate: 0.9
+    driftChargeRate: 0.9,
     miniTurbo: 4
 },
 
@@ -2204,7 +2204,7 @@ const bikeStats = {
     acceleration: 20,
     braking: 22,
     turnSpeed: 2.4,
-    driftChargeRate: 1.35
+    driftChargeRate: 1.35,
     miniTurbo: 6
 },
 
@@ -2214,7 +2214,7 @@ const bikeStats = {
     acceleration: 32,
     braking: 24,
     turnSpeed: 3.0,
-    driftChargeRate: 1.6
+    driftChargeRate: 1.6,
         miniTurbo: 13
 },
 
@@ -2224,7 +2224,7 @@ const bikeStats = {
     acceleration: 26,
     braking: 22,
     turnSpeed: 3.7,
-    driftChargeRate: 2.2
+    driftChargeRate: 2.2,
         miniTurbo: 15
 },
 
@@ -2234,7 +2234,7 @@ const bikeStats = {
     acceleration: 25,
     braking: 40,
     turnSpeed: 2.0,
-    driftChargeRate: 1.4
+    driftChargeRate: 1.4,
         miniTurbo: 8
 },
     streak: {
@@ -2243,7 +2243,7 @@ const bikeStats = {
     acceleration: 30,
     braking: 26,
     turnSpeed: 3.5,
-    driftChargeRate: 1.5
+    driftChargeRate: 1.5,
         miniTurbo: 10
 },
 
@@ -2253,7 +2253,7 @@ const bikeStats = {
     acceleration: 34,
     braking: 24,
     turnSpeed: 2.4,
-    driftChargeRate: 1.6
+    driftChargeRate: 1.6,
         miniTurbo: 14
 }
 
