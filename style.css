@@ -890,3 +890,30 @@ body {
     transform: scale(1.04);
     box-shadow: 0 0 25px rgba(255, 215, 0, 0.9);
 }
+
+#totalStats {
+    position: absolute;
+    left: 25px;
+    bottom: 25px;
+
+    width: 210px;
+    padding: 14px 18px;
+
+    background: rgba(0, 0, 0, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    border-radius: 8px;
+
+    color: white;
+    font-size: 17px;
+
+    z-index: 1000;
+}
+
+#totalStats h3 {
+    margin: 0 0 8px 0;
+    font-size: 20px;
+}
+
+#totalStats p {
+    margin: 3px 0;
+}
