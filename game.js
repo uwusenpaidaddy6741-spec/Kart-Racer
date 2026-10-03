@@ -9541,7 +9541,7 @@ function applyKartStats() {
             Math.min(
                 bike.driftChargeRate *
                 wheels.driftChargeRate,
-                2.00
+                2.00)
 player.miniTurbo =
     bike.miniTurbo;
             );
