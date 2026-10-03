@@ -1959,56 +1959,64 @@ const characterStats = {
         name: "Blaze",
         speed: 3,
         acceleration: 0,
-        handling: -0.2
+        handling: -0.2,
+        miniTurbo: 7
     },
 
     bolt: {
         name: "Bolt",
         speed: 0,
         acceleration: 3,
-        handling: +0.1
+        handling: +0.1,
+        miniTurbo: 13
     },
 
     rex: {
         name: "Rex",
         speed: 4,
         acceleration: -2,
-        handling: -0.2
+        handling: -0.2,
+        miniTurbo: 5
     },
 
     nova: {
         name: "Nova",
         speed: 1,
         acceleration: 1,
-        handling: 0
+        handling: 0,
+        miniTurbo: 10
     },
 
     misty: {
         name: "Misty",
         speed: -1,
         acceleration: 1,
-        handling: +0.5
+        handling: +0.5,
+        miniTurbo: 12
     },
 
     axel: {
         name: "Axel",
         speed: 2,
         acceleration: 1,
-        handling: +0.2
+        handling: +0.2,
+        miniTurbo: 11
     },
 
     vex: {
         name: "Vex",
         speed: 1,
         acceleration: 2,
-        handling: +0.2
+        handling: +0.2,
+        miniTurbo: 13
     },
 
     titan: {
         name: "Titan",
         speed: 5,
         acceleration: -3,
-        handling: -0.3
+        handling: -0.3,
+        miniTurbo: 3
     }
 };
 
@@ -2080,7 +2088,8 @@ const kartStats = {
         acceleration: 19,
         braking: 30,
         turnSpeed: 3.1,
-        driftChargeRate: 1
+        driftChargeRate: 1,
+        miniTurbo: 5
     },
 
     balanced: {
@@ -2088,7 +2097,8 @@ const kartStats = {
         acceleration: 18,
         braking: 30,
         turnSpeed: 3.4,
-        driftChargeRate: 1.5
+        driftChargeRate: 1.5,
+        miniTurbo: 9
     },
 
     rocket: {
@@ -2096,15 +2106,17 @@ const kartStats = {
         acceleration: 33,
         braking: 28,
         turnSpeed: 2.6,
-        driftChargeRate: 1.45
+        driftChargeRate: 1.45,
+        miniTurbo: 11
     },
 
     heavy: {
-        maxSpeed: 45,
+        maxSpeed: 60,
         acceleration: 20,
         braking: 35,
         turnSpeed: 2.8,
-        driftChargeRate: 1.15
+        driftChargeRate: 1.15,
+        miniTurbo: 4
     },
 
     drifter: {
@@ -2112,7 +2124,8 @@ const kartStats = {
         acceleration: 22,
         braking: 30,
         turnSpeed: 3.4,
-        driftChargeRate: 1.65
+        driftChargeRate: 1.65,
+        miniTurbo: 17
     },
         
     blaze: {
@@ -2120,7 +2133,8 @@ const kartStats = {
         acceleration: 22,
         braking: 20,
         turnSpeed: 2.9,
-        driftChargeRate: 1.2
+        driftChargeRate: 1.2,
+        miniTurbo: 7
     },
 
     accelerator: {
@@ -2128,15 +2142,17 @@ const kartStats = {
         acceleration: 35,
         braking: 24,
         turnSpeed: 3.1,
-        driftChargeRate: 1.35
+        driftChargeRate: 1.35,
+        miniTurbo: 12
     },
 
     comet: {
-        maxSpeed: 50,
+        maxSpeed: 58,
         acceleration: 18,
         braking: 20,
         turnSpeed: 2.7,
-        driftChargeRate: 1.0
+        driftChargeRate: 1.0,
+        miniTurbo: 5
     },
 
     turbo: {
@@ -2144,7 +2160,8 @@ const kartStats = {
         acceleration: 29,
         braking: 25,
         turnSpeed: 3.0,
-        driftChargeRate: 1.5
+        driftChargeRate: 1.5,
+        miniTurbo: 12
     },
 
     overdrive: {
@@ -2152,7 +2169,8 @@ const kartStats = {
         acceleration: 30,
         braking: 18,
         turnSpeed: 2.8,
-        driftChargeRate: 1.4
+        driftChargeRate: 1.4,
+        miniTurbo: 9
     }
 
 };
@@ -2412,49 +2430,56 @@ const wheelStats = {
         maxSpeed: 0,
         acceleration: 0,
         turnSpeed: 0,
-        driftChargeRate: 1.45
+        driftChargeRate: 1.45,
+    miniTurbo: 10
     },
 
     grip: {
         maxSpeed: -2,
         acceleration: 0,
         turnSpeed: 0.5,
-        driftChargeRate: 1.3
+        driftChargeRate: 1.3,
+        miniTurbo: 7
     },
 
     speed: {
         maxSpeed: 6,
         acceleration: -1,
         turnSpeed: -0.2,
-        driftChargeRate: 1
+        driftChargeRate: 1,
+        miniTurbo: 4
     },
 
     offroad: {
         maxSpeed: -2,
         acceleration: 2,
         turnSpeed: 0.2,
-        driftChargeRate: 1.45
+        driftChargeRate: 1.45,
+        miniTurbo: 11
     },
 
     drift: {
         maxSpeed: -1,
         acceleration: 0,
         turnSpeed: 0.3,
-        driftChargeRate: 1.65
+        driftChargeRate: 1.65,
+        miniTurbo: 17
     },
 
     shadow: {
         maxSpeed: +2,
         acceleration: +1,
         turnSpeed: 0.7,
-        driftChargeRate: 1.4
+        driftChargeRate: 1.4,
+        miniTurbo: 10
     },
 
     cyclone: {
         maxSpeed: 0,
         acceleration: 2,
         turnSpeed: 1.2,
-        driftChargeRate: 1.5
+        driftChargeRate: 1.5,
+        miniTurbo: 13
     }
 };
 
