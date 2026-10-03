@@ -10268,50 +10268,59 @@ function updatePlayer(deltaTime) {
         performance.now();
 
     // --------------------------------------------------------
-    // ACCELERATION
-    // --------------------------------------------------------
-    
+// ACCELERATION
+// --------------------------------------------------------
+
 if (forward()) {
+
+    // ----------------------------------------------------
+    // BOOST ACCELERATION
+    // ----------------------------------------------------
 
     if (player.boostTimer > 0) {
 
-    if (player.speed < player.currentBoostCap) {
-
-        player.speed +=
-            player.acceleration *
-            deltaTime;
-
-        player.speed =
-            Math.min(
-                player.speed,
-                player.currentBoostCap,
-                90
-            );
-    }
-}
-
-    } else {
-
-        // Normal driving
-        const wheelieCap =
-    player.maxSpeed +
-    (player.wheelie ? player.wheelieSpeedBonus : 0);
-
-if (player.speed < wheelieCap) {
+        if (player.speed < player.currentBoostCap) {
 
             player.speed +=
                 player.acceleration *
                 deltaTime;
 
             player.speed =
-    Math.min(
-        player.speed,
-        wheelieCap
-    );
+                Math.min(
+                    player.speed,
+                    player.currentBoostCap,
+                    90
+                );
+        }
+
+    } else {
+
+        // ------------------------------------------------
+        // NORMAL ACCELERATION
+        // ------------------------------------------------
+
+        const wheelieCap =
+            player.maxSpeed +
+            (player.wheelie
+                ? player.wheelieSpeedBonus
+                : 0);
+
+        if (player.speed < wheelieCap) {
+
+            player.speed +=
+                player.acceleration *
+                deltaTime;
+
+            player.speed =
+                Math.min(
+                    player.speed,
+                    wheelieCap
+                );
         }
 
         // If we are above normal speed after a boost,
-        // smoothly return toward 36.
+        // smoothly return toward normal maximum speed.
+
         if (player.speed > player.maxSpeed) {
 
             player.speed =
@@ -10322,8 +10331,12 @@ if (player.speed < wheelieCap) {
                 );
         }
     }
+}
 
-    // HARD MAX SPEED
+// --------------------------------------------------------
+// HARD MAX SPEED
+// --------------------------------------------------------
+
 player.speed =
     Math.min(
         player.speed,
