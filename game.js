@@ -6326,6 +6326,10 @@ if (selectedBike === "flash") {
     return "models/bikes/streak_bike.glb";
 }
 
+    if (selectedBike === "vortex") {
+    return "models/bikes/vortex_bike.glb";
+}
+
     // -------------------------
     // KARTS
     // -------------------------
