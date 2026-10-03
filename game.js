@@ -6419,16 +6419,6 @@ if (useGLBVehicle) {
     0
 );
 
-if (selectedBike === "vortex") {
-    vehicleGLBModel.rotation.set(
-        0,
-        Math.PI,
-        0
-    );
-
-    vehicleGLBModel.position.y = 0.25;
-}
-
             vehicleGLBModel.traverse(
                 (object) => {
 
