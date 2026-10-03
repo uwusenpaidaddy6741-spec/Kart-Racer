@@ -2237,6 +2237,15 @@ const bikeStats = {
     braking: 26,
     turnSpeed: 3.5,
     driftChargeRate: 1.5
+},
+
+    vortex: {
+    name: "Vortex",
+    maxSpeed: 45,
+    acceleration: 34,
+    braking: 24,
+    turnSpeed: 2.4,
+    driftChargeRate: 1.6
 }
 
 };
