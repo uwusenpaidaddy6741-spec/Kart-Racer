@@ -9538,13 +9538,14 @@ function applyKartStats() {
         // ----------------------------------------------------
 
         player.driftChargeRate =
-            Math.min(
-                bike.driftChargeRate *
-                wheels.driftChargeRate,
-                2.00)
+    Math.min(
+        bike.driftChargeRate *
+        wheels.driftChargeRate,
+        2.00
+    );
+
 player.miniTurbo =
     bike.miniTurbo;
-            );
 
 
         // ----------------------------------------------------
