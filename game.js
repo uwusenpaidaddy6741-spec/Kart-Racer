@@ -10499,12 +10499,12 @@ if (player.drifting) {
             2.5
         );
 
-} else {
+} else 
 
     if (
         player.lastDrifting &&
         player.driftCharge >= 0.35
-    ) }
+    ) 
 
 // ------------------------------------------------
 // RELEASE DRIFT BOOST
