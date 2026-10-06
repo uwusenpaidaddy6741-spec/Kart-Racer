@@ -10807,7 +10807,7 @@ if (player.boostTimer > 0) {
         Math.min(
             player.speed,
             player.currentBoostCap,
-            90
+            100
         );
 
     boostFlame.visible = true;
