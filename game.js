@@ -1998,7 +1998,7 @@ const trackPoints =
         : selectedTrack === "10"
             ? racersCircuitPoints()
     : selectedTrack === "11"
-            ? grandprixCircuitPoints()
+            ? grandPrixCircuitPoints()
             : roundedRectanglePoints();
 // ============================================================
 // PLAYER / CONTROL HELPERS
