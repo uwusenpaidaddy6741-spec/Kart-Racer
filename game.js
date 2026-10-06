@@ -10676,9 +10676,9 @@ if (
     // ----------------------------------------------------
 
     const boostCaps = {
-        1: 70,
-        2: 78,
-        3: 90
+        1: 73,
+        2: 85,
+        3: 100
     };
 
     const boostTimers = {
@@ -10738,7 +10738,7 @@ player.speed =
         player.speed +
         finalBoost,
         player.currentBoostCap,
-        90
+        100
     );
 
     }
@@ -10766,7 +10766,7 @@ player.speed =
             Math.min(
                 player.speed,
                 player.currentBoostCap,
-                90
+                100
             );
     }
 
@@ -10845,7 +10845,7 @@ if (player.boostTimer > 0) {
 player.speed =
     Math.min(
         player.speed,
-        90
+        100
     );
 
   // --------------------------------------------------------
