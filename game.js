@@ -1625,6 +1625,131 @@ function jungleRunPoints() {
 }
 
 // ============================================================
+// TRACK 10 - RACERS CIRCUIT
+// Long, basic, fast circuit designed for ~1–2 minute laps
+// ============================================================
+
+function racersCircuitPoints() {
+
+    const controlPoints = [
+
+        // ----------------------------------------------------
+        // START / FINISH — LONG MAIN STRAIGHT
+        // ----------------------------------------------------
+        { x: -110, z: -70 },
+        { x: -70,  z: -70 },
+        { x: -30,  z: -70 },
+        { x: 10,   z: -70 },
+        { x: 50,   z: -70 },
+        { x: 85,   z: -65 },
+
+        // ----------------------------------------------------
+        // FAST RIGHT-HAND CORNER
+        // ----------------------------------------------------
+        { x: 105, z: -50 },
+        { x: 112, z: -25 },
+        { x: 108, z: 0 },
+
+        // ----------------------------------------------------
+        // LONG SWEEPING RIGHT / UPPER SECTION
+        // ----------------------------------------------------
+        { x: 95,  z: 25 },
+        { x: 75,  z: 45 },
+        { x: 45,  z: 58 },
+        { x: 10,  z: 62 },
+        { x: -25, z: 62 },
+
+        // ----------------------------------------------------
+        // LARGE LEFT HAIRPIN
+        // ----------------------------------------------------
+        { x: -55, z: 58 },
+        { x: -82, z: 45 },
+        { x: -98, z: 25 },
+        { x: -100, z: 5 },
+        { x: -92, z: -10 },
+
+        // ----------------------------------------------------
+        // LONG MIDDLE STRAIGHT
+        // ----------------------------------------------------
+        { x: -70, z: -20 },
+        { x: -40, z: -22 },
+        { x: -5,  z: -22 },
+        { x: 30,  z: -20 },
+        { x: 60,  z: -15 },
+
+        // ----------------------------------------------------
+        // TECHNICAL S SECTION
+        // ----------------------------------------------------
+        { x: 72, z: -2 },
+        { x: 65, z: 12 },
+        { x: 48, z: 18 },
+        { x: 30, z: 12 },
+        { x: 20, z: -2 },
+
+        // ----------------------------------------------------
+        // LOWER SWEEP
+        // ----------------------------------------------------
+        { x: 25,  z: -20 },
+        { x: 45,  z: -35 },
+        { x: 70,  z: -45 },
+        { x: 55,  z: -55 },
+        { x: 25,  z: -62 },
+
+        // ----------------------------------------------------
+        // RETURN TO START
+        // ----------------------------------------------------
+        { x: -10, z: -65 },
+        { x: -45, z: -68 },
+        { x: -80, z: -68 }
+
+    ];
+
+    const points = [];
+
+    // Smooth the control points using Catmull-Rom
+    // interpolation, just like the other long tracks.
+    const curve =
+        new THREE.CatmullRomCurve3(
+            controlPoints.map(
+                p =>
+                    new THREE.Vector3(
+                        p.x,
+                        0,
+                        p.z
+                    )
+            ),
+            true,
+            "catmullrom",
+            0.5
+        );
+
+    const steps = 18;
+
+    const totalPoints =
+        controlPoints.length * steps;
+
+    for (
+        let i = 0;
+        i < totalPoints;
+        i++
+    ) {
+
+        const t =
+            i / totalPoints;
+
+        const point =
+            curve.getPointAt(t);
+
+        points.push({
+            x: point.x,
+            z: point.z
+        });
+    }
+
+    return points;
+}
+
+// ============================================================
 // TRACK SELECTION
 // ============================================================
 
@@ -1657,10 +1782,12 @@ const trackPoints =
                             : selectedTrack === "7"
                                 ? mountainPassPoints()
                                 : selectedTrack === "8"
-                                    ? castleRunPoints()
-                                    : selectedTrack === "9"
-                                         ? jungleRunPoints()
-                                          : roundedRectanglePoints();
+ ? castleRunPoints()
+    : selectedTrack === "9"
+        ? jungleRunPoints()
+        : selectedTrack === "10"
+            ? racersCircuitPoints()
+            : roundedRectanglePoints();
 // ============================================================
 // PLAYER / CONTROL HELPERS
 // ============================================================
