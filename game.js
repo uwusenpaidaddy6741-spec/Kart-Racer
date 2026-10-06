@@ -124,7 +124,7 @@ scene.add(grass);
 // TRACK SETTINGS
 // ============================================================
 
-const TRACK_WIDTH = 14;
+const TRACK_WIDTH = 20;
 
 const TRACK_HALF_X = 42;
 const TRACK_HALF_Z = 27;
@@ -9457,9 +9457,12 @@ wheelieSpeedBonus:
 
 boostTimer:
     0,
-    
-    boostAcceleration:
-        40,
+
+boostLevel:
+    0,
+
+boostAcceleration:
+    40,
 
     boostMaxSpeed:
         80,
@@ -10621,9 +10624,9 @@ if (!player.wheelie) {
         
     }
 
-    // --------------------------------------------------------
+   // ========================================================
 // DRIFT CHARGE
-// --------------------------------------------------------
+// ========================================================
 
 if (player.drifting) {
 
@@ -10637,156 +10640,193 @@ if (player.drifting) {
             2.5
         );
 
-} else 
-
-    if (
-        player.lastDrifting &&
-        player.driftCharge >= 0.35
-    ) 
-
-// ------------------------------------------------
-// RELEASE DRIFT BOOST
-// ------------------------------------------------
-
-if (player.driftCharge < 0.8) {
-
-    // MINI BOOST
-    player.boostTimer = 0.35;
-
-    player.currentBoostCap =
-        (
-            selectedKart === "drifter" ||
-            selectedBike === "specter" ||
-            selectedWheels === "drift"
-        )
-            ? 69
-            : 68;
-
-    player.speed =
-    Math.min(
-        player.speed +
-        (1 + player.miniTurbo * 0.4),
-        player.currentBoostCap
-    );
-
 }
 
-else if (player.driftCharge < 1.5) {
 
-    // MEDIUM BOOST
-    player.boostTimer = 0.65;
+// ========================================================
+// RELEASE DRIFT
+// ========================================================
 
-    player.currentBoostCap =
-        (
-            selectedKart === "drifter" ||
-            selectedBike === "specter" ||
-            selectedWheels === "drift"
-        )
-            ? 72
-            : 70;
+if (
+    !player.drifting &&
+    player.lastDrifting &&
+    player.driftCharge >= 0.35
+) {
 
-    player.speed =
-    Math.min(
-        player.speed +
-        (6 + player.miniTurbo * 0.4),
-        player.currentBoostCap
-    );
+    const releasedCharge =
+        player.driftCharge;
 
-}
+    // ----------------------------------------------------
+    // DETERMINE NEW DRIFT LEVEL
+    // ----------------------------------------------------
 
-else {
+    let newBoostLevel = 1;
 
-    // ------------------------------------------------
-    // MAX / ULTRA BOOST
-    // ------------------------------------------------
+    if (releasedCharge >= 1.5) {
+        newBoostLevel = 2;
+    }
+
+    if (releasedCharge >= 2.2) {
+        newBoostLevel = 3;
+    }
+
+
+    // ----------------------------------------------------
+    // BOOST VALUES
+    // ----------------------------------------------------
+
+    const boostCaps = {
+        1: 70,
+        2: 78,
+        3: 90
+    };
+
+    const boostTimers = {
+        1: 0.35,
+        2: 0.65,
+        3: 1.15
+    };
+
+    const boostAmounts = {
+        1: 1,
+        2: 6,
+        3: 19
+    };
+
+
+    // ----------------------------------------------------
+    // ONLY UPGRADE IF THIS DRIFT IS STRONGER
+    // ----------------------------------------------------
 
     if (
-        (
-            selectedBike === "none" ||
-            selectedBike === "specter"
-        ) &&
-        player.driftCharge >= 2.2
+        newBoostLevel >
+        player.boostLevel
     ) {
 
-        // KART ULTRA BOOST
-        player.boostTimer = 1.15;
+        player.boostLevel =
+            newBoostLevel;
+
+        player.boostTimer =
+            boostTimers[newBoostLevel];
 
         player.currentBoostCap =
-            (
-                selectedKart === "drifter" ||
-                selectedBike === "specter" ||
-                selectedWheels === "drift" ||
-                player.driftChargeRate >= 2.00
-            )
-                ? 93
-                : 90;
+            boostCaps[newBoostLevel];
 
         player.speed =
-    Math.min(
-        player.speed +
-        (19 + player.miniTurbo * 0.4),
-        player.currentBoostCap
-    );
+            Math.min(
+                player.speed +
+                boostAmounts[newBoostLevel] +
+                player.miniTurbo * 0.4,
+                player.currentBoostCap,
+                90
+            );
 
     }
 
-    else {
 
-        // NORMAL MAX BOOST
-        player.boostTimer = 1.0;
+    // ----------------------------------------------------
+    // IF SAME LEVEL, KEEP THE CURRENT BOOST
+    // ----------------------------------------------------
 
-        player.currentBoostCap =
-            (
-                selectedKart === "drifter" ||
-                selectedBike === "specter" ||
-                selectedWheels === "drift"
-            )
-                ? 90
-                : 85;
+    else if (
+        newBoostLevel ===
+        player.boostLevel
+    ) {
+
+        // Same-level drifts can refresh
+        // the existing boost, but never weaken it.
+
+        player.boostTimer =
+            Math.max(
+                player.boostTimer,
+                boostTimers[newBoostLevel]
+            );
 
         player.speed =
-    Math.min(
-        player.speed +
-        (16 + player.miniTurbo * 0.4),
-        player.currentBoostCap
-    );
+            Math.min(
+                player.speed,
+                player.currentBoostCap,
+                90
+            );
     }
+
+
+    // ----------------------------------------------------
+    // SMALLER DRIFT
+    // ----------------------------------------------------
+
+    // If newBoostLevel is lower than player.boostLevel,
+    // absolutely nothing happens.
+    //
+    // Example:
+    //
+    // MAX = level 3
+    // then MINI = level 1
+    //
+    // The MAX boost remains active.
+
+
+    // ----------------------------------------------------
+    // RESET DRIFT CHARGE
+    // ----------------------------------------------------
+
+    player.driftCharge = 0;
 }
 
-// --------------------------------------------------------
+
+// ========================================================
 // BOOST
-// --------------------------------------------------------
+// ========================================================
 
 if (player.boostTimer > 0) {
 
     player.boostTimer -=
         deltaTime;
 
-    // Never allow the current boost
-    // to exceed its individual cap.
     player.speed =
         Math.min(
             player.speed,
-            player.currentBoostCap
+            player.currentBoostCap,
+            90
         );
 
     boostFlame.visible = true;
 
 } else {
 
+    player.boostTimer = 0;
+
+    player.boostLevel = 0;
+
+    player.currentBoostCap =
+        player.maxSpeed;
+
     boostFlame.visible = false;
 
-    // After the boost ends, gradually
-    // return toward normal speed.
-    if (player.speed > player.maxSpeed) {
+    if (
+        player.speed >
+        player.maxSpeed
+    ) {
 
-        player.speed = moveToward(
-    player.speed,
-    player.maxSpeed,
-    1.5 * deltaTime
-);
+        player.speed =
+            moveToward(
+                player.speed,
+                player.maxSpeed,
+                1.5 * deltaTime
+            );
     }
 }
+
+
+// ========================================================
+// FINAL SPEED CAP
+// ========================================================
+
+player.speed =
+    Math.min(
+        player.speed,
+        90
+    );
 
   // --------------------------------------------------------
 // DRIFT MOVEMENT
