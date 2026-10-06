@@ -10718,29 +10718,39 @@ const miniTurboBonus =
     ) {
 
         player.boostLevel =
-            newBoostLevel;
+    newBoostLevel;
 
-        player.boostTimer =
-            boostTimers[newBoostLevel];
+player.boostTimer =
+    boostTimers[newBoostLevel];
 
-        player.currentBoostCap =
-            boostCaps[newBoostLevel];
+player.currentBoostCap =
+    Math.max(
+        boostCaps[newBoostLevel],
+        player.speed
+    );
 
-        const baseBoost =
+const baseBoost =
     boostAmounts[newBoostLevel];
 
 const finalBoost =
     baseBoost *
     (1 + miniTurboBonus);
 
-player.speed =
-    Math.min(
-        player.speed +
-        finalBoost,
-        player.currentBoostCap,
-        100
-    );
+if (newBoostLevel === 3) {
 
+    // MAX BOOST ALWAYS REACHES 100
+    player.speed = 100;
+
+} else {
+
+    player.speed =
+        Math.min(
+            player.speed +
+            finalBoost,
+            player.currentBoostCap,
+            100
+        );
+}
     }
 
 
