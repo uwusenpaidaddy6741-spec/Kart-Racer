@@ -9465,10 +9465,10 @@ boostAcceleration:
     40,
 
     boostMaxSpeed:
-        80,
+        100,
 
     currentBoostCap:
-        68,
+        73,
 
     lap:
         1,
@@ -10468,7 +10468,7 @@ if (forward()) {
 player.speed =
     Math.min(
         player.speed,
-        90
+        100
     );
 
     
