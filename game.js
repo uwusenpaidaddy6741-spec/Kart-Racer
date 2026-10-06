@@ -10688,10 +10688,24 @@ if (
     };
 
     const boostAmounts = {
-        1: 1,
-        2: 6,
-        3: 19
-    };
+    1: 2,   // MINI
+    2: 7,   // MEDIUM
+    3: 19   // MAX
+};
+
+
+// Mini Turbo boost bonus
+// 0 Mini Turbo = 0%
+// 5  = 5%
+// 10 = 10%
+// 15 = 15%
+// 20 = 20%
+//
+// Capped at 20% so Mini Turbo stays important
+// without making boosts overpowering.
+
+const miniTurboBonus =
+    Math.min(player.miniTurbo, 20) / 100;
 
 
     // ----------------------------------------------------
@@ -10712,14 +10726,20 @@ if (
         player.currentBoostCap =
             boostCaps[newBoostLevel];
 
-        player.speed =
-            Math.min(
-                player.speed +
-                boostAmounts[newBoostLevel] +
-                player.miniTurbo * 0.4,
-                player.currentBoostCap,
-                90
-            );
+        const baseBoost =
+    boostAmounts[newBoostLevel];
+
+const finalBoost =
+    baseBoost *
+    (1 + miniTurboBonus);
+
+player.speed =
+    Math.min(
+        player.speed +
+        finalBoost,
+        player.currentBoostCap,
+        90
+    );
 
     }
 
