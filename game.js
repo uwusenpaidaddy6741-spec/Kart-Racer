@@ -13084,7 +13084,3 @@ document.getElementById("timeTrialTrack4Button").onclick = () => {
 document.getElementById("timeTrialTrack5Button").onclick = () => {
     window.location.href = "?track=5&mode=timeTrial";
 };
-
-document.getElementById("timeTrialTrack10Button").onclick = () => {
-    window.location.href = "?track=10&mode=timeTrial";
-};
