@@ -485,89 +485,96 @@ function oasisPoints() {
 
 // ============================================================
 // TRACK 4 - SNOW TRACK
+// NEW SNOW TRACK LAYOUT
 // ============================================================
 
 function snowTrackPoints() {
 
-    // Control points for the Snow Track layout.
-    // Designed to follow the reference:
-    // long top straight -> right hairpin ->
-    // middle return -> S section -> lower sweep.
-
     const controlPoints = [
 
         // ----------------------------------------------------
-        // START / TOP STRAIGHT
+        // START / FINISH - LONG SNOW STRAIGHT
         // ----------------------------------------------------
 
-        { x: -45, z: -35 },
-        { x: -20, z: -35 },
-        { x: 10,  z: -35 },
-        { x: 35,  z: -35 },
+        { x: -55, z: -40 },
+        { x: -30, z: -40 },
+        { x: 0,   z: -40 },
+        { x: 30,  z: -40 },
+        { x: 50,  z: -36 },
 
         // ----------------------------------------------------
-        // LARGE RIGHT HAIRPIN
+        // FAST RIGHT-HAND SWEEP
         // ----------------------------------------------------
 
-        { x: 47, z: -28 },
-        { x: 47, z: -15 },
-        { x: 42, z: -5 },
-        { x: 30, z: 0 },
+        { x: 62, z: -27 },
+        { x: 67, z: -15 },
+        { x: 65, z: -3 },
 
         // ----------------------------------------------------
-        // MIDDLE RETURN
+        // DEEP RIGHT HAIRPIN
         // ----------------------------------------------------
 
-        { x: 5,  z: 0 },
-        { x: -20, z: 0 },
-        { x: -30, z: 5 },
+        { x: 58, z: 8 },
+        { x: 48, z: 17 },
+        { x: 34, z: 21 },
+        { x: 18, z: 20 },
 
         // ----------------------------------------------------
-        // FIRST S-TURN
+        // LONG BACK STRAIGHT
         // ----------------------------------------------------
 
-        { x: -30, z: 14 },
-        { x: -23, z: 20 },
-        { x: -10, z: 20 },
-        { x: 5,  z: 20 },
+        { x: -5,  z: 18 },
+        { x: -28, z: 18 },
+        { x: -48, z: 16 },
+
+        // ----------------------------------------------------
+        // LEFT S-TURN
+        // ----------------------------------------------------
+
+        { x: -60, z: 10 },
+        { x: -63, z: 0 },
+        { x: -58, z: -8 },
+        { x: -48, z: -12 },
 
         // ----------------------------------------------------
         // SECOND S-TURN
         // ----------------------------------------------------
 
-        { x: 17, z: 20 },
-        { x: 25, z: 25 },
-        { x: 25, z: 33 },
-        { x: 17, z: 39 },
+        { x: -35, z: -10 },
+        { x: -25, z: -3 },
+        { x: -18, z: 7 },
+        { x: -10, z: 13 },
 
         // ----------------------------------------------------
-        // TOP OF LOWER SECTION
+        // FROZEN LAKE HAIRPIN
         // ----------------------------------------------------
 
-        { x: 0,  z: 39 },
-        { x: -20, z: 39 },
-        { x: -38, z: 34 },
+        { x: 0,   z: 16 },
+        { x: 10,  z: 13 },
+        { x: 16,  z: 5 },
+        { x: 14,  z: -5 },
+        { x: 7,   z: -12 },
 
         // ----------------------------------------------------
-        // LARGE LEFT SWEEP
+        // FINAL LOWER SWEEP
         // ----------------------------------------------------
 
-        { x: -48, z: 25 },
-        { x: -48, z: 10 },
-        { x: -48, z: -5 },
-        { x: -48, z: -20 },
+        { x: -5,  z: -17 },
+        { x: -20, z: -20 },
+        { x: -35, z: -22 },
+        { x: -48, z: -27 },
 
         // ----------------------------------------------------
         // RETURN TO START
         // ----------------------------------------------------
 
-        { x: -48, z: -30 },
-        { x: -45, z: -35 }
+        { x: -55, z: -32 },
+        { x: -55, z: -40 }
     ];
 
     const points = [];
 
-    // Smoothly interpolate between the control points.
+    // Smoothly interpolate between control points.
     for (
         let i = 0;
         i < controlPoints.length;
@@ -615,15 +622,19 @@ function snowTrackPoints() {
 
                     (-previous.x + next.x) * t +
 
-                    (2 * previous.x -
+                    (
+                        2 * previous.x -
                         5 * current.x +
                         4 * next.x -
-                        nextNext.x) * t2 +
+                        nextNext.x
+                    ) * t2 +
 
-                    (-previous.x +
+                    (
+                        -previous.x +
                         3 * current.x -
                         3 * next.x +
-                        nextNext.x) * t3
+                        nextNext.x
+                    ) * t3
                 );
 
             const z =
@@ -632,15 +643,19 @@ function snowTrackPoints() {
 
                     (-previous.z + next.z) * t +
 
-                    (2 * previous.z -
+                    (
+                        2 * previous.z -
                         5 * current.z +
                         4 * next.z -
-                        nextNext.z) * t2 +
+                        nextNext.z
+                    ) * t2 +
 
-                    (-previous.z +
+                    (
+                        -previous.z +
                         3 * current.z -
                         3 * next.z +
-                        nextNext.z) * t3
+                        nextNext.z
+                    ) * t3
                 );
 
             points.push({
