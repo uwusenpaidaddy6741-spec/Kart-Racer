@@ -10818,18 +10818,6 @@ if (forward()) {
 
     boostFlame.visible = false;
 
-    if (
-        player.speed >
-        player.maxSpeed
-    ) {
-
-        player.speed =
-            moveToward(
-                player.speed,
-                player.maxSpeed,
-                1.5 * deltaTime
-            );
-    }
 }
 
         // ------------------------------------------------
@@ -10854,22 +10842,6 @@ if (forward()) {
                     wheelieCap
                 );
         }
-
-        // If we are above normal speed after a boost,
-        // smoothly return toward normal maximum speed.
-
-        if (
-    player.speed >
-    player.maxSpeed
-) {
-
-    player.speed =
-        moveToward(
-            player.speed,
-            player.maxSpeed,
-            1.5 * deltaTime
-        );
-      }
     }
 
 // --------------------------------------------------------
@@ -11277,19 +11249,6 @@ if (player.boostTimer > 0) {
 
     boostFlame.visible = false;
 
-    // Gradually return boosted speed to normal max.
-    if (
-        player.speed >
-        player.maxSpeed
-    ) {
-
-        player.speed =
-            moveToward(
-                player.speed,
-                player.maxSpeed,
-                1.5 * deltaTime
-            );
-    }
 }
 
 
