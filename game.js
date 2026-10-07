@@ -10795,21 +10795,39 @@ if (forward()) {
 
     if (player.boostTimer > 0) {
 
-        if (player.speed < player.currentBoostCap) {
+    // Don't add any more speed while the boost is active.
+    // The drift release already applied the boost amount.
 
-            player.speed +=
-                player.acceleration *
-                deltaTime;
+    player.speed =
+        Math.min(
+            player.speed,
+            100
+        );
 
-            player.speed =
-                Math.min(
-                    player.speed,
-                    player.currentBoostCap,
-                    90
-                );
-        }
+} else {
 
-    } else {
+    player.boostTimer = 0;
+
+    player.boostLevel = 0;
+
+    player.currentBoostCap =
+        player.maxSpeed;
+
+    boostFlame.visible = false;
+
+    if (
+        player.speed >
+        player.maxSpeed
+    ) {
+
+        player.speed =
+            moveToward(
+                player.speed,
+                player.maxSpeed,
+                1.5 * deltaTime
+            );
+    }
+}
 
         // ------------------------------------------------
         // NORMAL ACCELERATION
@@ -11099,23 +11117,31 @@ if (
             20
         ) * 0.9;
 
-    // ----------------------------------------------------
-// BOOST
+// ----------------------------------------------------
+// MARIO KART STYLE BOOST UPGRADE
 // ----------------------------------------------------
 
-// You can drift at any speed.
+// A stronger turbo replaces a weaker turbo.
+// They do NOT stack together.
 //
-// If you are already above your normal max speed,
-// the new drift does NOT add another speed boost.
+// MINI   -> MEDIUM -> MAX
+//   ↓         ↓        ↓
+// weaker   stronger  strongest
 //
-// Once you return to normal max speed,
-// the next drift can boost again.
+// Example:
+// Orange active -> Purple earned
+// Purple replaces Orange and gets its
+// own speed boost + longer timer.
 
-if (player.speed <= player.maxSpeed) {
+if (
+    newBoostLevel >
+    player.boostLevel
+) {
 
     player.boostLevel =
         newBoostLevel;
 
+    // Stronger turbo gets its full duration.
     player.boostTimer =
         boostTimers[newBoostLevel];
 
@@ -11129,6 +11155,7 @@ if (player.speed <= player.maxSpeed) {
         baseBoost +
         miniTurboBonus;
 
+    // Apply the stronger turbo's speed increase.
     player.speed =
         Math.min(
             player.speed +
@@ -11136,15 +11163,30 @@ if (player.speed <= player.maxSpeed) {
             100
         );
 
-} else {
+} else if (
+    newBoostLevel ===
+    player.boostLevel
+) {
 
-    // Already above normal speed.
-    // Allow drifting, but do NOT add speed.
+    // Same turbo level:
+    // refresh its duration, but don't
+    // add another speed boost.
 
     player.boostTimer =
         Math.max(
             player.boostTimer,
             boostTimers[newBoostLevel]
+        );
+
+} else {
+
+    // A weaker turbo cannot replace
+    // a stronger turbo that is already active.
+
+    player.boostTimer =
+        Math.max(
+            player.boostTimer,
+            0
         );
 }
 
@@ -11161,6 +11203,10 @@ if (player.boostTimer > 0) {
     player.boostTimer -=
         deltaTime;
 
+    // Do NOT reduce speed while the boost is active.
+    // The drift-release code already applied the
+    // correct Mini / Medium / MAX boost.
+
     player.speed =
         Math.min(
             player.speed,
@@ -11170,6 +11216,30 @@ if (player.boostTimer > 0) {
     boostFlame.visible = true;
 
 } else {
+
+    player.boostTimer = 0;
+
+    player.boostLevel = 0;
+
+    player.currentBoostCap =
+        player.maxSpeed;
+
+    boostFlame.visible = false;
+
+    // Gradually return boosted speed to normal max.
+    if (
+        player.speed >
+        player.maxSpeed
+    ) {
+
+        player.speed =
+            moveToward(
+                player.speed,
+                player.maxSpeed,
+                1.5 * deltaTime
+            );
+    }
+}
 
     player.boostTimer = 0;
 
