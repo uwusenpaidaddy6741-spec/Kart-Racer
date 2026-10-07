@@ -11124,8 +11124,7 @@ if (
 // ----------------------------------------------------
 
 // Stronger turbo replaces weaker turbo.
-// The new boost is calculated from the speed
-// BEFORE the current boost started.
+// Boosts NEVER stack.
 //
 // MINI -> MEDIUM -> MAX
 
@@ -11145,8 +11144,13 @@ if (
     player.boostLevel === 0
 ) {
 
+    // Remember the speed BEFORE the turbo.
+
     player.boostBaseSpeed =
-        player.speed;
+        Math.min(
+            player.speed,
+            player.maxSpeed
+        );
 
     player.boostLevel =
         newBoostLevel;
@@ -11157,12 +11161,21 @@ if (
     player.currentBoostCap =
         100;
 
-    player.speed =
-        Math.min(
-            player.boostBaseSpeed +
-            finalBoost,
-            100
-        );
+    // If already above normal max,
+    // don't add another boost on top of it.
+
+    if (
+        player.speed <=
+        player.maxSpeed
+    ) {
+
+        player.speed =
+            Math.min(
+                player.boostBaseSpeed +
+                finalBoost,
+                100
+            );
+    }
 
 
 // ----------------------------------------------------
@@ -11174,6 +11187,8 @@ if (
     player.boostLevel
 ) {
 
+    // Stronger turbo replaces the weaker one.
+
     player.boostLevel =
         newBoostLevel;
 
@@ -11183,8 +11198,8 @@ if (
     player.currentBoostCap =
         100;
 
-    // Recalculate from the original speed.
-    // This prevents the boosts from stacking.
+    // Recalculate from the ORIGINAL speed.
+    // This prevents stacking.
 
     player.speed =
         Math.min(
@@ -11203,8 +11218,8 @@ if (
     player.boostLevel
 ) {
 
-    // Same turbo refreshes the timer,
-    // but does not add more speed.
+    // Same turbo only refreshes its timer.
+    // It does NOT add speed again.
 
     player.boostTimer =
         Math.max(
