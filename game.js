@@ -10790,60 +10790,36 @@ function updatePlayer(deltaTime) {
 // ACCELERATION
 // --------------------------------------------------------
 
-if (forward()) {
+if (
+    forward() &&
+    player.boostTimer <= 0
+) {
 
-    // ----------------------------------------------------
-    // NORMAL ACCELERATION
-    // ----------------------------------------------------
-
-    if (player.boostTimer <= 0) {
-
-        const wheelieCap =
-            player.maxSpeed +
-            (player.wheelie
+    const wheelieCap =
+        player.maxSpeed +
+        (
+            player.wheelie
                 ? player.wheelieSpeedBonus
-                : 0);
+                : 0
+        );
 
-        if (player.speed < wheelieCap) {
+    if (
+        player.speed <
+        wheelieCap
+    ) {
 
-            player.speed +=
-                player.acceleration *
-                deltaTime;
+        player.speed +=
+            player.acceleration *
+            deltaTime;
 
-            player.speed =
-                Math.min(
-                    player.speed,
-                    wheelieCap
-                );
-        }
-
+        player.speed =
+            Math.min(
+                player.speed,
+                wheelieCap
+            );
     }
-
 }
-        // ------------------------------------------------
-        // NORMAL ACCELERATION
-        // ------------------------------------------------
-
-        const wheelieCap =
-            player.maxSpeed +
-            (player.wheelie
-                ? player.wheelieSpeedBonus
-                : 0);
-
-        if (player.speed < wheelieCap) {
-
-            player.speed +=
-                player.acceleration *
-                deltaTime;
-
-            player.speed =
-                Math.min(
-                    player.speed,
-                    wheelieCap
-                );
-        }
-    }
-
+    
 // --------------------------------------------------------
 // HARD MAX SPEED
 // --------------------------------------------------------
