@@ -11081,6 +11081,10 @@ if (
 const baseBoost =
     boostAmounts[newBoostLevel];
 
+    const finalBoost =
+    baseBoost +
+    miniTurboBonus;
+
 // ----------------------------------------------------
 // START NEW BOOST
 // ----------------------------------------------------
