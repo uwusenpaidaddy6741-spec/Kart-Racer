@@ -11087,12 +11087,6 @@ if (
 // Weaker boost does nothing.
 // Boosts never stack.
 
-const miniTurboBonus =
-    Math.min(
-        player.miniTurbo,
-        20
-    ) * 0.9;
-
 const baseBoost =
     boostAmounts[newBoostLevel];
 
