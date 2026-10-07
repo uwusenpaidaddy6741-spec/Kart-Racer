@@ -11145,30 +11145,24 @@ if (
     player.boostLevel === 0
 ) {
 
-    if (
-        player.speed <=
-        player.maxSpeed
-    ) {
+    player.boostBaseSpeed =
+        player.speed;
 
-        player.boostBaseSpeed =
-            player.speed;
+    player.boostLevel =
+        newBoostLevel;
 
-        player.boostLevel =
-            newBoostLevel;
+    player.boostTimer =
+        boostTimers[newBoostLevel];
 
-        player.boostTimer =
-            boostTimers[newBoostLevel];
+    player.currentBoostCap =
+        100;
 
-        player.currentBoostCap =
-            100;
-
-        player.speed =
-            Math.min(
-                player.boostBaseSpeed +
-                finalBoost,
-                100
-            );
-    }
+    player.speed =
+        Math.min(
+            player.boostBaseSpeed +
+            finalBoost,
+            100
+        );
 
 
 // ----------------------------------------------------
