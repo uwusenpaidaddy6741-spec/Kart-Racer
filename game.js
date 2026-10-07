@@ -9848,6 +9848,9 @@ boostTimer:
 boostLevel:
     0,
 
+boostChainLevel:
+    0,
+
 boostAcceleration:
     40,
 
@@ -10837,14 +10840,28 @@ if (forward()) {
         // If we are above normal speed after a boost,
         // smoothly return toward normal maximum speed.
 
-        if (player.speed > player.maxSpeed) {
+        if (
+    player.speed >
+    player.maxSpeed
+) {
 
-            player.speed = moveToward(
-    player.speed,
-    player.maxSpeed,
-    1.5 * deltaTime
-);
-        }
+    player.speed =
+        moveToward(
+            player.speed,
+            player.maxSpeed,
+            1.5 * deltaTime
+        );
+}
+
+// Once we are back at normal speed,
+// a new boost chain can begin.
+if (
+    player.speed <=
+    player.maxSpeed
+) {
+
+    player.boostChainLevel = 0;
+}
     }
 }
 
@@ -11096,41 +11113,83 @@ if (
         ) * 0.9;
 
 
-    // ----------------------------------------------------
-    // ONLY UPGRADE WHEN THE NEW DRIFT IS STRONGER
-    // ----------------------------------------------------
+   // ----------------------------------------------------
+// ONLY ADD SPEED ONCE PER BOOST LEVEL
+// ----------------------------------------------------
+
+// The boostChainLevel stays active even after the
+// boost timer expires.
+//
+// This prevents:
+//
+// MINI -> MINI -> MINI
+//
+// from repeatedly adding speed.
+//
+// But it still allows:
+//
+// MINI -> MEDIUM -> MAX
+//
+// to upgrade the boost.
+
+if (
+    newBoostLevel >
+    player.boostChainLevel
+) {
+
+    player.boostChainLevel =
+        newBoostLevel;
+
+    player.boostLevel =
+        newBoostLevel;
+
+    player.boostTimer =
+        boostTimers[newBoostLevel];
+
+    player.currentBoostCap =
+        100;
+
+    const baseBoost =
+        boostAmounts[newBoostLevel];
+
+    const finalBoost =
+        baseBoost +
+        miniTurboBonus;
+
+    player.speed =
+        Math.min(
+            player.speed +
+            finalBoost,
+            100
+        );
+}
+
+
+// ----------------------------------------------------
+// SAME OR LOWER LEVEL
+// ----------------------------------------------------
+// Do NOT add speed.
+//
+// We can still keep the existing stronger boost alive
+// if it is currently active.
+
+else if (
+    newBoostLevel <=
+    player.boostChainLevel
+) {
 
     if (
-        newBoostLevel >
-        player.boostLevel
+        player.boostTimer > 0 &&
+        player.boostLevel > 0
     ) {
 
-        player.boostLevel =
-            newBoostLevel;
-
         player.boostTimer =
-            boostTimers[newBoostLevel];
-
-        // Allow the boost to reach the global 100 cap.
-        player.currentBoostCap = 100;
-
-        const baseBoost =
-            boostAmounts[newBoostLevel];
-
-        // BASE BOOST + MINI TURBO
-        const finalBoost =
-            baseBoost +
-            miniTurboBonus;
-
-        // Add speed ONLY when upgrading
-        // to a stronger boost level.
-        player.speed =
-            Math.min(
-                player.speed +
-                finalBoost,
-                100
+            Math.max(
+                player.boostTimer,
+                boostTimers[player.boostLevel]
             );
     }
+}
 
 
     // ----------------------------------------------------
@@ -11195,12 +11254,12 @@ if (player.boostTimer > 0) {
 
 } else {
 
-    player.boostTimer = 0;
+   player.boostTimer = 0;
 
-    player.boostLevel = 0;
+player.boostLevel = 0;
 
-    player.currentBoostCap =
-        player.maxSpeed;
+player.currentBoostCap =
+    player.maxSpeed;
 
     boostFlame.visible = false;
 
