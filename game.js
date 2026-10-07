@@ -10786,25 +10786,40 @@ function updatePlayer(deltaTime) {
     player.previousFrameTime =
         performance.now();
 
-    // --------------------------------------------------------
+// --------------------------------------------------------
 // ACCELERATION
 // --------------------------------------------------------
 
 if (forward()) {
 
     // ----------------------------------------------------
-    // BOOST ACCELERATION
+    // NORMAL ACCELERATION
     // ----------------------------------------------------
 
-    if (player.boostTimer > 0) {
+    if (player.boostTimer <= 0) {
 
-    player.speed =
-        Math.min(
-            player.speed,
-            100
-        );
+        const wheelieCap =
+            player.maxSpeed +
+            (player.wheelie
+                ? player.wheelieSpeedBonus
+                : 0);
+
+        if (player.speed < wheelieCap) {
+
+            player.speed +=
+                player.acceleration *
+                deltaTime;
+
+            player.speed =
+                Math.min(
+                    player.speed,
+                    wheelieCap
+                );
+        }
+
+    }
+
 }
-
         // ------------------------------------------------
         // NORMAL ACCELERATION
         // ------------------------------------------------
