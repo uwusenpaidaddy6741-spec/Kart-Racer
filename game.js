@@ -11059,136 +11059,81 @@ if (
 
 
     // ----------------------------------------------------
-    // BOOST VALUES
-    // ----------------------------------------------------
+// BOOST VALUES
+// ----------------------------------------------------
 
-    const boostCaps = {
-        1: 73,
-        2: 85,
-        3: 100
-    };
-
-    const boostTimers = {
-        1: 0.35,
-        2: 0.65,
-        3: 1.15
-    };
-
-    const boostAmounts = {
-    1: 2,   // MINI
-    2: 7,   // MEDIUM
-    3: 19   // MAX
+const boostTimers = {
+    1: 0.35,  // MINI
+    2: 0.65,  // MEDIUM
+    3: 1.15   // MAX
 };
 
+const boostAmounts = {
+    1: 5,     // MINI
+    2: 11,    // MEDIUM
+    3: 18     // MAX
+};
 
-// Mini Turbo boost bonus
-// 0 Mini Turbo = 0%
-// 5  = 5%
-// 10 = 10%
-// 15 = 15%
-// 20 = 20%
-//
-// Capped at 20% so Mini Turbo stays important
-// without making boosts overpowering.
-
+// Mini Turbo bonus
 const miniTurboBonus =
-    Math.min(player.miniTurbo, 20) / 100;
+    Math.min(player.miniTurbo, 20) * 0.9;
 
+// ----------------------------------------------------
+// ONLY ADD SPEED WHEN BOOST LEVEL INCREASES
+// ----------------------------------------------------
 
-    // ----------------------------------------------------
-    // ONLY UPGRADE IF THIS DRIFT IS STRONGER
-    // ----------------------------------------------------
+if (newBoostLevel > player.boostLevel) {
 
-    if (
-        newBoostLevel >
-        player.boostLevel
-    ) {
+    player.boostLevel = newBoostLevel;
 
-        player.boostLevel =
-    newBoostLevel;
+    player.boostTimer =
+        boostTimers[newBoostLevel];
 
-player.boostTimer =
-    boostTimers[newBoostLevel];
+    player.currentBoostCap = 100;
 
-player.currentBoostCap =
-    Math.max(
-        boostCaps[newBoostLevel],
-        player.speed
-    );
+    const baseBoost =
+        boostAmounts[newBoostLevel];
 
-const baseBoost =
-    boostAmounts[newBoostLevel];
+    const finalBoost =
+        baseBoost +
+        miniTurboBonus;
 
-const finalBoost =
-    baseBoost *
-    (1 + miniTurboBonus);
-
-if (newBoostLevel === 3) {
-
-    // MAX BOOST ALWAYS REACHES 100
-    player.speed = 100;
-
-} else {
-
+    // ADD SPEED ONLY ON AN UPGRADE
     player.speed =
         Math.min(
-            player.speed +
-            finalBoost,
-            player.currentBoostCap,
+            player.speed + finalBoost,
             100
         );
 }
-    }
 
+// ----------------------------------------------------
+// SAME BOOST LEVEL
+// ----------------------------------------------------
+// Refresh the timer, but DO NOT add speed again.
 
-    // ----------------------------------------------------
-    // IF SAME LEVEL, KEEP THE CURRENT BOOST
-    // ----------------------------------------------------
+else if (newBoostLevel === player.boostLevel) {
 
-    else if (
-        newBoostLevel ===
-        player.boostLevel
-    ) {
+    player.boostTimer =
+        Math.max(
+            player.boostTimer,
+            boostTimers[newBoostLevel]
+        );
 
-        // Same-level drifts can refresh
-        // the existing boost, but never weaken it.
-
-        player.boostTimer =
-            Math.max(
-                player.boostTimer,
-                boostTimers[newBoostLevel]
-            );
-
-        player.speed =
-            Math.min(
-                player.speed,
-                player.currentBoostCap,
-                100
-            );
-    }
-
-
-    // ----------------------------------------------------
-    // SMALLER DRIFT
-    // ----------------------------------------------------
-
-    // If newBoostLevel is lower than player.boostLevel,
-    // absolutely nothing happens.
-    //
-    // Example:
-    //
-    // MAX = level 3
-    // then MINI = level 1
-    //
-    // The MAX boost remains active.
-
-
-    // ----------------------------------------------------
-    // RESET DRIFT CHARGE
-    // ----------------------------------------------------
-
-    player.driftCharge = 0;
+    // IMPORTANT:
+    // No player.speed change here.
 }
+
+// ----------------------------------------------------
+// LOWER BOOST LEVEL
+// ----------------------------------------------------
+// Do absolutely nothing.
+// The stronger boost remains active.
+
+// ----------------------------------------------------
+// RESET DRIFT CHARGE
+// ----------------------------------------------------
+
+player.driftCharge = 0;
 
 
 // ========================================================
