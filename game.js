@@ -10798,26 +10798,11 @@ if (forward()) {
 
     if (player.boostTimer > 0) {
 
-    // Don't add any more speed while the boost is active.
-    // The drift release already applied the boost amount.
-
     player.speed =
         Math.min(
             player.speed,
             100
         );
-
-} else {
-
-    player.boostTimer = 0;
-
-    player.boostLevel = 0;
-
-    player.currentBoostCap =
-        player.maxSpeed;
-
-    boostFlame.visible = false;
-
 }
 
         // ------------------------------------------------
@@ -11095,10 +11080,18 @@ if (
 // MARIO KART STYLE BOOST UPGRADE
 // ----------------------------------------------------
 
-// Stronger turbo replaces weaker turbo.
-// Boosts NEVER stack.
-//
 // MINI -> MEDIUM -> MAX
+//
+// Stronger boost replaces weaker boost.
+// Same boost refreshes the timer.
+// Weaker boost does nothing.
+// Boosts never stack.
+
+const miniTurboBonus =
+    Math.min(
+        player.miniTurbo,
+        20
+    ) * 0.9;
 
 const baseBoost =
     boostAmounts[newBoostLevel];
@@ -11109,14 +11102,15 @@ const finalBoost =
 
 
 // ----------------------------------------------------
-// START A NEW BOOST
+// START NEW BOOST
 // ----------------------------------------------------
 
 if (
     player.boostLevel === 0
 ) {
 
-    // Remember the speed BEFORE the turbo.
+    // Never use an already-boosted speed
+    // as the base for another boost.
 
     player.boostBaseSpeed =
         Math.min(
@@ -11133,25 +11127,25 @@ if (
     player.currentBoostCap =
         100;
 
-    // If already above normal max,
-    // don't add another boost on top of it.
+    const targetSpeed =
+        player.boostBaseSpeed +
+        finalBoost;
 
-    if (
-        player.speed <=
-        player.maxSpeed
-    ) {
+    // If already above the target,
+    // don't slow down.
 
-        player.speed =
-            Math.min(
-                player.boostBaseSpeed +
-                finalBoost,
-                100
-            );
-    }
+    player.speed =
+        Math.min(
+            Math.max(
+                player.speed,
+                targetSpeed
+            ),
+            100
+        );
 
 
 // ----------------------------------------------------
-// UPGRADE AN ACTIVE BOOST
+// STRONGER BOOST
 // ----------------------------------------------------
 
 } else if (
@@ -11159,7 +11153,7 @@ if (
     player.boostLevel
 ) {
 
-    // Stronger turbo replaces the weaker one.
+    // Replace the weaker turbo.
 
     player.boostLevel =
         newBoostLevel;
@@ -11170,13 +11164,19 @@ if (
     player.currentBoostCap =
         100;
 
-    // Recalculate from the ORIGINAL speed.
-    // This prevents stacking.
+    const targetSpeed =
+        player.boostBaseSpeed +
+        finalBoost;
+
+    // Apply only enough speed to reach
+    // the stronger turbo's target.
 
     player.speed =
         Math.min(
-            player.boostBaseSpeed +
-            finalBoost,
+            Math.max(
+                player.speed,
+                targetSpeed
+            ),
             100
         );
 
@@ -11190,8 +11190,8 @@ if (
     player.boostLevel
 ) {
 
-    // Same turbo only refreshes its timer.
-    // It does NOT add speed again.
+    // Refresh timer only.
+    // DO NOT add speed again.
 
     player.boostTimer =
         Math.max(
@@ -11206,12 +11206,10 @@ if (
 
 } else {
 
-    // Weaker turbo cannot replace
-    // the stronger turbo already active.
-
+    // Ignore weaker turbo.
 }
 
-   player.driftCharge = 0;
+player.driftCharge = 0;
 
 }
     
@@ -11221,20 +11219,16 @@ if (
 
 if (player.boostTimer > 0) {
 
-    player.boostTimer -=
-        deltaTime;
+    player.boostTimer -= deltaTime;
 
-    // Do NOT reduce speed while the boost is active.
-    // The drift-release code already applied the
-    // correct Mini / Medium / MAX boost.
+    boostFlame.visible = true;
 
+    // Keep boosted speed while the turbo is active.
     player.speed =
         Math.min(
             player.speed,
             100
         );
-
-    boostFlame.visible = true;
 
 } else {
 
@@ -11248,7 +11242,27 @@ if (player.boostTimer > 0) {
         player.maxSpeed;
 
     boostFlame.visible = false;
+}
 
+
+// ========================================================
+// BOOST SPEED DECAY
+// ========================================================
+// Only slow back toward normal speed AFTER
+// the turbo has completely ended.
+// This still works while holding W.
+
+if (
+    player.boostTimer <= 0 &&
+    player.speed > player.maxSpeed
+) {
+
+    player.speed =
+        moveToward(
+            player.speed,
+            player.maxSpeed,
+            3.0 * deltaTime
+        );
 }
 
 
