@@ -9848,9 +9848,6 @@ boostTimer:
 boostLevel:
     0,
 
-boostChainLevel:
-    0,
-
 boostAcceleration:
     40,
 
@@ -10852,16 +10849,6 @@ if (forward()) {
             1.5 * deltaTime
         );
 }
-
-// Once we are back at normal speed,
-// a new boost chain can begin.
-if (
-    player.speed <=
-    player.maxSpeed
-) {
-
-    player.boostChainLevel = 0;
-}
     }
 }
 
@@ -11132,13 +11119,25 @@ if (
 //
 // to upgrade the boost.
 
-if (
-    newBoostLevel >
-    player.boostChainLevel
-) {
+// ----------------------------------------------------
+// BOOST
+// ----------------------------------------------------
 
-    player.boostChainLevel =
-        newBoostLevel;
+// You can drift at any speed.
+//
+// However, a new drift will NOT add another speed
+// boost while you are already above your normal max.
+//
+// This prevents:
+//
+// 55 -> 78 -> 101 -> 124 -> ...
+//
+// from repeated drifting.
+//
+// Once speed falls back to maxSpeed, another drift
+// can give you another boost.
+
+if (player.speed <= player.maxSpeed) {
 
     player.boostLevel =
         newBoostLevel;
@@ -11161,6 +11160,17 @@ if (
             player.speed +
             finalBoost,
             100
+        );
+
+} else {
+
+    // Already above normal speed.
+    // Allow the drift, but don't add more speed.
+
+    player.boostTimer =
+        Math.max(
+            player.boostTimer,
+            boostTimers[newBoostLevel]
         );
 }
 
