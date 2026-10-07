@@ -11099,43 +11099,17 @@ if (
             20
         ) * 0.9;
 
-
-   // ----------------------------------------------------
-// ONLY ADD SPEED ONCE PER BOOST LEVEL
-// ----------------------------------------------------
-
-// The boostChainLevel stays active even after the
-// boost timer expires.
-//
-// This prevents:
-//
-// MINI -> MINI -> MINI
-//
-// from repeatedly adding speed.
-//
-// But it still allows:
-//
-// MINI -> MEDIUM -> MAX
-//
-// to upgrade the boost.
-
-// ----------------------------------------------------
+    // ----------------------------------------------------
 // BOOST
 // ----------------------------------------------------
 
 // You can drift at any speed.
 //
-// However, a new drift will NOT add another speed
-// boost while you are already above your normal max.
+// If you are already above your normal max speed,
+// the new drift does NOT add another speed boost.
 //
-// This prevents:
-//
-// 55 -> 78 -> 101 -> 124 -> ...
-//
-// from repeated drifting.
-//
-// Once speed falls back to maxSpeed, another drift
-// can give you another boost.
+// Once you return to normal max speed,
+// the next drift can boost again.
 
 if (player.speed <= player.maxSpeed) {
 
@@ -11165,7 +11139,7 @@ if (player.speed <= player.maxSpeed) {
 } else {
 
     // Already above normal speed.
-    // Allow the drift, but don't add more speed.
+    // Allow drifting, but do NOT add speed.
 
     player.boostTimer =
         Math.max(
@@ -11174,76 +11148,10 @@ if (player.speed <= player.maxSpeed) {
         );
 }
 
+   player.driftCharge = 0;
 
-// ----------------------------------------------------
-// SAME OR LOWER LEVEL
-// ----------------------------------------------------
-// Do NOT add speed.
-//
-// We can still keep the existing stronger boost alive
-// if it is currently active.
-
-else if (
-    newBoostLevel <=
-    player.boostChainLevel
-) {
-
-    if (
-        player.boostTimer > 0 &&
-        player.boostLevel > 0
-    ) {
-
-        player.boostTimer =
-            Math.max(
-                player.boostTimer,
-                boostTimers[player.boostLevel]
-            );
-    }
 }
-
-
-    // ----------------------------------------------------
-    // SAME BOOST LEVEL
-    // ----------------------------------------------------
-    // Refresh the boost timer,
-    // but DO NOT add speed again.
-    // ----------------------------------------------------
-
-    else if (
-        newBoostLevel ===
-        player.boostLevel
-    ) {
-
-        player.boostTimer =
-            Math.max(
-                player.boostTimer,
-                boostTimers[newBoostLevel]
-            );
-
-        // IMPORTANT:
-        // No speed is added here.
-    }
-
-
-    // ----------------------------------------------------
-    // LOWER BOOST LEVEL
-    // ----------------------------------------------------
-    // Do nothing.
-    //
-    // Example:
-    // MAX -> MINI
-    //
-    // The MAX boost stays active.
-    // ----------------------------------------------------
-
-
-    // ----------------------------------------------------
-    // RESET DRIFT CHARGE
-    // ----------------------------------------------------
-
-    player.driftCharge = 0;
-}
-
+    
 // ========================================================
 // BOOST
 // ========================================================
