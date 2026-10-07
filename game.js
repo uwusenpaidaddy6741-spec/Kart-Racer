@@ -11241,16 +11241,6 @@ if (player.boostTimer > 0) {
     }
 }
 
-    player.boostTimer = 0;
-
-    player.boostLevel = 0;
-
-    player.currentBoostCap =
-        player.maxSpeed;
-
-    boostFlame.visible = false;
-}
-
 
 // ========================================================
 // FINAL SPEED CAP
