@@ -11164,7 +11164,6 @@ if (player.boostTimer > 0) {
     player.speed =
         Math.min(
             player.speed,
-            player.currentBoostCap,
             100
         );
 
@@ -11172,27 +11171,14 @@ if (player.boostTimer > 0) {
 
 } else {
 
-   player.boostTimer = 0;
+    player.boostTimer = 0;
 
-player.boostLevel = 0;
+    player.boostLevel = 0;
 
-player.currentBoostCap =
-    player.maxSpeed;
+    player.currentBoostCap =
+        player.maxSpeed;
 
     boostFlame.visible = false;
-
-    if (
-        player.speed >
-        player.maxSpeed
-    ) {
-
-        player.speed =
-            moveToward(
-                player.speed,
-                player.maxSpeed,
-                1.5 * deltaTime
-            );
-    }
 }
 
 
