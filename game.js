@@ -10866,9 +10866,8 @@ if (forward()) {
             player.maxSpeed,
             1.5 * deltaTime
         );
-}
+      }
     }
-}
 
 // --------------------------------------------------------
 // HARD MAX SPEED
