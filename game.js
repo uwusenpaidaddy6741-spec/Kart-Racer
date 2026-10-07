@@ -9848,6 +9848,9 @@ boostTimer:
 boostLevel:
     0,
 
+boostAmount:
+    0,
+
 boostAcceleration:
     40,
 
@@ -11120,17 +11123,19 @@ if (
 // MARIO KART STYLE BOOST UPGRADE
 // ----------------------------------------------------
 
-// A stronger turbo replaces a weaker turbo.
-// They do NOT stack together.
+// Stronger turbo replaces weaker turbo.
+// Only the DIFFERENCE in boost strength is added.
 //
-// MINI   -> MEDIUM -> MAX
-//   ↓         ↓        ↓
-// weaker   stronger  strongest
+// MINI -> MEDIUM -> MAX
 //
 // Example:
-// Orange active -> Purple earned
-// Purple replaces Orange and gets its
-// own speed boost + longer timer.
+// Medium = +20 total
+// Max    = +27 total
+//
+// Upgrading Medium -> Max only adds:
+// +27 - +20 = +7
+//
+// This prevents boost stacking.
 
 if (
     newBoostLevel >
@@ -11140,7 +11145,6 @@ if (
     player.boostLevel =
         newBoostLevel;
 
-    // Stronger turbo gets its full duration.
     player.boostTimer =
         boostTimers[newBoostLevel];
 
@@ -11154,22 +11158,27 @@ if (
         baseBoost +
         miniTurboBonus;
 
-    // Apply the stronger turbo's speed increase.
+    const additionalBoost =
+        finalBoost -
+        player.boostAmount;
+
     player.speed =
         Math.min(
             player.speed +
-            finalBoost,
+            additionalBoost,
             100
         );
+
+    player.boostAmount =
+        finalBoost;
 
 } else if (
     newBoostLevel ===
     player.boostLevel
 ) {
 
-    // Same turbo level:
-    // refresh its duration, but don't
-    // add another speed boost.
+    // Same turbo:
+    // refresh the timer, but don't add speed.
 
     player.boostTimer =
         Math.max(
@@ -11179,14 +11188,9 @@ if (
 
 } else {
 
-    // A weaker turbo cannot replace
-    // a stronger turbo that is already active.
+    // Weaker turbo cannot replace
+    // a stronger turbo.
 
-    player.boostTimer =
-        Math.max(
-            player.boostTimer,
-            0
-        );
 }
 
    player.driftCharge = 0;
@@ -11219,6 +11223,8 @@ if (player.boostTimer > 0) {
     player.boostTimer = 0;
 
     player.boostLevel = 0;
+
+    player.boostAmount = 0;
 
     player.currentBoostCap =
         player.maxSpeed;
