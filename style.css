@@ -83,48 +83,298 @@ body {
 
 
 /* ============================================================
-   TRACK SELECT
+   TRACK SELECT - MODERN RACING MENU
    ============================================================ */
 
 #trackSelect {
     position: fixed;
 
-    top: 50%;
-    left: 50%;
+    top: 0;
+    left: 0;
 
-    transform: translate(-50%, -50%);
+    width: 100vw;
+    height: 100vh;
+
+    padding: 45px 50px;
+
+    background:
+        radial-gradient(
+            circle at top,
+            rgba(40, 40, 55, 0.95),
+            rgba(5, 5, 8, 0.98) 65%
+        );
+
+    color: white;
 
     z-index: 100;
 
-    background: rgba(0, 0, 0, 0.9);
-
-    padding: 40px;
-
-    border-radius: 20px;
+    overflow-y: auto;
 
     text-align: center;
-
-    color: white;
 }
+
+
+/* ============================================================
+   TITLE
+   ============================================================ */
 
 #trackSelect h2 {
-    margin-bottom: 25px;
+    margin: 0 0 30px 0;
+
+    font-size: 38px;
+    font-weight: 900;
+
+    letter-spacing: 6px;
+
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 10px rgba(255, 255, 255, 0.25),
+        0 0 30px rgba(255, 255, 255, 0.1);
 }
 
-#trackSelect button {
-    display: block;
 
-    width: 220px;
+/* ============================================================
+   NORMAL TRACK GRID
+   ============================================================ */
 
-    margin: 12px auto;
+#normalTracks {
+    width: min(1200px, 94vw);
 
-    padding: 15px;
+    margin: 0 auto;
 
-    font-size: 20px;
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+
+/* ============================================================
+   TRACK CARDS
+   ============================================================ */
+
+#normalTracks button {
+    position: relative;
+
+    min-height: 150px;
+
+    padding: 22px;
+
+    border: 2px solid rgba(255, 255, 255, 0.18);
+
+    border-radius: 16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(35, 35, 45, 0.95),
+            rgba(12, 12, 17, 0.98)
+        );
+
+    color: white;
 
     cursor: pointer;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    text-align: left;
+
+    transition:
+        transform 0.18s ease,
+        border-color 0.18s ease,
+        background 0.18s ease,
+        box-shadow 0.18s ease;
 }
 
+
+/* ============================================================
+   TRACK NUMBER
+   ============================================================ */
+
+#normalTracks button::before {
+    content: "";
+
+    position: absolute;
+
+    top: -20px;
+    right: -10px;
+
+    font-size: 110px;
+    font-weight: 900;
+
+    color: rgba(255, 255, 255, 0.035);
+
+    pointer-events: none;
+}
+
+
+/* ============================================================
+   HOVER
+   ============================================================ */
+
+#normalTracks button:hover {
+    transform: translateY(-6px) scale(1.015);
+
+    border-color: rgba(255, 255, 255, 0.65);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(55, 55, 68, 0.98),
+            rgba(18, 18, 25, 0.99)
+        );
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.5),
+        0 0 20px rgba(255, 255, 255, 0.08);
+}
+
+
+/* ============================================================
+   CLICK
+   ============================================================ */
+
+#normalTracks button:active {
+    transform: translateY(-2px) scale(0.99);
+}
+
+
+/* ============================================================
+   TRACK NAME
+   ============================================================ */
+
+#normalTracks button {
+    font-size: 20px;
+    font-weight: 800;
+
+    letter-spacing: 1.5px;
+
+    text-transform: uppercase;
+}
+
+
+/* ============================================================
+   TIME TRIAL BUTTON
+   ============================================================ */
+
+#timeTrialButton {
+    margin: 30px auto 0;
+
+    width: min(360px, 90vw);
+
+    padding: 15px 25px;
+
+    border: 2px solid rgba(255, 255, 255, 0.35);
+
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.08);
+
+    color: white;
+
+    font-size: 18px !important;
+
+    font-weight: 800;
+
+    letter-spacing: 2px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.18s ease,
+        background 0.18s ease,
+        border-color 0.18s ease;
+}
+
+#timeTrialButton:hover {
+    transform: translateY(-3px);
+
+    background: rgba(255, 255, 255, 0.16);
+
+    border-color: white;
+}
+
+
+/* ============================================================
+   TABLET
+   ============================================================ */
+
+@media (max-width: 900px) {
+
+    #trackSelect {
+        padding: 30px 25px;
+    }
+
+    #trackSelect h2 {
+        font-size: 30px;
+
+        margin-bottom: 22px;
+    }
+
+    #normalTracks {
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 14px;
+    }
+
+    #normalTracks button {
+        min-height: 125px;
+
+        padding: 18px;
+    }
+}
+
+
+/* ============================================================
+   PHONE
+   ============================================================ */
+
+@media (max-width: 600px) {
+
+    #trackSelect {
+        padding: 25px 15px;
+    }
+
+    #trackSelect h2 {
+        font-size: 24px;
+
+        letter-spacing: 3px;
+
+        margin-bottom: 18px;
+    }
+
+    #normalTracks {
+        grid-template-columns: 1fr;
+
+        width: 100%;
+
+        gap: 10px;
+    }
+
+    #normalTracks button {
+        min-height: 90px;
+
+        padding: 15px;
+
+        font-size: 17px !important;
+    }
+
+    #timeTrialButton {
+        margin-top: 18px;
+
+        width: 100%;
+    }
+}
 
 /* ============================================================
    MOBILE LANDSCAPE SUPPORT
