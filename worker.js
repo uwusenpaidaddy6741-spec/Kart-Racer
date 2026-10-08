@@ -4,6 +4,23 @@ export default {
         const url = new URL(request.url);
 
         // ============================================================
+// MULTIPLAYER API — forward requests to the shared room server
+// ============================================================
+if (url.pathname.startsWith("/api/rooms")) {
+    if (!env.ROOMS) {
+        return Response.json(
+            { error: "ROOMS Durable Object binding is missing" },
+            { status: 500 }
+        );
+    }
+
+    const id = env.ROOMS.idFromName("kart-racer-global");
+    const roomServer = env.ROOMS.get(id);
+
+    return roomServer.fetch(request);
+}
+
+        // ============================================================
         // LEADERBOARD API
         // ============================================================
 
@@ -282,4 +299,103 @@ export default {
 
         return env.ASSETS.fetch(request);
     }
+
+    
+export class KartRooms {
+    constructor(state, env) {
+        this.state = state;
+        this.env = env;
+    }
+
+    async fetch(request) {
+        const url = new URL(request.url);
+
+        // List public rooms
+        if (url.pathname === "/api/rooms" && request.method === "GET") {
+            const storedRooms = await this.state.storage.list({
+                prefix: "room:"
+            });
+
+            const rooms = [];
+
+            for (const room of storedRooms.values()) {
+                if (!room.private) {
+                    rooms.push({
+                        id: room.id,
+                        name: room.name,
+                        track: room.track,
+                        maxPlayers: room.maxPlayers,
+                        players: room.players.length,
+                        status: room.status
+                    });
+                }
+            }
+
+            return Response.json(rooms);
+        }
+
+        // Create a room
+        if (url.pathname === "/api/rooms" && request.method === "POST") {
+            let data;
+
+            try {
+                data = await request.json();
+            } catch {
+                return Response.json(
+                    { error: "Invalid JSON" },
+                    { status: 400 }
+                );
+            }
+
+            const name = String(data.name || "Race Room")
+                .trim()
+                .slice(0, 30);
+
+            const track = String(data.track || "track1").slice(0, 40);
+            const maxPlayers = Number(data.maxPlayers || 8);
+            const isPrivate = Boolean(data.private);
+
+            if (![2, 4, 6, 8].includes(maxPlayers)) {
+                return Response.json(
+                    { error: "Player limit must be 2, 4, 6, or 8" },
+                    { status: 400 }
+                );
+            }
+
+            const id = crypto.randomUUID().slice(0, 8);
+
+            const room = {
+                id,
+                name,
+                track,
+                maxPlayers,
+                private: isPrivate,
+                players: [],
+                status: "waiting",
+                createdAt: Date.now()
+            };
+
+            await this.state.storage.put(`room:${id}`, room);
+
+            return Response.json(
+                { success: true, room },
+                { status: 201 }
+            );
+        }
+
+        // Test endpoint
+        if (url.pathname === "/api/rooms/health") {
+            return Response.json({
+                success: true,
+                service: "Kart Racer multiplayer",
+                status: "online"
+            });
+        }
+
+        return Response.json(
+            { error: "Multiplayer endpoint not found" },
+            { status: 404 }
+        );
+    }
+}
 };
