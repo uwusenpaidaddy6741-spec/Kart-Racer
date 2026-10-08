@@ -11468,53 +11468,6 @@ if (player.drifting) {
             driftAngle;
     }
 }
-    // ----------------------------------------------------
-    // MARIO KART STYLE DRIFTING
-    // ----------------------------------------------------
-    //
-    // KARTS:
-    // Outward drift
-    //
-    // BIKES:
-    // Inward drift
-    //
-    // Our movement angle is separated from the
-    // vehicle's facing angle to create the slide.
-    // ----------------------------------------------------
-
-    const isBike =
-    selectedBike !== "none";
-
-const driftAngle =
-    0.34;
-
-
-    if (isBike) {
-
-    // ================================================
-    // BIKE - INWARD DRIFT
-    // ================================================
-
-    moveAngle +=
-        turnDirection *
-        driftAngle;
-
-    // Keep the bike visually facing into the turn.
-kart.rotation.y =
-    player.angle -
-    Math.PI / 2;
-        
-} else {
-        
-        // ================================================
-        // KART - OUTWARD DRIFT
-        // ================================================
-
-        moveAngle -=
-            turnDirection *
-            driftAngle;
-    }
-}
 
     // --------------------------------------------------------
     // REAL-TIME MOVEMENT
