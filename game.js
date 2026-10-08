@@ -11423,27 +11423,51 @@ let moveAngle =
 
 if (player.drifting) {
 
-    // Which direction are we turning?
-    //
-    // RIGHT = -1
-    // LEFT  = +1
-    //
+    // ----------------------------------------------------
+    // MARIO KART STYLE DRIFT
+    // ----------------------------------------------------
+
     const controllerSteering =
-    getGamepadSteering();
+        getGamepadSteering();
 
-const turnDirection =
-    controllerSteering !== 0
-        ? (
-            controllerSteering > 0
-                ? -1
-                : 1
-        )
-        : (
-            right()
-                ? -1
-                : 1
-        );
+    const turnDirection =
+        controllerSteering !== 0
+            ? (
+                controllerSteering > 0
+                    ? -1
+                    : 1
+            )
+            : (
+                right()
+                    ? -1
+                    : 1
+            );
 
+    const isBike =
+        selectedBike !== "none";
+
+    // How far the kart slides outward.
+    // Higher = more sideways.
+    const driftAngle =
+        isBike
+            ? 0.20
+            : 0.48;
+
+    if (isBike) {
+
+        // Bikes slide inward.
+        moveAngle +=
+            turnDirection *
+            driftAngle;
+
+    } else {
+
+        // Karts slide outward.
+        moveAngle -=
+            turnDirection *
+            driftAngle;
+    }
+}
     // ----------------------------------------------------
     // MARIO KART STYLE DRIFTING
     // ----------------------------------------------------
@@ -11698,9 +11722,9 @@ if (player.drifting) {
         selectedBike !== "none";
 
     const visualDriftAngle =
-        isBike
-            ? 0.20
-            : -0.20;
+    isBike
+        ? 0.20
+        : -0.32;
 
     visualAngle +=
         turnDirection *
