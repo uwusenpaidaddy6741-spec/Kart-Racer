@@ -11141,26 +11141,37 @@ if (
     };
 
 
-    // ----------------------------------------------------
-    // MINI TURBO BONUS
-    // ----------------------------------------------------
-    // Every Mini Turbo point adds +0.9 speed.
-    //
-    // 0  = +0
-    // 5  = +4.5
-    // 10 = +9
-    // 15 = +13.5
-    // 20 = +18
-    //
-    // This is ADDITIVE to the base boost.
-    // ----------------------------------------------------
+  // ----------------------------------------------------
+// MINI TURBO BONUS
+// ----------------------------------------------------
+// Normal Mini Turbo contribution:
+// 0  = +0
+// 5  = +2.75
+// 10 = +5.5
+// 15 = +8.25
+// 20 = +11
+//
+// Extra bonus for high Mini Turbo:
+// 13+ = +18
+//
+// This is ADDITIVE to the base boost.
+// ----------------------------------------------------
 
-    const miniTurboBonus =
-        Math.min(
-            player.miniTurbo,
-            20
-        ) * 0.9;
+const miniTurboBaseBonus =
+    Math.min(
+        player.miniTurbo,
+        20
+    ) * 0.55;
 
+const miniTurboExtraBonus =
+    player.miniTurbo >= 13
+        ? 18
+        : 0;
+
+const miniTurboBonus =
+    miniTurboBaseBonus +
+    miniTurboExtraBonus;
+    
 // ----------------------------------------------------
 // MARIO KART STYLE BOOST UPGRADE
 // ----------------------------------------------------
