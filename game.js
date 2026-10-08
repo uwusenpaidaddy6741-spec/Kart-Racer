@@ -10973,25 +10973,6 @@ player.speed =
     }
 
     // --------------------------------------------------------
-// DRIFT
-// --------------------------------------------------------
-
-const controllerSteering =
-    getGamepadSteering();
-
-const wantsDrift =
-    (space() || mobileDriftToggle) &&
-    Math.abs(player.speed) > 5 &&
-    (
-        left() ||
-        right() ||
-        controllerSteering !== 0
-    );
-
-player.drifting =
-    wantsDrift;
-
-    // --------------------------------------------------------
 // BIKE WHEELIE
 // --------------------------------------------------------
 
@@ -11007,6 +10988,27 @@ if (
 
     player.wheelie = false;
 }
+
+
+// --------------------------------------------------------
+// DRIFT
+// --------------------------------------------------------
+
+const controllerSteering =
+    getGamepadSteering();
+
+const wantsDrift =
+    !player.wheelie &&
+    (space() || mobileDriftToggle) &&
+    Math.abs(player.speed) > 5 &&
+    (
+        left() ||
+        right() ||
+        controllerSteering !== 0
+    );
+
+player.drifting =
+    wantsDrift;
 
     // --------------------------------------------------------
     // STEERING
