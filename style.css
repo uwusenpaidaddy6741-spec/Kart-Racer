@@ -1167,3 +1167,362 @@ body {
 #totalStats p {
     margin: 3px 0;
 }
+
+
+/* ============================================================
+   MULTIPLAYER BUTTON
+   ============================================================ */
+
+#multiplayerButton {
+    grid-column: 1 / -1;
+    width: min(360px, 90vw);
+    min-height: 64px !important;
+    margin: 10px auto 0;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    border-color: rgba(69, 210, 255, 0.7) !important;
+    background: linear-gradient(
+        135deg,
+        rgba(0, 108, 160, 0.75),
+        rgba(15, 24, 42, 0.98)
+    ) !important;
+    box-shadow: 0 0 22px rgba(0, 170, 255, 0.12);
+}
+
+#multiplayerButton:hover {
+    border-color: #70e1ff !important;
+    box-shadow: 0 0 28px rgba(0, 170, 255, 0.28);
+}
+
+/* ============================================================
+   MULTIPLAYER SCREEN
+   ============================================================ */
+
+#multiplayerScreen {
+    position: fixed;
+    inset: 0;
+    z-index: 130;
+    overflow-y: auto;
+    padding: clamp(20px, 4vh, 42px)
+             clamp(16px, 4vw, 54px);
+    color: #f5f7ff;
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(0, 120, 190, 0.2),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 95% 100%,
+            rgba(90, 55, 190, 0.16),
+            transparent 35%
+        ),
+        linear-gradient(145deg, #10141e, #050609 72%);
+}
+
+.multiplayerHeader {
+    width: min(1250px, 100%);
+    margin: 0 auto 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.multiplayerEyebrow,
+.panelEyebrow {
+    margin-bottom: 8px;
+    color: #62d9ff;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 3px;
+}
+
+.multiplayerHeader h2 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 900;
+    letter-spacing: 5px;
+}
+
+.multiplayerSubtitle {
+    margin-top: 8px;
+    color: #aab4c7;
+    font-size: 15px;
+}
+
+#multiplayerBackButton {
+    flex: 0 0 auto;
+    padding: 12px 16px;
+    border: 1px solid #414b5f;
+    border-radius: 9px;
+    background: rgba(255, 255, 255, 0.06);
+    color: white;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+#multiplayerBackButton:hover {
+    background: rgba(255, 255, 255, 0.13);
+    border-color: #91a2bc;
+}
+
+/* ============================================================
+   LEFT AND RIGHT PANELS
+   ============================================================ */
+
+.multiplayerPanels {
+    width: min(1250px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.25fr)
+        minmax(300px, 0.85fr);
+    gap: 22px;
+    align-items: start;
+}
+
+.multiplayerPanel {
+    min-width: 0;
+    padding: clamp(18px, 2.5vw, 28px);
+    border: 1px solid rgba(166, 190, 225, 0.2);
+    border-radius: 16px;
+    background: linear-gradient(
+        145deg,
+        rgba(25, 31, 45, 0.94),
+        rgba(10, 13, 20, 0.97)
+    );
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+}
+
+.panelHeading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.multiplayerPanel h3 {
+    font-size: 22px;
+    letter-spacing: 1.5px;
+}
+
+.roomCountBadge {
+    padding: 7px 10px;
+    border: 1px solid rgba(98, 217, 255, 0.3);
+    border-radius: 99px;
+    color: #8be5ff;
+    background: rgba(0, 155, 220, 0.1);
+    font-size: 11px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   OPEN ROOM LIST
+   ============================================================ */
+
+#multiplayerRoomList {
+    min-height: 310px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.roomEmptyState {
+    flex: 1;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 25px;
+    text-align: center;
+    border: 1px dashed rgba(166, 190, 225, 0.25);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.roomEmptyIcon {
+    width: 54px;
+    height: 54px;
+    margin-bottom: 16px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    color: #6bddff;
+    background: rgba(0, 155, 220, 0.12);
+    font-size: 34px;
+}
+
+.roomEmptyState h4 {
+    margin-bottom: 8px;
+    font-size: 17px;
+}
+
+.roomEmptyState p,
+.multiplayerNote,
+.createRoomIntro {
+    max-width: 360px;
+    color: #9da8bc;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.multiplayerNote {
+    margin-top: 15px;
+    font-size: 11px;
+}
+
+/* ============================================================
+   CREATE ROOM FORM
+   ============================================================ */
+
+.createRoomPanel > h3 {
+    margin-bottom: 8px;
+}
+
+.createRoomIntro {
+    margin-bottom: 22px;
+}
+
+#createRoomForm {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+#createRoomForm > label:not(.privateRoomToggle) {
+    margin-top: 8px;
+    color: #c2ccdc;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 1.4px;
+}
+
+#createRoomForm input[type="text"],
+#createRoomForm select {
+    width: 100%;
+    min-height: 44px;
+    padding: 11px 12px;
+    border: 1px solid #3a4559;
+    border-radius: 8px;
+    outline: none;
+    background: #0d111a;
+    color: #f5f7ff;
+    font-size: 14px;
+}
+
+#createRoomForm input[type="text"]:focus,
+#createRoomForm select:focus {
+    border-color: #62d9ff;
+    box-shadow: 0 0 0 3px rgba(98, 217, 255, 0.1);
+}
+
+.privateRoomToggle {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin: 12px 0;
+    cursor: pointer;
+}
+
+.privateRoomToggle input {
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+    accent-color: #29b9ef;
+}
+
+.privateRoomToggle span {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.privateRoomToggle strong {
+    font-size: 13px;
+}
+
+.privateRoomToggle small {
+    color: #9da8bc;
+    font-size: 11px;
+}
+
+.createRoomButton {
+    min-height: 48px;
+    margin-top: 6px;
+    border: none;
+    border-radius: 9px;
+    background: linear-gradient(100deg, #20b6eb, #3675ff);
+    color: white;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+}
+
+.createRoomButton:hover {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+}
+
+.multiplayerStatus {
+    min-height: 40px;
+    margin-top: 7px;
+    color: #9da8bc;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+/* ============================================================
+   TABLET AND MOBILE
+   ============================================================ */
+
+@media (max-width: 800px) {
+    #multiplayerScreen {
+        padding: 20px 14px 30px;
+    }
+
+    .multiplayerHeader {
+        align-items: flex-start;
+        flex-direction: column;
+        margin-bottom: 18px;
+    }
+
+    .multiplayerPanels {
+        grid-template-columns: 1fr;
+    }
+
+    #multiplayerRoomList {
+        min-height: 220px;
+    }
+
+    .roomEmptyState {
+        min-height: 200px;
+    }
+}
+
+@media (max-width: 600px) {
+    #multiplayerButton {
+        width: 100%;
+        min-height: 58px !important;
+    }
+
+    .multiplayerHeader h2 {
+        letter-spacing: 3px;
+    }
+
+    .multiplayerPanel {
+        padding: 17px;
+    }
+
+    .multiplayerPanel h3 {
+        font-size: 19px;
+    }
+
+    #multiplayerBackButton {
+        width: 100%;
+    }
+}
