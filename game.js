@@ -9665,96 +9665,98 @@ for (let i = 0; i < AI_COUNT; i++) {
         aiColors[i]
     );
 
-    // --------------------------------------------------------
-    // STARTING GRID
-    // --------------------------------------------------------
+  // --------------------------------------------------------
+// STARTING GRID
+// --------------------------------------------------------
 
-    // Each AI gets its own row/side of the grid
-    const startingIndices = [
-        116, // Red - front left
-        112, // Yellow - back right
-        108  // Purple - back left
-    ];
+// The official starting line is trackPoints[0].
+// All racers start close to it instead of using
+// completely different track indices.
 
-    const startIndex =
-        startingIndices[i];
+const startPoint =
+    trackPoints[0];
 
-    const startPoint =
-        trackPoints[startIndex];
+const nextPoint =
+    trackPoints[1];
 
-    const nextPoint =
-        trackPoints[
-            (startIndex + 1) %
-            trackPoints.length
-        ];
+// Direction of the track
+const dx =
+    nextPoint.x -
+    startPoint.x;
 
-    // Get the direction of the track
-    const dx =
-        nextPoint.x -
-        startPoint.x;
+const dz =
+    nextPoint.z -
+    startPoint.z;
 
-    const dz =
-        nextPoint.z -
-        startPoint.z;
-
-    const length =
-        Math.sqrt(
-            dx * dx +
-            dz * dz
-        );
-
-    // Forward direction
-    const forwardX =
-        dx / length;
-
-    const forwardZ =
-        dz / length;
-
-    // Right-side direction
-    const rightX =
-        -forwardZ;
-
-    const rightZ =
-        forwardX;
-
-    // Alternate sides of the track
-    const sideOffset =
-        i === 0 ? -2.0 :
-        i === 1 ?  2.0 :
-        -2.0;
-
-    // Position the AI on the grid
-    aiKart.position.set(
-
-        startPoint.x +
-        rightX *
-        sideOffset,
-
-        0,
-
-        startPoint.z +
-        rightZ *
-        sideOffset
+const length =
+    Math.hypot(
+        dx,
+        dz
     );
 
-    // Calculate starting rotation
-    const angle =
-        -Math.atan2(
-            dz,
-            dx
-        );
+const forwardX =
+    dx / length;
 
-    // The kart model faces local -Z
-    aiKart.rotation.y =
-        angle -
-        Math.PI / 2;
+const forwardZ =
+    dz / length;
+
+// Right side of the track
+const rightX =
+    -forwardZ;
+
+const rightZ =
+    forwardX;
+
+// --------------------------------------------------------
+// GRID POSITIONS
+// --------------------------------------------------------
+
+// Red = front left
+// Yellow = back right
+// Purple = back left
+
+const sideOffset =
+    i === 0 ? -2.0 :
+    i === 1 ?  2.0 :
+    -2.0;
+
+const backDistance =
+    i === 0 ? 0.5 :
+    3.5;
+
+const gridX =
+    startPoint.x -
+    forwardX * backDistance +
+    rightX * sideOffset;
+
+const gridZ =
+    startPoint.z -
+    forwardZ * backDistance +
+    rightZ * sideOffset;
+
+aiKart.position.set(
+    gridX,
+    0,
+    gridZ
+);
+
+// The kart faces the direction of the track
+const angle =
+    -Math.atan2(
+        dz,
+        dx
+    );
+
+aiKart.rotation.y =
+    angle -
+    Math.PI / 2;
 
     aiKarts.push({
 
         kart: aiKart,
 
         trackIndex:
-            startIndex,
+    0,
 
         speed:
             0,
@@ -9795,8 +9797,9 @@ for (let i = 0; i < AI_COUNT; i++) {
         // Start the AI behind the player's
         // official race-start position.
         raceProgress:
-            startIndex -
-            trackPoints.length,
+    i === 0 ? -1 :
+    i === 1 ? -2 :
+    -3,
 
         finished:
             false
@@ -9814,7 +9817,7 @@ for (let i = 0; i < AI_COUNT; i++) {
 
 // Player starts on the front row of the grid
 const playerStartIndex =
-    116;
+    0;
 
 const playerStartPoint =
     trackPoints[playerStartIndex];
@@ -9856,17 +9859,25 @@ const playerRightX =
 const playerRightZ =
     playerForwardX;
 
-// Player starts on the right side
+// Player starts slightly behind the starting line
+// and on the right side.
 const playerGridOffset =
     2.0;
 
+const playerGridBackDistance =
+    0.5;
+
 const playerStartX =
-    playerStartPoint.x +
+    playerStartPoint.x -
+    playerForwardX *
+    playerGridBackDistance +
     playerRightX *
     playerGridOffset;
 
 const playerStartZ =
-    playerStartPoint.z +
+    playerStartPoint.z -
+    playerForwardZ *
+    playerGridBackDistance +
     playerRightZ *
     playerGridOffset;
 
