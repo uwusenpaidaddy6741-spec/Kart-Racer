@@ -297,8 +297,9 @@ if (url.pathname.startsWith("/api/rooms")) {
         // SERVE GAME FILES
         // ============================================================
 
-        return env.ASSETS.fetch(request);
+               return env.ASSETS.fetch(request);
     }
+};
 
     
 export class KartRooms {
