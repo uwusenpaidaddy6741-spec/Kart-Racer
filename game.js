@@ -2477,7 +2477,7 @@ const kartStats = {
         braking: 31,
         turnSpeed: 3.2,
         driftChargeRate: 1.15,
-        miniTurbo: 9
+        miniTurbo: 4
     },
 
     balanced: {
@@ -2504,7 +2504,7 @@ const kartStats = {
         braking: 39,
         turnSpeed: 2.6,
         driftChargeRate: 1.10,
-        miniTurbo: 6
+        miniTurbo: 2
     },
 
     drifter: {
@@ -2540,7 +2540,7 @@ const kartStats = {
         braking: 22,
         turnSpeed: 2.8,
         driftChargeRate: 1.0,
-        miniTurbo: 8
+        miniTurbo: 3
     },
 
     turbo: {
@@ -2579,7 +2579,7 @@ const bikeStats = {
         braking: 27,
         turnSpeed: 3.0,
         driftChargeRate: 1.3,
-        miniTurbo: 12
+        miniTurbo: 8
     },
 
     bobsBike: {
@@ -2599,7 +2599,7 @@ const bikeStats = {
         braking: 19,
         turnSpeed: 2.0,
         driftChargeRate: 0.95,
-        miniTurbo: 7
+        miniTurbo: 2
     },
 
     champion: {
@@ -2639,7 +2639,7 @@ const bikeStats = {
         braking: 43,
         turnSpeed: 2.1,
         driftChargeRate: 1.4,
-        miniTurbo: 9
+        miniTurbo: 4
     },
 
     streak: {
