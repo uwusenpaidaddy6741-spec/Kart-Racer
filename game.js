@@ -10998,7 +10998,6 @@ const controllerSteering =
     getGamepadSteering();
 
 const wantsDrift =
-    !player.wheelie &&
     (space() || mobileDriftToggle) &&
     Math.abs(player.speed) > 5 &&
     (
@@ -11007,9 +11006,61 @@ const wantsDrift =
         controllerSteering !== 0
     );
 
+// --------------------------------------------------------
+// LOCK DRIFT DIRECTION
+// --------------------------------------------------------
+
+// RIGHT = -1
+// LEFT  = +1
+
+const currentDriftDirection =
+    controllerSteering !== 0
+        ? (
+            controllerSteering > 0
+                ? -1
+                : 1
+        )
+        : (
+            right()
+                ? -1
+                : 1
+        );
+
+const wasDrifting =
+    player.drifting;
+
+// Start / continue drift
 player.drifting =
     wantsDrift;
 
+// --------------------------------------------------------
+// PREVENT A/D DRIFT CHARGING EXPLOIT
+// --------------------------------------------------------
+
+if (player.drifting) {
+
+    // First frame of a new drift
+    if (!wasDrifting) {
+
+        player.driftDirection =
+            currentDriftDirection;
+
+    }
+
+    // Player switched from A -> D or D -> A
+    else if (
+        player.driftDirection !==
+        currentDriftDirection
+    ) {
+
+        // Break the accumulated charge
+        player.driftCharge = 0;
+
+        // Lock the new direction
+        player.driftDirection =
+            currentDriftDirection;
+    }
+}
     // --------------------------------------------------------
     // STEERING
     // --------------------------------------------------------
