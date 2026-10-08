@@ -10113,11 +10113,9 @@ function applyKartStats() {
 
         player.miniTurbo =
     Math.round(
-        (
-            character.miniTurbo +
-            bike.miniTurbo +
-            wheels.miniTurbo
-        ) / 3
+        character.miniTurbo * 0.25 +
+        bike.miniTurbo * 0.50 +
+        wheels.miniTurbo * 0.25
     );
 
         // ----------------------------------------------------
@@ -10191,11 +10189,9 @@ return;
 
     player.miniTurbo =
     Math.round(
-        (
-            character.miniTurbo +
-            kart.miniTurbo +
-            wheels.miniTurbo
-        ) / 3
+        character.miniTurbo * 0.25 +
+        kart.miniTurbo * 0.50 +
+        wheels.miniTurbo * 0.25
     );
 
 
