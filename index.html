@@ -80,6 +80,10 @@
             TIME TRIAL
         </button>
 
+        <button id="multiplayerButton" type="button">
+    MULTIPLAYER
+</button>
+
     </div>
 
     <div id="timeTrialTracks" style="display: none;">
@@ -298,6 +302,180 @@
 
 </div>
 
+       <!-- ============================================================
+     MULTIPLAYER ROOM BROWSER
+     ============================================================ -->
+
+<div id="multiplayerScreen" style="display: none;" aria-hidden="true">
+
+    <header class="multiplayerHeader">
+        <div>
+            <p class="multiplayerEyebrow">KART RACER ONLINE</p>
+            <h2>MULTIPLAYER</h2>
+            <p class="multiplayerSubtitle">
+                Find a room or set up your own race.
+            </p>
+        </div>
+
+        <button id="multiplayerBackButton" type="button">
+            ← BACK TO TRACKS
+        </button>
+    </header>
+
+    <div class="multiplayerPanels">
+
+        <!-- OPEN ROOMS: LEFT SIDE -->
+        <section class="multiplayerPanel">
+
+            <div class="panelHeading">
+                <div>
+                    <p class="panelEyebrow">PLAY ONLINE</p>
+                    <h3>OPEN ROOMS</h3>
+                </div>
+
+                <span class="roomCountBadge" id="roomCountBadge">
+                    0 ROOMS
+                </span>
+            </div>
+
+            <div id="multiplayerRoomList" aria-live="polite">
+                <div class="roomEmptyState">
+                    <div class="roomEmptyIcon">⌁</div>
+                    <h4>No rooms to display yet</h4>
+                    <p>
+                        Online rooms will appear here once multiplayer
+                        networking is connected.
+                    </p>
+                </div>
+            </div>
+
+            <p class="multiplayerNote">
+                Live room listings are not connected yet.
+            </p>
+
+        </section>
+
+        <!-- CREATE ROOM: RIGHT SIDE -->
+        <section class="multiplayerPanel createRoomPanel">
+
+            <p class="panelEyebrow">BE THE HOST</p>
+            <h3>CREATE A ROOM</h3>
+
+            <p class="createRoomIntro">
+                Choose the basics for your next race.
+            </p>
+
+            <form id="createRoomForm">
+
+                <label for="roomNameInput">ROOM NAME</label>
+                <input
+                    id="roomNameInput"
+                    name="roomName"
+                    type="text"
+                    maxlength="24"
+                    placeholder="e.g. Friday Night Racing"
+                    required
+                >
+
+                <label for="roomTrackSelect">STARTING TRACK</label>
+                <select id="roomTrackSelect" name="track">
+                    <option value="1">Track 1</option>
+                    <option value="2">Forest Run</option>
+                    <option value="3">Oasis</option>
+                    <option value="4">Snow Track</option>
+                    <option value="5">Grand Circuit</option>
+                    <option value="6">Sunset Speedway</option>
+                    <option value="7">Mountain Pass</option>
+                    <option value="8">Castle Run</option>
+                    <option value="9">Jungle Run</option>
+                    <option value="10">Racers Circuit</option>
+                    <option value="11">Grand Prix Circuit</option>
+                </select>
+
+                <label for="roomPlayerLimit">PLAYER LIMIT</label>
+                <select id="roomPlayerLimit" name="playerLimit">
+                    <option value="2">2 players</option>
+                    <option value="4" selected>4 players</option>
+                    <option value="6">6 players</option>
+                    <option value="8">8 players</option>
+                </select>
+
+                <label class="privateRoomToggle">
+                    <input
+                        id="privateRoomCheckbox"
+                        name="privateRoom"
+                        type="checkbox"
+                    >
+                    <span>
+                        <strong>Private room</strong>
+                        <small>
+                            Keep it out of the public room list.
+                        </small>
+                    </span>
+                </label>
+
+                <button class="createRoomButton" type="submit">
+                    CREATE ROOM
+                </button>
+
+                <p
+                    id="multiplayerStatus"
+                    class="multiplayerStatus"
+                    role="status"
+                    aria-live="polite"
+                >
+                    Online rooms are not connected yet.
+                </p>
+
+            </form>
+        </section>
+
+    </div>
+</div>
+
+<script>
+(() => {
+    const trackSelect = document.getElementById("trackSelect");
+    const multiplayerScreen =
+        document.getElementById("multiplayerScreen");
+    const multiplayerButton =
+        document.getElementById("multiplayerButton");
+    const backButton =
+        document.getElementById("multiplayerBackButton");
+    const createRoomForm =
+        document.getElementById("createRoomForm");
+    const status =
+        document.getElementById("multiplayerStatus");
+
+    if (
+        !trackSelect ||
+        !multiplayerScreen ||
+        !multiplayerButton ||
+        !backButton
+    ) {
+        return;
+    }
+
+    multiplayerButton.addEventListener("click", () => {
+        trackSelect.style.display = "none";
+        multiplayerScreen.style.display = "block";
+        multiplayerScreen.setAttribute("aria-hidden", "false");
+    });
+
+    backButton.addEventListener("click", () => {
+        multiplayerScreen.style.display = "none";
+        multiplayerScreen.setAttribute("aria-hidden", "true");
+        trackSelect.style.display = "";
+    });
+
+    createRoomForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        status.textContent =
+            "Room creation is not connected yet. Cloudflare networking must be added before other players can see or join rooms.";
+    });
+})();
+</script>
 
 <!-- ============================================================
      KART SELECT SCREEN
