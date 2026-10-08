@@ -9668,10 +9668,11 @@ for (let i = 0; i < AI_COUNT; i++) {
     // STARTING GRID
     // --------------------------------------------------------
 
+    // Each AI gets its own row/side of the grid
     const startingIndices = [
-        116,
-        112,
-        108
+        116, // Red - front left
+        112, // Yellow - back right
+        108  // Purple - back left
     ];
 
     const startIndex =
@@ -9695,18 +9696,52 @@ for (let i = 0; i < AI_COUNT; i++) {
         nextPoint.z -
         startPoint.z;
 
+    const length =
+        Math.sqrt(
+            dx * dx +
+            dz * dz
+        );
+
+    // Forward direction
+    const forwardX =
+        dx / length;
+
+    const forwardZ =
+        dz / length;
+
+    // Right-side direction
+    const rightX =
+        -forwardZ;
+
+    const rightZ =
+        forwardX;
+
+    // Alternate sides of the track
+    const sideOffset =
+        i === 0 ? -2.0 :
+        i === 1 ?  2.0 :
+        -2.0;
+
+    // Position the AI on the grid
+    aiKart.position.set(
+
+        startPoint.x +
+        rightX *
+        sideOffset,
+
+        0,
+
+        startPoint.z +
+        rightZ *
+        sideOffset
+    );
+
+    // Calculate starting rotation
     const angle =
         -Math.atan2(
             dz,
             dx
         );
-
-    // Put the AI on the starting grid
-    aiKart.position.set(
-        startPoint.x,
-        0,
-        startPoint.z
-    );
 
     // The kart model faces local -Z
     aiKart.rotation.y =
@@ -9720,32 +9755,41 @@ for (let i = 0; i < AI_COUNT; i++) {
         trackIndex:
             startIndex,
 
-        speed: 0,
+        speed:
+            0,
 
         maxSpeed:
-    i === 0 ? 43.5 :
-    i === 1 ? 44 :
-    43,
+            i === 0 ? 43.5 :
+            i === 1 ? 44 :
+            43,
 
         driftLevel:
-    i === 0 ? 2 :   // Red: Mini + Medium
-    i === 1 ? 1 :   // Yellow: Mini only
-    3,              // Purple: Mini + Medium + Max
+            i === 0 ? 2 :   // Red: Mini + Medium
+            i === 1 ? 1 :   // Yellow: Mini only
+            3,              // Purple: Mini + Medium + Max
 
-driftChargeMultiplier:
-    i === 0 ? 1 :
-    i === 1 ? 0.8 :
-    0.9,
+        driftChargeMultiplier:
+            i === 0 ? 1 :
+            i === 1 ? 0.8 :
+            0.9,
 
-driftCharge: 0,
-drifting: false,
-driftBoostTimer: 0,
+        driftCharge:
+            0,
 
-        acceleration: 12,
+        drifting:
+            false,
 
-        angle: angle,
+        driftBoostTimer:
+            0,
 
-        lap: 1,
+        acceleration:
+            12,
+
+        angle:
+            angle,
+
+        lap:
+            1,
 
         // Start the AI behind the player's
         // official race-start position.
@@ -9753,7 +9797,8 @@ driftBoostTimer: 0,
             startIndex -
             trackPoints.length,
 
-        finished: false
+        finished:
+            false
 
     });
 }
@@ -9762,30 +9807,78 @@ driftBoostTimer: 0,
 // PLAYER STATE
 // ============================================================
 
-const startPoint =
-    trackPoints[0];
+// ============================================================
+// PLAYER STARTING POSITION
+// ============================================================
 
-const nextStartPoint =
-    trackPoints[1];
+// Player starts on the front row of the grid
+const playerStartIndex =
+    116;
 
-const startDX =
-    nextStartPoint.x -
-    startPoint.x;
+const playerStartPoint =
+    trackPoints[playerStartIndex];
 
-const startDZ =
-    nextStartPoint.z -
-    startPoint.z;
+const playerNextPoint =
+    trackPoints[
+        (playerStartIndex + 1) %
+        trackPoints.length
+    ];
+
+// Get the direction of the track
+const playerStartDX =
+    playerNextPoint.x -
+    playerStartPoint.x;
+
+const playerStartDZ =
+    playerNextPoint.z -
+    playerStartPoint.z;
+
+const playerStartLength =
+    Math.sqrt(
+        playerStartDX * playerStartDX +
+        playerStartDZ * playerStartDZ
+    );
+
+// Forward direction
+const playerForwardX =
+    playerStartDX /
+    playerStartLength;
+
+const playerForwardZ =
+    playerStartDZ /
+    playerStartLength;
+
+// Right-side direction
+const playerRightX =
+    -playerForwardZ;
+
+const playerRightZ =
+    playerForwardX;
+
+// Player starts on the right side
+const playerGridOffset =
+    2.0;
+
+const playerStartX =
+    playerStartPoint.x +
+    playerRightX *
+    playerGridOffset;
+
+const playerStartZ =
+    playerStartPoint.z +
+    playerRightZ *
+    playerGridOffset;
 
 const playerStartAngle =
     -Math.atan2(
-        startDZ,
-        startDX
+        playerStartDZ,
+        playerStartDX
     );
 
 const player = {
 
     trackIndex:
-        0,
+    playerStartIndex,
 
     coins:
         0,
@@ -9793,10 +9886,10 @@ const player = {
     maxCoins:
         10,
     x:
-        startPoint.x,
+    playerStartX,
 
     z:
-        startPoint.z,
+    playerStartZ,
 
     speed:
         0,
