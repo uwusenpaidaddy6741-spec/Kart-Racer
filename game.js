@@ -2472,12 +2472,12 @@ if (savedCharacterButton) {
 const kartStats = {
 
     speedster: {
-        maxSpeed: 51,
+        maxSpeed: 55,
         acceleration: 23,
         braking: 31,
         turnSpeed: 3.2,
         driftChargeRate: 1.15,
-        miniTurbo: 4
+        miniTurbo: 5
     },
 
     balanced: {
