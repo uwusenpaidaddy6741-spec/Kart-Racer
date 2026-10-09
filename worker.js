@@ -312,6 +312,195 @@ export class KartRooms {
     async fetch(request) {
         const url = new URL(request.url);
         const parts = url.pathname.split("/").filter(Boolean);
+
+        // LIVE RACE CONNECTION
+if (
+    parts[0] === "api" &&
+    parts[1] === "rooms" &&
+    parts[3] === "connect"
+) {
+    if (request.headers.get("Upgrade")?.toLowerCase() !== "websocket") {
+        return Response.json(
+            { error: "WebSocket upgrade required" },
+            { status: 426 }
+        );
+    }
+
+    const roomId = parts[2];
+    const playerId = url.searchParams.get("playerId") || "";
+    const room = await this.state.storage.get(`room:${roomId}`);
+
+    if (!room) {
+        return Response.json(
+            { error: "Room not found" },
+            { status: 404 }
+        );
+    }
+
+    const player = room.players.find(p => p.id === playerId);
+
+    if (!player) {
+        return Response.json(
+            { error: "Join the room before connecting" },
+            { status: 403 }
+        );
+    }
+
+    const pair = new WebSocketPair();
+    const client = pair[0];
+    const server = pair[1];
+
+    this.state.acceptWebSocket(server, [roomId]);
+
+    server.serializeAttachment({
+        roomId,
+        playerId,
+        playerName: player.name
+    });
+
+    server.send(JSON.stringify({
+        type: "connected",
+        roomId,
+        playerId,
+        hostId: room.hostId,
+        status: room.status,
+        startAt: room.startAt || null,
+        players: room.players
+    }));
+
+    this.broadcastToRoom(roomId, {
+        type: "player-joined",
+        playerId,
+        playerName: player.name
+    }, server);
+
+    return new Response(null, {
+        status: 101,
+        webSocket: client
+    });
+}
+
+        // Send a message to everyone connected to one room.
+broadcastToRoom(roomId, message, exceptSocket = null) {
+    const sockets = this.state.getWebSockets(roomId);
+    const payload = JSON.stringify(message);
+
+    for (const socket of sockets) {
+        if (socket === exceptSocket) continue;
+
+        try {
+            socket.send(payload);
+        } catch (error) {
+            console.warn("Could not send multiplayer update:", error);
+        }
+    }
+}
+
+// Handle messages sent by connected racers.
+async webSocketMessage(socket, message) {
+    let data;
+
+    try {
+        data = JSON.parse(message);
+    } catch {
+        return;
+    }
+
+    const attachment = socket.deserializeAttachment();
+
+    if (!attachment?.roomId || !attachment?.playerId) {
+        socket.close(1008, "Missing player information");
+        return;
+    }
+
+    const { roomId, playerId, playerName } = attachment;
+    const storageKey = `room:${roomId}`;
+    const room = await this.state.storage.get(storageKey);
+
+    if (!room || !room.players.some(p => p.id === playerId)) {
+        socket.close(1008, "Room membership not found");
+        return;
+    }
+
+    // The room host starts a synchronized countdown.
+    if (data.type === "start") {
+        if (room.hostId !== playerId) {
+            socket.send(JSON.stringify({
+                type: "error",
+                message: "Only the room host can start the race."
+            }));
+            return;
+        }
+
+        if (room.status !== "waiting") {
+            return;
+        }
+
+        room.status = "racing";
+        room.startAt = Date.now() + 5000;
+
+        await this.state.storage.put(storageKey, room);
+
+        this.broadcastToRoom(roomId, {
+            type: "race-start",
+            startAt: room.startAt
+        });
+
+        return;
+    }
+
+    // Broadcast the player's current position to their room.
+    if (data.type === "state") {
+        const numeric = value =>
+            typeof value === "number" && Number.isFinite(value)
+                ? value
+                : null;
+
+        const x = numeric(data.x);
+        const y = numeric(data.y);
+        const z = numeric(data.z);
+        const rotation = numeric(data.rotation);
+        const speed = numeric(data.speed);
+
+        if (
+            x === null ||
+            y === null ||
+            z === null ||
+            rotation === null ||
+            speed === null
+        ) {
+            return;
+        }
+
+        this.broadcastToRoom(roomId, {
+            type: "player-state",
+            playerId,
+            playerName,
+            x,
+            y,
+            z,
+            rotation,
+            speed
+        }, socket);
+    }
+}
+
+// Let the remaining racers know when a connection closes.
+webSocketClose(socket, code, reason, wasClean) {
+    const attachment = socket.deserializeAttachment();
+
+    if (attachment?.roomId && attachment?.playerId) {
+        this.broadcastToRoom(attachment.roomId, {
+            type: "player-disconnected",
+            playerId: attachment.playerId
+        }, socket);
+    }
+}
+
+webSocketError(socket, error) {
+    console.warn("Kart Racer WebSocket error:", error);
+}
+        
         // Expected paths:
         // /api/rooms
         // /api/rooms/health
