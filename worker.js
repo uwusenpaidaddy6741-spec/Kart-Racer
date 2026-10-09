@@ -302,6 +302,7 @@ if (url.pathname.startsWith("/api/rooms")) {
 };
 
     
+
 export class KartRooms {
     constructor(state, env) {
         this.state = state;
@@ -310,6 +311,21 @@ export class KartRooms {
 
     async fetch(request) {
         const url = new URL(request.url);
+        const parts = url.pathname.split("/").filter(Boolean);
+        // Expected paths:
+        // /api/rooms
+        // /api/rooms/health
+        // /api/rooms/ROOM_ID
+        // /api/rooms/ROOM_ID/join
+        // /api/rooms/ROOM_ID/leave
+
+        if (url.pathname === "/api/rooms/health") {
+            return Response.json({
+                success: true,
+                service: "Kart Racer multiplayer",
+                status: "online"
+            });
+        }
 
         // List public rooms
         if (url.pathname === "/api/rooms" && request.method === "GET") {
@@ -352,8 +368,8 @@ export class KartRooms {
                 .trim()
                 .slice(0, 30);
 
-            const track = String(data.track || "track1").slice(0, 40);
-            const maxPlayers = Number(data.maxPlayers || 8);
+            const track = String(data.track || "1").slice(0, 40);
+            const maxPlayers = Number(data.maxPlayers || 4);
             const isPrivate = Boolean(data.private);
 
             if (![2, 4, 6, 8].includes(maxPlayers)) {
@@ -372,6 +388,7 @@ export class KartRooms {
                 maxPlayers,
                 private: isPrivate,
                 players: [],
+                hostId: null,
                 status: "waiting",
                 createdAt: Date.now()
             };
@@ -384,13 +401,176 @@ export class KartRooms {
             );
         }
 
-        // Test endpoint
-        if (url.pathname === "/api/rooms/health") {
-            return Response.json({
-                success: true,
-                service: "Kart Racer multiplayer",
-                status: "online"
-            });
+        // Join, leave, or view a particular room
+        if (parts[0] === "api" && parts[1] === "rooms" && parts[2]) {
+            const roomId = parts[2];
+            const action = parts[3];
+            const storageKey = `room:${roomId}`;
+            const room = await this.state.storage.get(storageKey);
+
+            if (!room) {
+                return Response.json(
+                    { error: "Room not found. It may have been closed." },
+                    { status: 404 }
+                );
+            }
+
+            // Get lobby information
+            if (!action && request.method === "GET") {
+                return Response.json({
+                    success: true,
+                    room: {
+                        id: room.id,
+                        name: room.name,
+                        track: room.track,
+                        maxPlayers: room.maxPlayers,
+                        private: room.private,
+                        players: room.players,
+                        hostId: room.hostId,
+                        status: room.status
+                    }
+                });
+            }
+
+            // Join room
+            if (action === "join" && request.method === "POST") {
+                let data;
+
+                try {
+                    data = await request.json();
+                } catch {
+                    return Response.json(
+                        { error: "Invalid JSON" },
+                        { status: 400 }
+                    );
+                }
+
+                const playerId = String(data.playerId || "").slice(0, 80);
+                const playerName = String(data.playerName || "Player")
+                    .trim()
+                    .slice(0, 20);
+
+                if (!playerId) {
+                    return Response.json(
+                        { error: "Missing player ID. Refresh and try again." },
+                        { status: 400 }
+                    );
+                }
+
+                // Don't register the same browser twice in the same room.
+                const existingPlayer = room.players.find(
+                    player => player.id === playerId
+                );
+
+                if (existingPlayer) {
+                    return Response.json({
+                        success: true,
+                        room: {
+                            id: room.id,
+                            name: room.name,
+                            track: room.track,
+                            maxPlayers: room.maxPlayers,
+                            players: room.players,
+                            hostId: room.hostId,
+                            status: room.status
+                        }
+                    });
+                }
+
+                if (room.status !== "waiting") {
+                    return Response.json(
+                        { error: "This race has already started." },
+                        { status: 409 }
+                    );
+                }
+
+                if (room.players.length >= room.maxPlayers) {
+                    return Response.json(
+                        { error: "This room is full." },
+                        { status: 409 }
+                    );
+                }
+
+                room.players.push({
+                    id: playerId,
+                    name: playerName || "Player",
+                    joinedAt: Date.now()
+                });
+
+                if (!room.hostId) {
+                    room.hostId = playerId;
+                }
+
+                await this.state.storage.put(storageKey, room);
+
+                return Response.json({
+                    success: true,
+                    room: {
+                        id: room.id,
+                        name: room.name,
+                        track: room.track,
+                        maxPlayers: room.maxPlayers,
+                        players: room.players,
+                        hostId: room.hostId,
+                        status: room.status
+                    }
+                });
+            }
+
+            // Leave room
+            if (action === "leave" && request.method === "POST") {
+                let data;
+
+                try {
+                    data = await request.json();
+                } catch {
+                    return Response.json(
+                        { error: "Invalid JSON" },
+                        { status: 400 }
+                    );
+                }
+
+                const playerId = String(data.playerId || "").slice(0, 80);
+
+                if (!playerId) {
+                    return Response.json(
+                        { error: "Missing player ID." },
+                        { status: 400 }
+                    );
+                }
+
+                room.players = room.players.filter(
+                    player => player.id !== playerId
+                );
+
+                // Transfer host status if the host leaves.
+                if (room.hostId === playerId) {
+                    room.hostId = room.players.length
+                        ? room.players[0].id
+                        : null;
+                }
+
+                // Remove empty rooms so abandoned rooms don't pile up.
+                if (room.players.length === 0) {
+                    await this.state.storage.delete(storageKey);
+                    return Response.json({ success: true, closed: true });
+                }
+
+                await this.state.storage.put(storageKey, room);
+
+                return Response.json({
+                    success: true,
+                    room: {
+                        id: room.id,
+                        name: room.name,
+                        track: room.track,
+                        maxPlayers: room.maxPlayers,
+                        players: room.players,
+                        hostId: room.hostId,
+                        status: room.status
+                    }
+                });
+            }
         }
 
         return Response.json(
