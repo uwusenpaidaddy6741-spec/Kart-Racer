@@ -433,47 +433,226 @@
     </div>
 </div>
 
+
 <script>
 (() => {
     const trackSelect = document.getElementById("trackSelect");
-    const multiplayerScreen =
-        document.getElementById("multiplayerScreen");
-    const multiplayerButton =
-        document.getElementById("multiplayerButton");
-    const backButton =
-        document.getElementById("multiplayerBackButton");
-    const createRoomForm =
-        document.getElementById("createRoomForm");
-    const status =
-        document.getElementById("multiplayerStatus");
+    const multiplayerScreen = document.getElementById("multiplayerScreen");
+    const multiplayerButton = document.getElementById("multiplayerButton");
+    const backButton = document.getElementById("multiplayerBackButton");
+    const createRoomForm = document.getElementById("createRoomForm");
+    const status = document.getElementById("multiplayerStatus");
+    const roomList = document.getElementById("multiplayerRoomList");
+    const roomCountBadge = document.getElementById("roomCountBadge");
 
     if (
-        !trackSelect ||
-        !multiplayerScreen ||
-        !multiplayerButton ||
-        !backButton
+        !trackSelect || !multiplayerScreen || !multiplayerButton ||
+        !backButton || !createRoomForm || !status || !roomList
     ) {
+        console.error("Multiplayer screen elements are missing.");
         return;
+    }
+
+    const API = "/api/rooms";
+
+    const trackNames = {
+        "1": "Track 1",
+        "2": "Forest Run",
+        "3": "Oasis",
+        "4": "Snow Track",
+        "5": "Grand Circuit",
+        "6": "Sunset Speedway",
+        "7": "Mountain Pass",
+        "8": "Castle Run",
+        "9": "Jungle Run",
+        "10": "Racers Circuit",
+        "11": "Grand Prix Circuit"
+    };
+
+    let refreshTimer = null;
+
+    function setStatus(message, isError = false) {
+        status.textContent = message;
+        status.style.color = isError ? "#ff7777" : "";
+    }
+
+    function showEmptyRooms(message) {
+        roomList.replaceChildren();
+
+        const empty = document.createElement("div");
+        empty.className = "roomEmptyState";
+
+        const heading = document.createElement("h4");
+        heading.textContent = message;
+
+        const description = document.createElement("p");
+        description.textContent =
+            "Create a public room to let other players find it.";
+
+        empty.append(heading, description);
+        roomList.appendChild(empty);
+
+        if (roomCountBadge) {
+            roomCountBadge.textContent = "0 ROOMS";
+        }
+    }
+
+    async function refreshRooms() {
+        try {
+            const response = await fetch(API, {
+                method: "GET",
+                cache: "no-store"
+            });
+
+            if (!response.ok) {
+                throw new Error("Server returned HTTP " + response.status);
+            }
+
+            const rooms = await response.json();
+
+            if (!Array.isArray(rooms)) {
+                throw new Error("Unexpected room list response.");
+            }
+
+            if (roomCountBadge) {
+                roomCountBadge.textContent =
+                    rooms.length + (rooms.length === 1 ? " ROOM" : " ROOMS");
+            }
+
+            roomList.replaceChildren();
+
+            if (rooms.length === 0) {
+                showEmptyRooms("No public rooms are open");
+                return;
+            }
+
+            for (const room of rooms) {
+                const card = document.createElement("div");
+                card.className = "multiplayerRoomCard";
+
+                const title = document.createElement("h4");
+                title.textContent = room.name || "Race Room";
+
+                const details = document.createElement("p");
+                details.textContent =
+                    (trackNames[String(room.track)] || "Track " + room.track) +
+                    " • " +
+                    room.players + "/" + room.maxPlayers + " players";
+
+                const state = document.createElement("p");
+                state.textContent =
+                    room.status === "waiting" ? "Waiting for players" : room.status;
+
+                const roomId = document.createElement("small");
+                roomId.textContent = "Room code: " + room.id;
+
+                card.append(title, details, state, roomId);
+                roomList.appendChild(card);
+            }
+        } catch (error) {
+            console.error("Could not load multiplayer rooms:", error);
+            showEmptyRooms("Couldn't load rooms");
+            setStatus(
+                "Couldn't load rooms. Check your connection and try again.",
+                true
+            );
+        }
     }
 
     multiplayerButton.addEventListener("click", () => {
         trackSelect.style.display = "none";
         multiplayerScreen.style.display = "block";
         multiplayerScreen.setAttribute("aria-hidden", "false");
+
+        refreshRooms();
+
+        if (refreshTimer !== null) {
+            clearInterval(refreshTimer);
+        }
+
+        // Refresh public rooms while the browser is open.
+        refreshTimer = setInterval(refreshRooms, 5000);
     });
 
     backButton.addEventListener("click", () => {
         multiplayerScreen.style.display = "none";
         multiplayerScreen.setAttribute("aria-hidden", "true");
         trackSelect.style.display = "";
+
+        if (refreshTimer !== null) {
+            clearInterval(refreshTimer);
+            refreshTimer = null;
+        }
     });
 
-    createRoomForm.addEventListener("submit", (event) => {
+    createRoomForm.addEventListener("submit", async (event) => {
         event.preventDefault();
 
-        status.textContent =
-            "Room creation is not connected yet. Cloudflare networking must be added before other players can see or join rooms.";
+        const nameInput = document.getElementById("roomNameInput");
+        const trackInput = document.getElementById("roomTrackSelect");
+        const playerLimitInput = document.getElementById("roomPlayerLimit");
+        const privateInput = document.getElementById("privateRoomCheckbox");
+        const submitButton = createRoomForm.querySelector(
+            'button[type="submit"]'
+        );
+
+        const name = nameInput.value.trim();
+
+        if (!name) {
+            setStatus("Enter a room name first.", true);
+            return;
+        }
+
+        submitButton.disabled = true;
+        setStatus("Creating room...");
+
+        try {
+            const response = await fetch(API, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name,
+                    track: trackInput.value,
+                    maxPlayers: Number(playerLimitInput.value),
+                    private: privateInput.checked
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(result.error || "Room creation failed.");
+            }
+
+            const room = result.room;
+
+            if (room.private) {
+                setStatus(
+                    "Private room created! Room code: " + room.id +
+                    ". It won't appear in the public room list."
+                );
+            } else {
+                setStatus(
+                    "Room created! Code: " + room.id +
+                    ". Other players can now see it in Open Rooms."
+                );
+            }
+
+            await refreshRooms();
+        } catch (error) {
+            console.error("Could not create room:", error);
+            setStatus(
+                "Couldn't create room: " + error.message,
+                true
+            );
+        } finally {
+            submitButton.disabled = false;
+        }
     });
+
+    showEmptyRooms("Open the Multiplayer screen to find rooms");
 })();
 </script>
 
