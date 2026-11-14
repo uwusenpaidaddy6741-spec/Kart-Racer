@@ -12634,7 +12634,7 @@ container.appendChild(
 
 function updateCountdown(deltaTime) {
 
-        if (!trackSelected) {
+    if (!trackSelected) {
         return;
     }
 
@@ -12642,54 +12642,91 @@ function updateCountdown(deltaTime) {
         return;
     }
 
-    countdownTime -=
-        deltaTime;
+    // ========================================================
+    // MULTIPLAYER SYNCHRONIZED COUNTDOWN
+    // ========================================================
 
-    if (
-        countdownTime > 2
-    ) {
+    if (multiplayerStartAt !== null) {
 
-        countdownDisplay.textContent =
-            "3";
+        const remaining =
+            (multiplayerStartAt - Date.now()) / 1000;
 
-    } else if (
-        countdownTime > 1
-    ) {
+        if (remaining > 3) {
+            countdownDisplay.textContent = "";
+            return;
+        }
 
-        countdownDisplay.textContent =
-            "2";
+        if (remaining > 2) {
 
-    } else if (
-        countdownTime > 0
-    ) {
+            countdownDisplay.textContent = "3";
 
-        countdownDisplay.textContent =
-            "1";
+        } else if (remaining > 1) {
 
-    } else if (
-        !goShown
-    ) {
+            countdownDisplay.textContent = "2";
+
+        } else if (remaining > 0) {
+
+            countdownDisplay.textContent = "1";
+
+        } else if (!goShown) {
+
+            goShown = true;
+
+            raceStarted = true;
+
+            raceStartTime =
+                performance.now() -
+                Math.max(0, Date.now() - multiplayerStartAt);
+
+            countdownDisplay.textContent = "GO!";
+
+            setTimeout(() => {
+
+                countdownDisplay.textContent = "";
+
+                countdownFinished = true;
+
+            }, 700);
+        }
+
+        return;
+    }
+
+    // ========================================================
+    // ORIGINAL SINGLE-PLAYER COUNTDOWN
+    // ========================================================
+
+    countdownTime -= deltaTime;
+
+    if (countdownTime > 2) {
+
+        countdownDisplay.textContent = "3";
+
+    } else if (countdownTime > 1) {
+
+        countdownDisplay.textContent = "2";
+
+    } else if (countdownTime > 0) {
+
+        countdownDisplay.textContent = "1";
+
+    } else if (!goShown) {
 
         goShown = true;
 
         raceStarted = true;
-raceStartTime = performance.now();
 
-countdownDisplay.textContent =
-    "GO!";
+        raceStartTime = performance.now();
 
-        setTimeout(
-            () => {
+        countdownDisplay.textContent = "GO!";
 
-                countdownDisplay.textContent =
-                    "";
+        setTimeout(() => {
 
-                countdownFinished =
-                    true;
+            countdownDisplay.textContent = "";
 
-            },
-            700
-        );
+            countdownFinished = true;
+
+        }, 700);
     }
 }
 
