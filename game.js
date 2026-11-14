@@ -2856,7 +2856,7 @@ const wheelStats = {
     shadow: {
         maxSpeed: 2,
         acceleration: 2,
-        turnSpeed: 0.8,
+        turnSpeed: 0.5,
         driftChargeRate: 1.40,
         miniTurbo: 14
     },
