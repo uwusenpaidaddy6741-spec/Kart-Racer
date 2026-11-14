@@ -12571,6 +12571,10 @@ let countdownFinished = false;
 
 let goShown = false;
 
+// Multiplayer's shared server start time.
+const multiplayerStartAt =
+    Number(currentUrlParams.get("startAt")) || null;
+
 // ------------------------------------------------------------
 // COUNTDOWN DISPLAY
 // ------------------------------------------------------------
