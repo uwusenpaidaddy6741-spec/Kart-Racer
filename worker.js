@@ -704,7 +704,7 @@ async webSocketMessage(socket, message) {
         }
 
         room.status = "racing";
-        room.startAt = Date.now() + 5000;
+        room.startAt = Date.now() + 15000;
 
         await this.state.storage.put(storageKey, room);
 
