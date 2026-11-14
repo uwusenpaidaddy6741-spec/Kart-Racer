@@ -470,6 +470,9 @@
     let refreshTimer = null;
     let lobbyTimer = null;
     let currentRoomId = null;
+let currentRoomTrack = null;
+let roomSocket = null;
+let roomHostId = null;
 
     let playerId = localStorage.getItem("kartRacerPlayerId");
     if (!playerId) {
@@ -543,17 +546,25 @@
     const lobbyMessage = document.createElement("p");
     lobbyMessage.setAttribute("role", "status");
 
+    const startRaceButton = document.createElement("button");
+startRaceButton.type = "button";
+startRaceButton.textContent = "START RACE";
+startRaceButton.style.display = "none";
+startRaceButton.disabled = true;
+
     const leaveButton = document.createElement("button");
     leaveButton.type = "button";
     leaveButton.textContent = "LEAVE ROOM";
 
     lobby.append(
-        lobbyTitle,
-        lobbyDetails,
-        lobbyPlayers,
-        lobbyMessage,
-        leaveButton
-    );
+    lobbyTitle,
+    lobbyDetails,
+    lobbyPlayers,
+    startRaceButton,
+    lobbyMessage,
+    leaveButton
+);
+    
     multiplayerScreen.appendChild(lobby);
 
     function stopLobbyRefresh() {
@@ -568,6 +579,125 @@
         lobbyMessage.style.color = isError ? "#ff7777" : "";
     }
 
+    // ============================================================
+// MULTIPLAYER WEBSOCKET
+// ============================================================
+
+function updateStartButton() {
+    const isHost = roomHostId === playerId;
+
+    startRaceButton.style.display =
+        isHost ? "block" : "none";
+
+    startRaceButton.disabled =
+        !roomSocket ||
+        roomSocket.readyState !== WebSocket.OPEN;
+}
+
+function connectRoomSocket() {
+
+    if (!currentRoomId) return;
+
+    // Close an older connection if one exists.
+    if (roomSocket) {
+        roomSocket.close();
+        roomSocket = null;
+    }
+
+    const protocol =
+        location.protocol === "https:" ? "wss:" : "ws:";
+
+    const wsUrl =
+        `${protocol}//${location.host}` +
+        `/api/rooms/${encodeURIComponent(currentRoomId)}/connect` +
+        `?playerId=${encodeURIComponent(playerId)}`;
+
+    roomSocket = new WebSocket(wsUrl);
+
+    roomSocket.addEventListener("open", () => {
+        console.log("Connected to multiplayer room.");
+
+        updateStartButton();
+    });
+
+    roomSocket.addEventListener("message", event => {
+
+        let data;
+
+        try {
+            data = JSON.parse(event.data);
+        } catch {
+            return;
+        }
+
+        if (data.type === "connected") {
+
+            roomHostId = data.hostId;
+
+            updateStartButton();
+
+            return;
+        }
+
+        if (data.type === "race-start") {
+
+            showLobbyMessage("Race starting! Loading track...");
+
+            const startUrl =
+                "?track=" + encodeURIComponent(currentRoomTrack) +
+                "&start=1" +
+                "&multiplayer=1" +
+                "&startAt=" + encodeURIComponent(data.startAt);
+
+            window.location.href = startUrl;
+
+            return;
+        }
+
+        if (data.type === "error") {
+            showLobbyMessage(data.message, true);
+        }
+    });
+
+    roomSocket.addEventListener("close", () => {
+        console.log("Disconnected from multiplayer room.");
+
+        updateStartButton();
+    });
+
+    roomSocket.addEventListener("error", error => {
+        console.error("Multiplayer WebSocket error:", error);
+
+        showLobbyMessage(
+            "Multiplayer connection error.",
+            true
+        );
+    });
+}
+
+// HOST START BUTTON
+startRaceButton.addEventListener("click", () => {
+
+    if (
+        !roomSocket ||
+        roomSocket.readyState !== WebSocket.OPEN
+    ) {
+        showLobbyMessage(
+            "Not connected to the room.",
+            true
+        );
+        return;
+    }
+
+    startRaceButton.disabled = true;
+
+    showLobbyMessage("Starting race...");
+
+    roomSocket.send(JSON.stringify({
+        type: "start"
+    }));
+});
+
     async function refreshLobby() {
         if (!currentRoomId) return;
 
@@ -576,6 +706,11 @@
                 "/" + encodeURIComponent(currentRoomId)
             );
             const room = result.room;
+
+            currentRoomTrack = String(room.track);
+roomHostId = room.hostId;
+
+updateStartButton();
 
             lobbyTitle.textContent = room.name;
             lobbyDetails.textContent =
@@ -625,9 +760,14 @@
             );
 
             currentRoomId = result.room.id;
-            lobby.style.display = "block";
-            showLobbyMessage("Joined successfully!");
+currentRoomTrack = String(result.room.track);
 
+lobby.style.display = "block";
+
+connectRoomSocket();
+
+showLobbyMessage("Joined successfully!");
+            
             await refreshLobby();
             stopLobbyRefresh();
             lobbyTimer = setInterval(refreshLobby, 2000);
@@ -779,9 +919,10 @@
 
             // Register the creator as the first player and host.
             currentRoomId = result.room.id;
+currentRoomTrack = String(result.room.track);
 
-            await apiRequest(
-                "/" + encodeURIComponent(currentRoomId) + "/join",
+await apiRequest(
+    "/" + encodeURIComponent(currentRoomId) + "/join",
                 {
                     method: "POST",
                     body: JSON.stringify({ playerId, playerName })
@@ -789,7 +930,10 @@
             );
 
             lobby.style.display = "block";
-            await refreshLobby();
+
+connectRoomSocket();
+
+await refreshLobby();
 
             stopLobbyRefresh();
             lobbyTimer = setInterval(refreshLobby, 2000);
@@ -824,8 +968,16 @@
                 }
             );
 
-            currentRoomId = null;
-            stopLobbyRefresh();
+            if (roomSocket) {
+    roomSocket.close();
+    roomSocket = null;
+}
+
+currentRoomId = null;
+currentRoomTrack = null;
+roomHostId = null;
+
+stopLobbyRefresh();
             lobby.style.display = "none";
             setStatus("You left the room.");
             await refreshRooms();
